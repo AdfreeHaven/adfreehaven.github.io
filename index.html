@@ -9,14 +9,14 @@
 
     <!-- SEO Meta Tags -->
     <title>AdFree Haven | Premium Ad-Free Tools & Web Apps</title>
-    <meta name="description" content="Welcome to AdFree Haven. Your premium centralized hub for exclusive, lightning-fast tools, scripts, and web applications like CloudServer-PC. Enjoy a 100% ad-free, secure, and seamless user experience. Made by Team AdFree Haven, Powered by Jalapgroup.">
-    <meta name="keywords" content="AdFree Haven, Jalapgroup, CloudServer-PC, CloudServer PC, ad-free tools, web applications, premium SaaS, personal cloud server, zero ads, secure scripts, online tools, free software, Jalap Group">
+    <meta name="description" content="Welcome to AdFree Haven. Your premium centralized hub for exclusive, lightning-fast tools, scripts, browser web apps, and Windows software like CloudServer-PC, Image Editor, and JPEG/PDF Compressor. Enjoy a 100% ad-free, secure, and seamless user experience. Made by Team AdFree Haven, Powered by Jalapgroup.">
+    <meta name="keywords" content="AdFree Haven, Jalapgroup, CloudServer-PC, Image Editor, JPEG Compressor, PDF Compressor, ad-free tools, web applications, Windows software, premium SaaS, personal cloud server, zero ads, free online tools, Jalap Group">
     <meta name="author" content="Team AdFree Haven">
     <meta name="robots" content="index, follow">
 
     <!-- Open Graph (For sharing on Social Media/WhatsApp) -->
     <meta property="og:title" content="AdFree Haven | Premium Ad-Free Tools">
-    <meta property="og:description" content="Your premium centralized hub for exclusive web applications built for peak performance. 100% Ad-Free.">
+    <meta property="og:description" content="Your premium centralized hub for exclusive web applications and Windows software built for peak performance. 100% Ad-Free.">
     <meta property="og:type" content="website">
     
     <!-- Favicon (Aapka Logo) -->
@@ -28,14 +28,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- Premium Clean Theme (Anti-AI Dark Blue) --- */
+        /* --- Premium Clean Theme --- */
         :root {
-            --primary: #10b981; /* Premium Emerald Green (Matches Logo) */
-            --secondary: #0ea5e9; /* Premium Blue */
-            --bg-color: #f4f7f9; /* Soft Silver/Gray Background */
-            --card-bg: #ffffff; /* Pure White Cards */
-            --text-main: #1e293b; /* Slate Dark Text */
-            --text-muted: #64748b; /* Gray Text */
+            --primary: #10b981; 
+            --secondary: #0ea5e9; 
+            --bg-color: #f4f7f9; 
+            --card-bg: #ffffff; 
+            --text-main: #1e293b; 
+            --text-muted: #64748b; 
             --border-color: #e2e8f0;
         }
 
@@ -46,10 +46,7 @@
             font-family: 'Inter', sans-serif;
         }
 
-        /* Smooth Scrolling jab Vision button par click ho */
-        html {
-            scroll-behavior: smooth;
-        }
+        html { scroll-behavior: smooth; }
 
         body {
             background-color: var(--bg-color);
@@ -82,7 +79,6 @@
             text-decoration: none;
         }
 
-        /* Round Logo */
         .logo-img {
             width: 50px;
             height: 50px;
@@ -117,47 +113,21 @@
             cursor: pointer;
         }
 
-        .nav-links a:hover {
-            color: var(--primary);
-        }
+        .nav-links a:hover { color: var(--primary); }
 
-        /* Dropdown CSS */
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
+        .dropdown { position: relative; display: inline-block; }
 
         .dropbtn {
-            background: none;
-            border: none;
-            color: var(--text-main);
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 10px 0;
-            transition: color 0.3s;
+            background: none; border: none; color: var(--text-main); font-weight: 600; font-size: 1rem;
+            cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 10px 0; transition: color 0.3s;
         }
 
-        .dropdown:hover .dropbtn {
-            color: var(--primary);
-        }
+        .dropdown:hover .dropbtn { color: var(--primary); }
 
         .dropdown-content {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: var(--card-bg);
-            min-width: 200px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            overflow: hidden;
-            z-index: 1;
+            display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+            background-color: var(--card-bg); min-width: 240px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden; z-index: 1;
             animation: fadeIn 0.3s ease;
         }
 
@@ -166,226 +136,109 @@
             to { opacity: 1; transform: translate(-50%, 0); }
         }
 
-        .dropdown-content a {
-            color: var(--text-main);
-            padding: 12px 20px;
-            text-decoration: none;
-            display: block;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: background 0.3s;
-            border-bottom: 1px solid var(--border-color);
+        .dropdown-category {
+            padding: 12px 20px 5px; font-size: 0.75rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
         }
 
-        .dropdown-content a:last-child {
-            border-bottom: none;
+        .dropdown-content a {
+            color: var(--text-main); padding: 10px 20px 12px; text-decoration: none; display: flex; align-items: center; gap: 10px;
+            font-weight: 500; font-size: 0.95rem; transition: background 0.3s;
         }
 
         .dropdown-content a:hover {
-            background-color: #f8fafc;
-            color: var(--primary);
-            padding-left: 25px;
+            background-color: #f8fafc; color: var(--primary); padding-left: 25px;
         }
 
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
+        .dropdown:hover .dropdown-content { display: block; }
 
         /* --- Hero Section --- */
         .hero {
-            text-align: center;
-            padding: 80px 20px 50px;
-            background: radial-gradient(circle at top, #ffffff, var(--bg-color));
+            text-align: center; padding: 80px 20px 40px; background: radial-gradient(circle at top, #ffffff, var(--bg-color));
         }
 
         .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            margin-bottom: 15px;
-            letter-spacing: -1px;
-            color: var(--text-main);
+            font-size: 3.5rem; font-weight: 800; margin-bottom: 15px; letter-spacing: -1px; color: var(--text-main);
         }
 
         .hero h1 span {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        .hero p {
-            color: var(--text-muted);
-            font-size: 1.15rem;
-            max-width: 650px;
-            margin: 0 auto;
-            line-height: 1.6;
+        .hero p { color: var(--text-muted); font-size: 1.15rem; max-width: 650px; margin: 0 auto; line-height: 1.6; }
+
+        /* --- Sections & Grid --- */
+        .section-heading {
+            text-align: center; font-size: 2rem; color: var(--text-main); font-weight: 800; margin: 20px 0 10px;
         }
 
-        /* --- Tools Grid --- */
+        .section-subheading {
+            text-align: center; color: var(--text-muted); font-size: 1rem; margin-bottom: 30px;
+        }
+
         .tools-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 35px;
-            padding: 20px 10% 60px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 35px; padding: 0 10% 60px; max-width: 1400px; margin: 0 auto;
         }
 
         /* Clean Premium Card Design */
         .tool-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            padding: 40px 30px;
-            text-decoration: none;
-            color: var(--text-main);
-            transition: all 0.4s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-            position: relative;
-            overflow: hidden;
+            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 24px; padding: 40px 30px;
+            text-decoration: none; color: var(--text-main); transition: all 0.4s ease; display: flex; flex-direction: column;
+            align-items: center; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.03); position: relative; overflow: hidden;
         }
 
         .tool-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            transform: scaleX(0);
-            transition: transform 0.4s ease;
-            transform-origin: left;
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0); transition: transform 0.4s ease; transform-origin: left;
         }
 
-        .tool-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .tool-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-            border-color: transparent;
-        }
+        .tool-card:hover::before { transform: scaleX(1); }
+        .tool-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); border-color: transparent; }
 
         .card-icon {
-            font-size: 3.5rem;
-            color: var(--secondary);
-            margin-bottom: 20px;
-            background: rgba(14, 165, 233, 0.1);
-            width: 90px;
-            height: 90px;
-            line-height: 90px;
-            border-radius: 50%;
-            transition: 0.4s;
+            font-size: 3rem; color: var(--secondary); margin-bottom: 20px; background: rgba(14, 165, 233, 0.1);
+            width: 80px; height: 80px; display: flex; justify-content: center; align-items: center; border-radius: 50%; transition: 0.4s;
         }
 
-        .tool-card:hover .card-icon {
-            background: var(--primary);
-            color: white;
-            transform: rotate(360deg);
-        }
-
-        .tool-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 12px;
-            font-weight: 700;
-        }
-
-        .tool-card p {
-            color: var(--text-muted);
-            font-size: 1rem;
-            margin-bottom: 30px;
-            flex: 1;
-            line-height: 1.5;
-        }
+        .tool-card:hover .card-icon { background: var(--primary); color: white; transform: rotate(360deg); }
+        .tool-card h3 { font-size: 1.4rem; margin-bottom: 12px; font-weight: 700; }
+        .tool-card p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 30px; flex: 1; line-height: 1.5; }
 
         .visit-btn {
-            background: var(--text-main);
-            color: #ffffff;
-            padding: 12px 35px;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: 0.3s;
+            background: var(--text-main); color: #ffffff; padding: 12px 35px; border-radius: 50px; font-weight: 600;
+            font-size: 0.95rem; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s;
         }
 
-        .tool-card:hover .visit-btn {
-            background: var(--primary);
-            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
-        }
+        .tool-card:hover .visit-btn { background: var(--primary); box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3); }
 
         /* --- Vision Section --- */
         .vision-section {
-            background: var(--card-bg);
-            padding: 60px 20px 120px; /* Extra padding for taskbar */
-            text-align: center;
-            border-top: 1px solid var(--border-color);
+            background: var(--card-bg); padding: 60px 20px 120px; text-align: center; border-top: 1px solid var(--border-color);
         }
 
         .vision-box {
-            max-width: 800px;
-            margin: 0 auto;
-            background: linear-gradient(to right, rgba(16,185,129,0.05), rgba(14,165,233,0.05));
-            border: 1px solid var(--border-color);
-            padding: 40px;
-            border-radius: 24px;
+            max-width: 800px; margin: 0 auto; background: linear-gradient(to right, rgba(16,185,129,0.05), rgba(14,165,233,0.05));
+            border: 1px solid var(--border-color); padding: 40px; border-radius: 24px;
         }
 
-        .vision-box h2 {
-            font-size: 2.2rem;
-            margin-bottom: 15px;
-            color: var(--text-main);
-        }
-
-        .vision-box h2 i {
-            color: var(--primary);
-            margin-right: 10px;
-        }
-
-        .vision-box p {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            line-height: 1.8;
-            font-weight: 400;
-        }
+        .vision-box h2 { font-size: 2.2rem; margin-bottom: 15px; color: var(--text-main); }
+        .vision-box h2 i { color: var(--primary); margin-right: 10px; }
+        .vision-box p { font-size: 1.2rem; color: var(--text-muted); line-height: 1.8; font-weight: 400; }
 
         /* --- Bottom Taskbar --- */
         .taskbar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: var(--card-bg);
-            border-top: 1px solid var(--border-color);
-            padding: 15px 0;
-            text-align: center;
-            z-index: 1000;
-            box-shadow: 0 -4px 15px rgba(0,0,0,0.03);
+            position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); border-top: 1px solid var(--border-color);
+            padding: 15px 0; text-align: center; z-index: 1000; box-shadow: 0 -4px 15px rgba(0,0,0,0.03);
         }
 
-        .taskbar p {
-            font-size: 0.9rem;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            color: var(--text-muted);
-        }
-
-        .taskbar .highlight-1 {
-            color: var(--primary);
-        }
-
-        .taskbar .highlight-2 {
-            color: var(--secondary);
-        }
+        .taskbar p { font-size: 0.9rem; font-weight: 700; letter-spacing: 1.5px; color: var(--text-muted); }
+        .taskbar .highlight-1 { color: var(--primary); }
+        .taskbar .highlight-2 { color: var(--secondary); }
 
         /* Responsive Design */
         @media (max-width: 768px) {
             nav { padding: 15px 20px; flex-direction: column; gap: 15px; }
             .hero h1 { font-size: 2.5rem; }
-            .tools-container { padding: 20px 5%; }
-            .vision-box p { font-size: 1rem; }
+            .tools-container { padding: 0 5% 40px; }
             .taskbar p { font-size: 0.75rem; }
         }
     </style>
@@ -395,7 +248,6 @@
     <!-- Navbar -->
     <nav>
         <a href="#" class="logo-container">
-            <!-- Upload your LOGO.webp in the same folder -->
             <img src="LOGO.webp" alt="AdFree Haven Logo" class="logo-img">
             <span class="brand-name">AdFree Haven</span>
         </a>
@@ -403,11 +255,18 @@
         <div class="nav-links">
             <a href="#"><i class="fa-solid fa-house"></i> Home</a>
             
-            <!-- Tools Dropdown -->
+            <!-- Tools Dropdown (Updated with Categories) -->
             <div class="dropdown">
                 <button class="dropbtn"><i class="fa-solid fa-screwdriver-wrench"></i> Tools <i class="fa-solid fa-chevron-down" style="font-size: 0.8rem;"></i></button>
                 <div class="dropdown-content">
-                    <a href="https://adfreehaven.github.io/CloudServer-PC/"><i class="fa-solid fa-server"></i> CloudServer-PC</a>
+                    <!-- Category 1 -->
+                    <div class="dropdown-category">Browser Apps</div>
+                    <a href="ImageEditor.html"><i class="fa-solid fa-image"></i> Image Editor</a>
+                    <a href="JpegPdfCompressor.html"><i class="fa-solid fa-file-zipper"></i> JPEG/PDF Compressor</a>
+                    
+                    <!-- Category 2 -->
+                    <div class="dropdown-category" style="border-top: 1px solid #e2e8f0; margin-top: 5px;">Windows Software</div>
+                    <a href="https://adfreehaven.github.io/CloudServer-PC/"><i class="fa-brands fa-windows" style="color: #0ea5e9;"></i> CloudServer-PC</a>
                 </div>
             </div>
 
@@ -419,25 +278,56 @@
     <!-- Main Hero Text -->
     <header class="hero">
         <h1>Welcome to <span>AdFree Haven</span></h1>
-        <p>Your premium centralized hub for exclusive web applications built for peak performance.</p>
+        <p>Your premium centralized hub for exclusive web applications and software built for peak performance.</p>
     </header>
 
-    <!-- Tools Grid -->
+    <!-- ==============================================
+         SECTION 1: BROWSER WEB APPS 
+    ================================================ -->
+    <h2 class="section-heading">Browser Web Apps</h2>
+    <p class="section-subheading">Powerful tools that run instantly in your browser. No installation required.</p>
+    
     <main class="tools-container">
         
-        <!-- Webpage 1: CloudServer-PC -->
-        <a href="https://adfreehaven.github.io/CloudServer-PC/" class="tool-card">
-            <div class="card-icon"><i class="fa-solid fa-server"></i></div>
-            <h3>CloudServer PC</h3>
-            <p>Access our powerful, lightning-fast cloud server environment directly from your browser.</p>
-            <div class="visit-btn">Open Tool <i class="fa-solid fa-arrow-right"></i></div>
+        <!-- App 1: Image Editor -->
+        <a href="ImageEditor.html" class="tool-card">
+            <div class="card-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+            <h3>Image Editor</h3>
+            <p>A fast, ad-free online image editor. Crop, resize, filter, and adjust your photos instantly without uploading them to any server.</p>
+            <div class="visit-btn">Launch App <i class="fa-solid fa-arrow-right"></i></div>
         </a>
 
-        <!-- Upcoming Tool Placeholder -->
+        <!-- App 2: JPEG/PDF Compressor -->
+        <a href="JpegPdfCompressor.html" class="tool-card">
+            <div class="card-icon"><i class="fa-solid fa-file-arrow-down"></i></div>
+            <h3>JPEG/PDF Compressor</h3>
+            <p>Compress your images and PDF files securely in your browser. Reduce file size without losing quality, 100% locally.</p>
+            <div class="visit-btn">Launch App <i class="fa-solid fa-arrow-right"></i></div>
+        </a>
+
+    </main>
+
+    <!-- ==============================================
+         SECTION 2: WINDOWS SOFTWARE 
+    ================================================ -->
+    <h2 class="section-heading">Windows Software</h2>
+    <p class="section-subheading">High-performance desktop applications built for your PC.</p>
+    
+    <main class="tools-container">
+        
+        <!-- Software 1: CloudServer-PC -->
+        <a href="https://adfreehaven.github.io/CloudServer-PC/" class="tool-card">
+            <div class="card-icon" style="color: #0ea5e9;"><i class="fa-brands fa-windows"></i></div>
+            <h3>CloudServer PC</h3>
+            <p>Turn your Windows PC into a powerful, lightning-fast personal cloud server. Share files and stream media directly with zero port forwarding.</p>
+            <div class="visit-btn">View Details <i class="fa-solid fa-arrow-right"></i></div>
+        </a>
+
+        <!-- Upcoming Software Placeholder -->
         <a href="#" class="tool-card" style="opacity: 0.6;">
             <div class="card-icon" style="background: #e2e8f0; color: #94a3b8;"><i class="fa-solid fa-code"></i></div>
             <h3>Coming Soon</h3>
-            <p>More innovative tools and apps are under development. Stay tuned for updates!</p>
+            <p>More innovative desktop software is under development. Stay tuned for our next big release!</p>
             <div class="visit-btn" style="background: #94a3b8; pointer-events: none;">In Progress</div>
         </a>
 
@@ -447,7 +337,7 @@
     <section id="vision" class="vision-section">
         <div class="vision-box">
             <h2><i class="fa-solid fa-shield-halved"></i> Our Vision</h2>
-            <p>"To provide the absolute best tools and web applications completely free from any intrusive ads or annoying pop-ups. We believe in pure performance, seamless user experience, and zero interruptions."</p>
+            <p>"To provide the absolute best tools, web applications, and software completely free from any intrusive ads or annoying pop-ups. We believe in pure performance, seamless user experience, and zero interruptions."</p>
         </div>
     </section>
 
