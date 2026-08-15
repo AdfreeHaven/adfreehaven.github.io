@@ -172,11 +172,11 @@
         }
 
         .section-subheading {
-            text-align: center; color: var(--text-muted); font-size: 1rem; margin-bottom: 30px;
+            text-align: center; color: var(--text-muted); font-size: 1rem; margin-bottom: 30px; padding: 0 20px;
         }
 
         .tools-container {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 35px; padding: 0 10% 60px; max-width: 1400px; margin: 0 auto;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 35px; padding: 0 10% 60px; max-width: 1400px; margin: 0 auto;
         }
 
         /* Clean Premium Card Design */
@@ -234,12 +234,41 @@
         .taskbar .highlight-1 { color: var(--primary); }
         .taskbar .highlight-2 { color: var(--secondary); }
 
-        /* Responsive Design */
+        /* =========================================
+           MOBILE RESPONSIVE SETTINGS 
+           ========================================= */
         @media (max-width: 768px) {
+            /* Navbar adjustments */
             nav { padding: 15px 20px; flex-direction: column; gap: 15px; }
-            .hero h1 { font-size: 2.5rem; }
-            .tools-container { padding: 0 5% 40px; }
-            .taskbar p { font-size: 0.75rem; }
+            .nav-links { gap: 15px; flex-wrap: wrap; justify-content: center; }
+            
+            /* Smaller Welcome Message */
+            .hero { padding: 40px 20px 30px; }
+            .hero h1 { font-size: 2rem; margin-bottom: 10px; }
+            .hero p { font-size: 0.95rem; }
+            
+            /* Section Headings */
+            .section-heading { font-size: 1.6rem; margin: 10px 0; }
+            .section-subheading { font-size: 0.9rem; margin-bottom: 25px; }
+            
+            /* Tools Grid - Stack 1 by 1 */
+            .tools-container { 
+                grid-template-columns: 1fr; /* Forces 1 column */
+                padding: 0 20px 40px; 
+                gap: 20px; 
+            }
+            .tool-card { padding: 30px 20px; }
+            .card-icon { width: 60px; height: 60px; font-size: 2.2rem; margin-bottom: 15px; }
+            .tool-card h3 { font-size: 1.3rem; }
+            
+            /* Vision Box */
+            .vision-section { padding: 40px 20px 100px; }
+            .vision-box { padding: 25px; }
+            .vision-box h2 { font-size: 1.6rem; }
+            .vision-box p { font-size: 1rem; line-height: 1.6; }
+            
+            /* Taskbar */
+            .taskbar p { font-size: 0.75rem; letter-spacing: 1px; }
         }
     </style>
 </head>
@@ -255,18 +284,17 @@
         <div class="nav-links">
             <a href="#"><i class="fa-solid fa-house"></i> Home</a>
             
-            <!-- Tools Dropdown (Updated with Categories) -->
+            <!-- Tools Dropdown -->
             <div class="dropdown">
                 <button class="dropbtn"><i class="fa-solid fa-screwdriver-wrench"></i> Tools <i class="fa-solid fa-chevron-down" style="font-size: 0.8rem;"></i></button>
                 <div class="dropdown-content">
-                    <!-- Category 1 -->
                     <div class="dropdown-category">Browser Apps</div>
-                    <a href="ImageEditor.html"><i class="fa-solid fa-image"></i> Image Editor</a>
-                    <a href="JpegPdfCompressor.html"><i class="fa-solid fa-file-zipper"></i> JPEG/PDF Compressor</a>
+                    <!-- Clean URLs included below -->
+                    <a href="ImageEditor/"><i class="fa-solid fa-image"></i> Image Editor</a>
+                    <a href="JpegPdfCompressor/"><i class="fa-solid fa-file-zipper"></i> JPEG/PDF Compressor</a>
                     
-                    <!-- Category 2 -->
                     <div class="dropdown-category" style="border-top: 1px solid #e2e8f0; margin-top: 5px;">Windows Software</div>
-                    <a href="https://adfreehaven.github.io/CloudServer-PC/"><i class="fa-brands fa-windows" style="color: #0ea5e9;"></i> CloudServer-PC</a>
+                    <a href="CloudServer-PC/"><i class="fa-brands fa-windows" style="color: #0ea5e9;"></i> CloudServer-PC</a>
                 </div>
             </div>
 
@@ -275,7 +303,7 @@
         </div>
     </nav>
 
-    <!-- Main Hero Text -->
+    <!-- Main Hero Text (Made smaller for mobile) -->
     <header class="hero">
         <h1>Welcome to <span>AdFree Haven</span></h1>
         <p>Your premium centralized hub for exclusive web applications and software built for peak performance.</p>
@@ -290,7 +318,7 @@
     <main class="tools-container">
         
         <!-- App 1: Image Editor -->
-        <a href="ImageEditor" class="tool-card">
+        <a href="ImageEditor/" class="tool-card">
             <div class="card-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
             <h3>Image Editor</h3>
             <p>A fast, ad-free online image editor. Crop, resize, filter, and adjust your photos instantly without uploading them to any server.</p>
@@ -298,7 +326,7 @@
         </a>
 
         <!-- App 2: JPEG/PDF Compressor -->
-        <a href="JpegPdfCompressor" class="tool-card">
+        <a href="JpegPdfCompressor/" class="tool-card">
             <div class="card-icon"><i class="fa-solid fa-file-arrow-down"></i></div>
             <h3>JPEG/PDF Compressor</h3>
             <p>Compress your images and PDF files securely in your browser. Reduce file size without losing quality, 100% locally.</p>
@@ -316,7 +344,7 @@
     <main class="tools-container">
         
         <!-- Software 1: CloudServer-PC -->
-        <a href="https://adfreehaven.github.io/CloudServer-PC/" class="tool-card">
+        <a href="CloudServer-PC/" class="tool-card">
             <div class="card-icon" style="color: #0ea5e9;"><i class="fa-brands fa-windows"></i></div>
             <h3>CloudServer PC</h3>
             <p>Turn your Windows PC into a powerful, lightning-fast personal cloud server. Share files and stream media directly with zero port forwarding.</p>
