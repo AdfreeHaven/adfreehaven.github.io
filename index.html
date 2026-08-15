@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdFree Haven | Main Hub</title>
+    
+    <!-- Favicon (Aapka Logo) -->
+    <link rel="icon" href="LOGO.webp" type="image/webp">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- Premium Clean Theme (Anti-AI Dark Blue) --- */
+        :root {
+            --primary: #10b981; /* Premium Emerald Green (Matches Logo) */
+            --secondary: #0ea5e9; /* Premium Blue */
+            --bg-color: #f4f7f9; /* Soft Silver/Gray Background */
+            --card-bg: #ffffff; /* Pure White Cards */
+            --text-main: #1e293b; /* Slate Dark Text */
+            --text-muted: #64748b; /* Gray Text */
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Smooth Scrolling jab Vision button par click ho */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* --- Navbar / Header --- */
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 50px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        /* Round Logo */
+        .logo-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary);
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
+        }
+
+        .brand-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* --- Navigation Links & Dropdown --- */
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 1rem;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Dropdown CSS */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropbtn {
+            background: none;
+            border: none;
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 0;
+            transition: color 0.3s;
+        }
+
+        .dropdown:hover .dropbtn {
+            color: var(--primary);
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--card-bg);
+            min-width: 200px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            z-index: 1;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, 10px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
+
+        .dropdown-content a {
+            color: var(--text-main);
+            padding: 12px 20px;
+            text-decoration: none;
+            display: block;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: background 0.3s;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .dropdown-content a:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f8fafc;
+            color: var(--primary);
+            padding-left: 25px; /* Slight indent effect */
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            text-align: center;
+            padding: 80px 20px 50px;
+            background: radial-gradient(circle at top, #ffffff, var(--bg-color));
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            letter-spacing: -1px;
+            color: var(--text-main);
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.15rem;
+            max-width: 650px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* --- Tools Grid --- */
+        .tools-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 35px;
+            padding: 20px 10% 60px;
+        }
+
+        /* Clean Premium Card Design */
+        .tool-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 40px 30px;
+            text-decoration: none;
+            color: var(--text-main);
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+            transform-origin: left;
+        }
+
+        .tool-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            border-color: transparent;
+        }
+
+        .card-icon {
+            font-size: 3.5rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            background: rgba(14, 165, 233, 0.1);
+            width: 90px;
+            height: 90px;
+            line-height: 90px;
+            border-radius: 50%;
+            transition: 0.4s;
+        }
+
+        .tool-card:hover .card-icon {
+            background: var(--primary);
+            color: white;
+            transform: rotate(360deg);
+        }
+
+        .tool-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .tool-card p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-bottom: 30px;
+            flex: 1;
+            line-height: 1.5;
+        }
+
+        .visit-btn {
+            background: var(--text-main);
+            color: #ffffff;
+            padding: 12px 35px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+        }
+
+        .tool-card:hover .visit-btn {
+            background: var(--primary);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        /* --- Vision Section --- */
+        .vision-section {
+            background: var(--card-bg);
+            padding: 60px 20px 120px; /* Extra padding for taskbar */
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .vision-box {
+            max-width: 800px;
+            margin: 0 auto;
+            background: linear-gradient(to right, rgba(16,185,129,0.05), rgba(14,165,233,0.05));
+            border: 1px solid var(--border-color);
+            padding: 40px;
+            border-radius: 24px;
+        }
+
+        .vision-box h2 {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            color: var(--text-main);
+        }
+
+        .vision-box h2 i {
+            color: var(--primary);
+            margin-right: 10px;
+        }
+
+        .vision-box p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+            font-weight: 400;
+        }
+
+        /* --- Bottom Taskbar --- */
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 15px 0;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.03);
+        }
+
+        .taskbar p {
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+        }
+
+        .taskbar .highlight-1 {
+            color: var(--primary);
+        }
+
+        .taskbar .highlight-2 {
+            color: var(--secondary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav { padding: 15px 20px; flex-direction: column; gap: 15px; }
+            .hero h1 { font-size: 2.5rem; }
+            .tools-container { padding: 20px 5%; }
+            .vision-box p { font-size: 1rem; }
+            .taskbar p { font-size: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav>
+        <a href="#" class="logo-container">
+            <!-- Upload your LOGO.webp in the same folder -->
+            <img src="LOGO.webp" alt="AdFree Haven Logo" class="logo-img">
+            <span class="brand-name">AdFree Haven</span>
+        </a>
+
+        <div class="nav-links">
+            <a href="#"><i class="fa-solid fa-house"></i> Home</a>
+            
+            <!-- Tools Dropdown -->
+            <div class="dropdown">
+                <button class="dropbtn"><i class="fa-solid fa-screwdriver-wrench"></i> Tools <i class="fa-solid fa-chevron-down" style="font-size: 0.8rem;"></i></button>
+                <div class="dropdown-content">
+                    <a href="https://adfreehaven.github.io/CloudServer-PC/"><i class="fa-solid fa-server"></i> CloudServer-PC</a>
+                    <!-- Yahan aap future me aur tools daal sakte hain -->
+                </div>
+            </div>
+
+            <!-- Vision Anchor Link -->
+            <a href="#vision"><i class="fa-solid fa-eye"></i> Our Vision</a>
+        </div>
+    </nav>
+
+    <!-- Main Hero Text -->
+    <header class="hero">
+        <h1>Welcome to <span>AdFree Haven</span></h1>
+        <p>Your premium centralized hub for exclusive web applications built for peak performance.</p>
+    </header>
+
+    <!-- Tools Grid -->
+    <main class="tools-container">
+        
+        <!-- Webpage 1: CloudServer-PC -->
+        <a href="https://adfreehaven.github.io/CloudServer-PC/" class="tool-card">
+            <div class="card-icon"><i class="fa-solid fa-server"></i></div>
+            <h3>CloudServer PC</h3>
+            <p>Access our powerful, lightning-fast cloud server environment directly from your browser.</p>
+            <div class="visit-btn">Open Tool <i class="fa-solid fa-arrow-right"></i></div>
+        </a>
+
+        <!-- Upcoming Tool Placeholder -->
+        <a href="#" class="tool-card" style="opacity: 0.6;">
+            <div class="card-icon" style="background: #e2e8f0; color: #94a3b8;"><i class="fa-solid fa-code"></i></div>
+            <h3>Coming Soon</h3>
+            <p>More innovative tools and apps are under development. Stay tuned for updates!</p>
+            <div class="visit-btn" style="background: #94a3b8; pointer-events: none;">In Progress</div>
+        </a>
+
+    </main>
+
+    <!-- Vision Section -->
+    <section id="vision" class="vision-section">
+        <div class="vision-box">
+            <h2><i class="fa-solid fa-shield-halved"></i> Our Vision</h2>
+            <p>"To provide the absolute best tools and web applications completely free from any intrusive ads or annoying pop-ups. We believe in pure performance, seamless user experience, and zero interruptions."</p>
+        </div>
+    </section>
+
+    <!-- Fixed Bottom Taskbar -->
+    <div class="taskbar">
+        <p>MADE BY TEAM <span class="highlight-1">ADFREE HAVEN</span> | POWERED BY <span class="highlight-2">JALAPGROUP</span></p>
+    </div>
+
+</body>
+</html>
