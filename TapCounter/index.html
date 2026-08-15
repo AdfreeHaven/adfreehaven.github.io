@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- ================= SEO & GOOGLE SEARCH TAGS ================= -->
+    <title>Online Tally & Click Counter | Tasbeeh & Tab Counter | AdFree Haven</title>
+    
+    <!-- Google Site Verification (Replace with yours) -->
+    <meta name="google-site-verification" content="7128yxzhCcd7EMxvrUifurAQF5T2X_BqKxq7rVVTqPg" />
+    
+    <!-- Optimized Meta Description & Keywords -->
+    <meta name="description" content="Free Online Tab Counter, Tally Counter, Click Counter, and Tasbeeh Counter. Track multiple user profiles, export PDF reports, and backup data. 100% Ad-Free UI by AdFree Haven.">
+    <meta name="keywords" content="Online Tab Counter, Tally Counter, Click Counter, Tasbeeh Counter, digital counter, tap counter app, ad-free tally counter, multiple profiles tap counter, AdFree Haven">
+    <meta name="author" content="Team AdFree Haven">
+    <meta name="robots" content="index, follow">
+
+    <!-- Schema.org JSON-LD (Google Rich Results) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "AdFree Haven Click & Tally Counter",
+      "author": {
+        "@type": "Organization",
+        "name": "Team AdFree Haven"
+      },
+      "operatingSystem": "All",
+      "applicationCategory": "UtilitiesApplication",
+      "description": "An advanced online tally counter with user profiles, PDF reports, JSON backup, and beautiful graphics. Perfect for Tasbeeh, inventory, or event counting."
+    }
+    </script>
+    <!-- ================= END SEO TAGS ================= -->
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2310b981' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='18' height='18' rx='2' ry='2'></rect><circle cx='12' cy='12' r='4'></circle><path d='M12 8v8'></path><path d='M8 12h8'></path></svg>">
+
+    <!-- Premium Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- HTML2PDF Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <style>
+        /* --- Premium Clean Theme Variables --- */
+        :root {
+            --primary: #10b981; 
+            --secondary: #0ea5e9; 
+            --bg-color: #f4f7f9; 
+            --card-bg: #ffffff; 
+            --text-main: #1e293b; 
+            --text-muted: #64748b; 
+            --border-color: #cbd5e1;
+            --danger: #ef4444;
+        }
+
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            height: 100dvh; /* Mobile friendly full height */
+            display: flex; flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* --- 1. NAVBAR --- */
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 20px; background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02); z-index: 1000; flex-shrink: 0;
+        }
+
+        .hamburger { font-size: 24px; cursor: pointer; user-select: none; color: var(--text-main); transition: 0.2s;}
+        .hamburger:hover { color: var(--primary); }
+
+        .navbar-brand { display: flex; align-items: center; gap: 8px; }
+        .logo-img { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--primary); }
+        .navbar h2 {
+            font-size: 1.1rem; font-weight: 800; letter-spacing: -0.5px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin: 0; font-family: 'Poppins', sans-serif;
+        }
+
+        .home-btn {
+            font-size: 20px; color: var(--text-main); text-decoration: none; transition: 0.2s;
+        }
+        .home-btn:hover { color: var(--primary); }
+
+        /* --- 2. SIDEBAR MENU --- */
+        .sidebar {
+            position: fixed; top: 0; left: -300px; width: 280px; height: 100%;
+            background: var(--card-bg); border-right: 1px solid var(--border-color);
+            transition: 0.3s ease-in-out; z-index: 2000; padding-top: 60px;
+            overflow-y: auto; box-shadow: 5px 0 25px rgba(0,0,0,0.05);
+        }
+
+        .sidebar.active { left: 0; }
+
+        .sidebar-header {
+            position: absolute; top: 0; left: 0; width: 100%; height: 60px;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 20px; border-bottom: 1px solid var(--border-color); background: #f8fafc;
+        }
+        .sidebar-header span { font-weight: 800; color: var(--text-main); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;}
+        .close-btn { font-size: 20px; cursor: pointer; color: var(--text-muted); transition: 0.2s;}
+        .close-btn:hover { color: var(--danger); }
+
+        .sidebar button {
+            width: 100%; background: transparent; color: var(--text-main);
+            border: none; padding: 16px 20px; text-align: left; font-weight: 600;
+            font-size: 0.9rem; border-bottom: 1px solid #f1f5f9; cursor: pointer;
+            transition: 0.2s; display: flex; align-items: center; gap: 12px;
+        }
+        .sidebar button i { width: 20px; text-align: center; color: var(--secondary); font-size: 1.1rem;}
+        .sidebar button:hover { background: #f8fafc; color: var(--primary); padding-left: 25px;}
+        .sidebar button.btn-danger { color: var(--danger); }
+        .sidebar button.btn-danger i { color: var(--danger); }
+        .sidebar button.btn-danger:hover { background: #fef2f2; color: var(--danger); }
+
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.4); z-index: 1500; display: none;
+            backdrop-filter: blur(2px);
+        }
+        .overlay.active { display: block; }
+        #restoreFileInput { display: none; }
+
+        /* --- 3. MAIN CONTAINER & UI --- */
+        .main-container {
+            flex: 1; display: flex; flex-direction: column; align-items: center;
+            justify-content: space-evenly; padding: 15px 20px; min-height: 0;
+        }
+
+        /* Profile & Dropdown */
+        .name-setup {
+            display: flex; gap: 10px; width: 100%; max-width: 400px;
+            background: var(--card-bg); padding: 10px; border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid var(--border-color);
+            flex-shrink: 0; z-index: 100;
+        }
+
+        .input-wrapper { position: relative; flex: 1; display: flex; }
+        .input-wrapper input {
+            width: 100%; padding: 10px 35px 10px 15px; border-radius: 10px;
+            border: 1px solid var(--border-color); background: #f8fafc;
+            color: var(--text-main); font-size: 0.9rem; font-weight: 600; outline: none; transition: 0.3s;
+        }
+        .input-wrapper input:focus { border-color: var(--secondary); background: #fff; box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1); }
+
+        .dropdown-btn {
+            position: absolute; right: 5px; top: 50%; transform: translateY(-50%);
+            background: transparent; border: none; color: var(--text-muted);
+            font-size: 14px; padding: 5px; cursor: pointer; transition: 0.2s;
+        }
+        .dropdown-btn:hover { color: var(--secondary); }
+
+        .dropdown-content {
+            display: none; position: absolute; top: 110%; left: 0; width: 100%;
+            background: var(--card-bg); border: 1px solid var(--border-color);
+            border-radius: 10px; max-height: 200px; overflow-y: auto; z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .dropdown-content.show { display: block; animation: fadeIn 0.2s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .dropdown-item {
+            padding: 12px 15px; cursor: pointer; border-bottom: 1px solid #f1f5f9;
+            font-size: 0.85rem; font-weight: 600; color: var(--text-main); display: flex; justify-content: space-between;
+        }
+        .dropdown-item:last-child { border-bottom: none; }
+        .dropdown-item:hover { background: #f8fafc; color: var(--primary); padding-left: 20px; transition: 0.2s;}
+
+        .name-setup > button {
+            padding: 0 20px; border-radius: 10px; border: none;
+            background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white;
+            font-weight: 700; font-size: 0.85rem; cursor: pointer;
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2); transition: 0.2s;
+        }
+        .name-setup > button:hover { box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3); transform: translateY(-1px); }
+        .name-setup > button:active { transform: scale(0.95); }
+
+        /* Counter Display */
+        .counter-box {
+            text-align: center; flex: 0 1 auto;
+            background: var(--card-bg); padding: 25px 40px; border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid var(--border-color);
+            min-width: 280px; display: flex; flex-direction: column; align-items: center;
+        }
+
+        .user-label {
+            font-size: 0.85rem; color: var(--secondary); margin-bottom: 5px;
+            text-transform: uppercase; letter-spacing: 2px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+
+        #countDisplay {
+            font-size: 4.5rem; font-weight: 800; font-family: 'Poppins', sans-serif;
+            color: var(--text-main); line-height: 1.1; margin: 0;
+            background: linear-gradient(135deg, var(--text-main), var(--text-muted)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        /* RESET BUTTON ON MAIN SCREEN */
+        .reset-main-btn {
+            margin-top: 15px; background: #f8fafc; border: 1px solid var(--border-color);
+            color: var(--text-muted); padding: 6px 16px; border-radius: 20px;
+            font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: 0.2s;
+            display: inline-flex; align-items: center; gap: 6px; justify-content: center;
+        }
+        .reset-main-btn:hover { background: #fef2f2; color: var(--danger); border-color: #fca5a5; }
+
+        /* Giant Tap Button */
+        .tap-area {
+            flex: 1; display: flex; align-items: center; justify-content: center; width: 100%;
+        }
+
+        #tapBtn {
+            width: 55vmin; height: 55vmin; max-width: 250px; max-height: 250px;
+            border-radius: 50%; border: 6px solid #ffffff;
+            background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white;
+            font-size: 2.5rem; font-weight: 800; font-family: 'Poppins', sans-serif; cursor: pointer;
+            box-shadow: 0 15px 35px rgba(16, 185, 129, 0.3), inset 0 -10px 20px rgba(0,0,0,0.1);
+            transition: all 0.1s ease; user-select: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+        }
+        #tapBtn i { font-size: 1.5rem; opacity: 0.8; }
+        #tapBtn:active { transform: scale(0.92); box-shadow: 0 5px 15px rgba(16, 185, 129, 0.2), inset 0 -5px 10px rgba(0,0,0,0.1); }
+
+        /* --- 4. SLIM TASKBAR --- */
+        .taskbar {
+            flex-shrink: 0; width: 100%; background: var(--card-bg); padding: 8px 0;
+            text-align: center; font-size: 0.7rem; color: var(--text-muted);
+            border-top: 1px solid var(--border-color); font-weight: 600; letter-spacing: 1px;
+        }
+        .taskbar span.t1 { color: var(--primary); }
+        .taskbar span.t2 { color: var(--secondary); }
+
+        /* PDF Template */
+        #pdfTemplate {
+            display: none; background: #fff; color: #1e293b;
+            padding: 40px; font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="overlay" id="overlay" onclick="closeAllModals()"></div>
+
+    <!-- Sidebar Menu -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <span><i class="fa-solid fa-sliders"></i> Menu Options</span>
+            <i class="fa-solid fa-xmark close-btn" onclick="toggleSidebar()"></i>
+        </div>
+        
+        <button onclick="generatePDF()"><i class="fa-solid fa-file-pdf" style="color:var(--danger);"></i> Download PDF Report</button>
+        <button onclick="backupData()"><i class="fa-solid fa-download" style="color:var(--primary);"></i> Backup Data (JSON)</button>
+        <button onclick="document.getElementById('restoreFileInput').click()"><i class="fa-solid fa-folder-open" style="color:var(--warning);"></i> Restore Data</button>
+        <input type="file" id="restoreFileInput" accept=".json" onchange="restoreData(event)">
+        <button onclick="clearAllData()" class="btn-danger" style="margin-top: 20px; border-top: 1px solid #e2e8f0;"><i class="fa-solid fa-trash-can"></i> Clear All Data</button>
+    </div>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <i class="fa-solid fa-bars hamburger" onclick="toggleSidebar()"></i>
+        <div class="navbar-brand">
+            <img src="LOGO.webp" onerror="this.src='../LOGO.webp'" alt="AdFree Haven" class="logo-img">
+            <h2>Tab Counter</h2>
+        </div>
+        <!-- Home Button Added -->
+        <a href="https://adfreehaven.github.io/" class="home-btn" title="Go to Home Hub"><i class="fa-solid fa-house"></i></a> 
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        
+        <!-- Input with Custom Dropdown -->
+        <div class="name-setup">
+            <div class="input-wrapper">
+                <input type="text" id="userNameInput" placeholder="Type name or select..." autocomplete="off">
+                <button class="dropdown-btn" onclick="toggleDropdown(event)"><i class="fa-solid fa-chevron-down"></i></button>
+                
+                <div class="dropdown-content" id="customDropdown">
+                    <!-- Javascript se names aayenge -->
+                </div>
+            </div>
+            <button onclick="setUserName()">Set Profile</button>
+        </div>
+
+        <!-- Counter Display -->
+        <div class="counter-box">
+            <div class="user-label" id="displayUserName"><i class="fa-regular fa-user"></i> GUEST'S COUNT</div>
+            <div id="countDisplay">0</div>
+            
+            <!-- Reset Button added inside Counter Box -->
+            <button onclick="resetCurrent()" class="reset-main-btn"><i class="fa-solid fa-rotate-left"></i> Reset Count</button>
+        </div>
+
+        <!-- Giant Tap Button -->
+        <div class="tap-area">
+            <button id="tapBtn" onclick="incrementCount()">
+                <i class="fa-solid fa-hand-pointer"></i>
+                TAP
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Slim Taskbar -->
+    <div class="taskbar">
+        MADE BY <span class="t1">TEAM ADFREEHAVEN</span> | POWERED BY <span class="t2">JALAPGROUP</span>
+    </div>
+
+    <!-- Hidden HTML structure used ONLY for generating PDF -->
+    <div id="pdfTemplate">
+        <div style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #0ea5e9; padding-bottom: 20px;">
+            <h1 style="color: #0ea5e9; font-weight: 800; font-size: 30px; margin-bottom: 5px;">Tally & Tap Counter Report</h1>
+            <p style="color: #64748b; font-weight: 500;">Official Statistics by AdFree Haven</p>
+        </div>
+        <div id="pdfDataList" style="margin-bottom: 40px;"></div>
+        <div style="text-align: center; margin-top: 40px; font-size: 12px; color: #64748b; padding-top: 20px; border-top: 1px solid #cbd5e1; font-weight: 600;">
+            GENERATED BY TEAM ADFREEHAVEN | POWERED BY JALAPGROUP
+        </div>
+    </div>
+
+    <script>
+        let tapData = {};
+        // Ensures last tapped/selected user is loaded immediately
+        let currentUser = localStorage.getItem("lastActiveUser") || "guest"; 
+
+        // Load Data on Startup
+        function loadData() {
+            let savedJSON = localStorage.getItem("tapCounterData");
+            if (savedJSON) {
+                tapData = JSON.parse(savedJSON);
+            }
+            // Populate input with the last active user (unless it's guest)
+            if (currentUser !== "guest") {
+                document.getElementById("userNameInput").value = currentUser.toUpperCase();
+            }
+            updateDisplay();
+            updateDropdownList();
+        }
+
+        function saveData() {
+            localStorage.setItem("tapCounterData", JSON.stringify(tapData));
+            localStorage.setItem("lastActiveUser", currentUser); // Always remember last user
+        }
+
+        // --- Custom Dropdown Logic --- //
+        function toggleDropdown(event) {
+            event.stopPropagation(); // prevent closing immediately
+            document.getElementById("customDropdown").classList.toggle("show");
+        }
+
+        function updateDropdownList() {
+            let dropdown = document.getElementById("customDropdown");
+            dropdown.innerHTML = ""; 
+            
+            let users = Object.keys(tapData);
+            let hasUsers = false;
+
+            users.forEach(user => {
+                if(user !== "guest" && tapData[user] !== undefined) {
+                    hasUsers = true;
+                    let div = document.createElement("div");
+                    div.className = "dropdown-item";
+                    div.innerHTML = `<span>${user.toUpperCase()}</span> <span style="color: var(--secondary);">${tapData[user]}</span>`;
+                    
+                    // Click karne par directly user select ho jaye
+                    div.onclick = function() {
+                        selectExistingUser(user);
+                    };
+                    dropdown.appendChild(div);
+                }
+            });
+
+            if(!hasUsers) {
+                dropdown.innerHTML = "<div class='dropdown-item' style='color:var(--text-muted); justify-content:center;'>No saved profiles</div>";
+            }
+        }
+
+        function selectExistingUser(userName) {
+            document.getElementById("userNameInput").value = userName.toUpperCase();
+            document.getElementById("customDropdown").classList.remove("show");
+            setUserName(); // Automatically set the user
+        }
+
+        // Close dropdown if clicked outside
+        document.addEventListener("click", function(event) {
+            if (!event.target.closest('.input-wrapper')) {
+                document.getElementById("customDropdown").classList.remove("show");
+            }
+        });
+        // ------------------------------ //
+
+        // Set User Name Function
+        function setUserName() {
+            let inputVal = document.getElementById("userNameInput").value.trim();
+            if (inputVal === "") {
+                currentUser = "guest";
+            } else {
+                currentUser = inputVal.toLowerCase(); 
+            }
+
+            if (tapData[currentUser] === undefined) {
+                tapData[currentUser] = 0;
+            }
+            
+            saveData();
+            updateDropdownList();
+            updateDisplay();
+            document.getElementById("userNameInput").blur(); 
+            document.getElementById("customDropdown").classList.remove("show");
+        }
+
+        // Increment count
+        function incrementCount() {
+            // Agar input me naya naam type karke directly tap dabaya, toh pehle naam set karo
+            let inputVal = document.getElementById("userNameInput").value.trim().toLowerCase();
+            if(inputVal !== "" && inputVal !== currentUser) {
+                setUserName();
+            }
+
+            if (tapData[currentUser] === undefined) {
+                tapData[currentUser] = 0;
+            }
+            tapData[currentUser]++;
+            saveData();
+            updateDisplay();
+            updateDropdownList(); // Update count in dropdown
+            
+            if (navigator.vibrate) navigator.vibrate(50);
+        }
+
+        // Update Screen
+        function updateDisplay() {
+            let count = tapData[currentUser] || 0;
+            document.getElementById("countDisplay").innerText = count.toLocaleString('en-IN');
+            
+            let displayName = currentUser === "guest" ? "GUEST" : currentUser;
+            document.getElementById("displayUserName").innerHTML = `<i class="fa-regular fa-user"></i> ${displayName.toUpperCase()} - TRACKING`;
+        }
+
+        // Sidebar Toggles
+        function toggleSidebar() {
+            document.getElementById("sidebar").classList.toggle("active");
+            document.getElementById("overlay").classList.toggle("active");
+            document.getElementById("customDropdown").classList.remove("show");
+        }
+
+        function closeAllModals() {
+            document.getElementById("sidebar").classList.remove("active");
+            document.getElementById("overlay").classList.remove("active");
+            document.getElementById("customDropdown").classList.remove("show");
+        }
+
+        function resetCurrent() {
+            if (confirm("Reset count for " + currentUser.toUpperCase() + "?")) {
+                tapData[currentUser] = 0;
+                saveData();
+                updateDisplay();
+                updateDropdownList();
+                // Check if sidebar is open, close it if so
+                if(document.getElementById("sidebar").classList.contains("active")) {
+                    toggleSidebar();
+                }
+            }
+        }
+
+        function clearAllData() {
+            if (confirm("WARNING: This will delete ALL history! Are you sure?")) {
+                tapData = {};
+                currentUser = "guest";
+                document.getElementById("userNameInput").value = "";
+                localStorage.removeItem("tapCounterData");
+                localStorage.removeItem("lastActiveUser");
+                updateDisplay();
+                updateDropdownList();
+                toggleSidebar();
+            }
+        }
+
+        // --- BACKUP & RESTORE DATA --- //
+
+        function backupData() {
+            let dataStr = JSON.stringify(tapData, null, 2);
+            let blob = new Blob([dataStr], { type: "application/json" });
+            let url = URL.createObjectURL(blob);
+            let a = document.createElement("a");
+            a.href = url;
+            a.download = "TapCounter_Backup.json";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            toggleSidebar();
+        }
+
+        function restoreData(event) {
+            let file = event.target.files[0];
+            if (!file) return;
+
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    let importedData = JSON.parse(e.target.result);
+                    tapData = importedData;
+                    saveData();
+                    updateDisplay();
+                    updateDropdownList();
+                    alert("Data Restored Successfully!");
+                    toggleSidebar();
+                } catch (err) {
+                    alert("Error: Invalid JSON File!");
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = ""; 
+        }
+
+        // --- SHANDAR PDF REPORT GENERATION --- //
+
+        function generatePDF() {
+            toggleSidebar(); 
+            
+            let pdfContainer = document.getElementById("pdfDataList");
+            pdfContainer.innerHTML = ""; 
+
+            let users = Object.keys(tapData);
+            let hasData = false;
+            
+            users.forEach(user => {
+                if(tapData[user] > 0) {
+                    hasData = true;
+                    pdfContainer.innerHTML += `
+                        <div style="display: flex; justify-content: space-between; padding: 12px 15px; border-bottom: 1px solid #e2e8f0; font-size: 16px;">
+                            <span style="font-weight: 700; text-transform: uppercase; color: #1e293b;">${user}</span>
+                            <span style="color: #0ea5e9; font-weight: 800;">${tapData[user].toLocaleString('en-IN')} Taps</span>
+                        </div>
+                    `;
+                }
+            });
+
+            if(!hasData) {
+                pdfContainer.innerHTML = "<p style='text-align:center; color:#94a3b8; font-weight: 500;'>No tap history found.</p>";
+            }
+
+            let element = document.getElementById('pdfTemplate');
+            element.style.display = 'block'; 
+
+            let opt = {
+              margin:       10,
+              filename:     'Tap_Count_Report.pdf',
+              image:        { type: 'jpeg', quality: 0.98 },
+              html2canvas:  { scale: 2 },
+              jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                element.style.display = 'none'; 
+            });
+        }
+
+        window.onload = loadData;
+
+    </script>
+</body>
+</html>
