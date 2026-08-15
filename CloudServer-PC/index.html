@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudServerPc | AdFree Haven</title>
+    
+    <!-- Google Site Verification -->
+    <meta name="google-site-verification" content="acRDymDA5v9jn3qx7g63vayLaAuDSjQyUlRWxgiayDw" />
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Download CloudServerPc to instantly transform your PC into a secure, fully customizable personal cloud server. Enjoy 100% ad-free file sharing with AdFree Haven.">
+    <meta name="keywords" content="CloudServerPc, Adfreehaven, personal cloud server, Cloudflare tunnel server, ad-free file hosting">
+    <meta name="author" content="Adfreehaven">
+    
+    <!-- Custom Favicon: (Mene ise change nahi kiya hai, exactly wahi hai jo aapne diya tha) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2310b981' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='3' width='20' height='14' rx='2' ry='2'></rect><line x1='8' y1='21' x2='16' y2='21'></line><line x1='12' y1='17' x2='12' y2='21'></line><path d='M16 12a3.5 3.5 0 0 0-5.5-2.5 2.5 2.5 0 1 0-3.5 2.5h9z' fill='%2310b981' stroke='none'></path></svg>">
+    
+    <!-- Google Fonts (Main Website Theme) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        /* --- Premium Clean Theme (Matches Main Website) --- */
+        :root {
+            --primary: #10b981; /* Premium Emerald Green */
+            --secondary: #0ea5e9; /* Premium Blue */
+            --bg-color: #f4f7f9; /* Soft Silver/Gray */
+            --card-bg: #ffffff; /* Pure White Cards */
+            --text-main: #1e293b; /* Slate Dark Text */
+            --text-muted: #64748b; /* Gray Text */
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- Navbar --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 50px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        /* Round Logo from Main Site */
+        .logo-img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary);
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
+        }
+
+        .brand-name {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand-divider {
+            color: var(--border-color);
+            font-weight: 300;
+        }
+
+        .nav-links a {
+            color: var(--text-main);
+            text-decoration: none;
+            margin-left: 30px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--primary); }
+
+        /* --- Hero Section --- */
+        .hero {
+            text-align: center;
+            padding: 140px 20px 60px;
+            max-width: 900px;
+            margin: 0 auto;
+            background: radial-gradient(circle at top, #ffffff, var(--bg-color));
+        }
+
+        .hero h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            letter-spacing: -1px;
+            color: var(--text-main);
+            line-height: 1.2;
+        }
+        
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+        }
+
+        .hero-badges {
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .hero-badge {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--text-main);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        /* ==== Visual Showcase Section (Light Mode SaaS Look) ==== */
+        .showcase { max-width: 1200px; margin: 20px auto 80px; padding: 0 20px; }
+        .bento-grid { display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: auto auto; gap: 20px; }
+
+        .mockup-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+            position: relative;
+        }
+
+        .mockup-header {
+            background: #f8fafc;
+            padding: 12px 15px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .mac-btn { width: 12px; height: 12px; border-radius: 50%; }
+        .mac-btn.red { background: #ff5f56; }
+        .mac-btn.yellow { background: #ffbd2e; }
+        .mac-btn.green { background: #27c93f; }
+        .mockup-header-text { margin-left:10px; font-size:12px; color:var(--text-muted); font-family:monospace; }
+
+        /* 1. Laptop Login Mockup */
+        .laptop-mockup { grid-column: 1 / -1; padding-bottom: 30px; }
+        .login-split {
+            display: flex; justify-content: space-evenly; padding: 40px 20px; flex-wrap: wrap; gap: 20px;
+            background: radial-gradient(circle at top, #f8fafc 0%, #ffffff 100%);
+        }
+        .login-ui {
+            width: 300px; background: #ffffff; border-radius: 16px; padding: 25px; text-align: center;
+            border: 1px solid var(--border-color); box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+        .login-ui.master { border-top: 4px solid #f59e0b; }
+        .login-ui.client { border-top: 4px solid var(--secondary); }
+        .login-icon { width: 60px; height: 60px; border-radius: 50%; margin: 0 auto 15px; display: flex; justify-content: center; align-items: center; font-size: 24px; }
+        .login-ui.master .login-icon { color: #f59e0b; background: rgba(245,158,11,0.1); }
+        .login-ui.client .login-icon { color: var(--secondary); background: rgba(14,165,233,0.1); }
+        .login-title { font-weight: 700; font-size: 1.2rem; margin-bottom: 20px; color: var(--text-main); }
+        
+        .input-mock { 
+            width: 100%; height: 42px; background: #f1f5f9; border-radius: 8px; margin-bottom: 15px; 
+            border: 1px solid #e2e8f0; display: flex; align-items: center; padding-left: 15px;
+            color: var(--text-main); font-size: 13px; font-family: monospace; letter-spacing: 2px;
+        }
+        .btn-mock { width: 100%; height: 42px; border-radius: 8px; }
+        .login-ui.master .btn-mock { background: linear-gradient(135deg, #f59e0b, #ea580c); }
+        .login-ui.client .btn-mock { background: linear-gradient(135deg, var(--secondary), #2563eb); }
+
+        /* 2. PC to PC Sync Mockup */
+        .sync-mockup {
+            padding: 40px 20px; display: flex; justify-content: center; align-items: center; gap: 20px;
+            background: linear-gradient(to right, rgba(16, 185, 129, 0.05), rgba(14, 165, 233, 0.05));
+        }
+        .pc-icon { font-size: 50px; color: #cbd5e1; }
+        .pc-icon.active { color: var(--primary); }
+        .sync-line { height: 2px; width: 100px; background: #e2e8f0; position: relative; overflow: hidden; }
+        .sync-line::after {
+            content: ''; position: absolute; top: 0; left: -50px; width: 50px; height: 100%;
+            background: linear-gradient(to right, transparent, var(--primary), transparent);
+            animation: syncAnim 2s infinite linear;
+        }
+        .floating-folder { position: absolute; top: -25px; color: #fbbf24; font-size: 20px; animation: floatFolder 2s infinite ease-in-out; }
+        @keyframes syncAnim { 0% { left: -50px; } 100% { left: 100%; } }
+        @keyframes floatFolder { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+        /* 3. Media Player UI Mockup */
+        .media-mockup { padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .dir-list { display: flex; gap: 10px; align-items: center; background: #f1f5f9; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);}
+        .video-player {
+            width: 100%; height: 150px; background: #0f172a; border-radius: 12px;
+            position: relative; display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1); overflow: hidden;
+        }
+        .play-btn {
+            width: 50px; height: 50px; background: var(--primary); border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; font-size: 20px; color: #fff;
+            z-index: 10; box-shadow: 0 5px 15px rgba(16,185,129,0.4);
+        }
+        .progress-bar { position: absolute; bottom: 0; left: 0; height: 5px; width: 100%; background: rgba(255,255,255,0.2); }
+        .progress-fill { height: 100%; width: 45%; background: var(--primary); }
+
+        /* --- Features Section (Matches Main Site Cards) --- */
+        .features { padding: 20px 50px 80px; max-width: 1200px; margin: 0 auto; flex: 1; margin-bottom: 40px;}
+        .section-title { text-align: center; font-size: 2.2rem; margin-bottom: 50px; font-weight: 800; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        
+        .card { 
+            background: var(--card-bg); 
+            border: 1px solid var(--border-color); 
+            padding: 35px 25px; 
+            border-radius: 20px; 
+            text-align: center;
+            transition: all 0.4s ease; 
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        }
+        
+        .card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0); transition: transform 0.4s ease; transform-origin: left;
+        }
+
+        .card:hover::before { transform: scaleX(1); }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); border-color: transparent; }
+        
+        .card i { 
+            font-size: 30px; margin-bottom: 20px; 
+            background: rgba(14, 165, 233, 0.1); 
+            width: 70px; height: 70px; line-height: 70px; 
+            border-radius: 50%; color: var(--secondary);
+            transition: 0.4s;
+        }
+        .card:hover i { background: var(--primary); color: white; transform: rotate(360deg); }
+
+        .card h3 { font-size: 1.2rem; margin-bottom: 12px; font-weight: 700; color: var(--text-main); }
+        .card p { color: var(--text-muted); font-size: 0.95rem; }
+
+        /* --- Fixed Bottom Taskbar (Matches Main Site) --- */
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 15px 0;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.03);
+        }
+        .taskbar p { font-size: 0.9rem; font-weight: 700; letter-spacing: 1.5px; color: var(--text-muted); }
+        .taskbar .highlight-1 { color: var(--primary); }
+        .taskbar .highlight-2 { color: var(--secondary); }
+
+        /* Responsive */
+        @media (max-width: 900px) { .bento-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            nav { padding: 15px 20px; flex-direction: column; gap: 15px; position: static; }
+            .nav-links { display: flex; gap: 15px; }
+            .nav-links a { margin: 0; }
+            .features { padding: 20px 20px 80px; }
+            .taskbar p { font-size: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav>
+        <a href="https://adfreehaven.github.io/" class="logo-container">
+            <!-- Yeh aapka wahi round logo hai jo main site par hai -->
+            <img src="LOGO.webp" alt="AdFree Haven Logo" class="logo-img">
+            <span class="brand-name">AdFree Haven <span class="brand-divider">|</span> CloudServer-PC</span>
+        </a>
+        <div class="nav-links">
+            <a href="https://adfreehaven.github.io/"><i class="fa-solid fa-house"></i> Main Hub</a>
+            <a href="#features"><i class="fa-solid fa-star"></i> Features</a>
+            <a href="#download"><i class="fa-solid fa-download"></i> Download</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Your PC is Now a <span>Secure Cloud Server</span></h1>
+        <p>Turn your computer into a powerful cloud storage engine. Share files, stream media, and get direct online links instantly with zero ads and pop-ups.</p>
+        
+        <div class="hero-badges">
+            <span class="hero-badge"><i class="fa-solid fa-ban"></i> 100% Ad-Free Experience</span>
+            <span class="hero-badge"><i class="fa-solid fa-shield-halved"></i> Total Privacy & Control</span>
+        </div>
+
+        <div id="download">
+            <a href="https://github.com/AdfreeHaven/cloudserverpc/releases/download/v2.0/CloudServerPC.exe" class="btn btn-primary"><i class="fa-brands fa-windows"></i> Direct Download</a>
+        </div>
+    </section>
+
+    <!-- ==== App Visual Showcase Section ==== -->
+    <section class="showcase">
+        <div class="bento-grid">
+            
+            <!-- 1. Laptop Login Mockup -->
+            <div class="mockup-card laptop-mockup">
+                <div class="mockup-header">
+                    <div class="mac-btn red"></div><div class="mac-btn yellow"></div><div class="mac-btn green"></div>
+                    <span class="mockup-header-text">http://localhost:8001 | Dual Node Authentication</span>
+                </div>
+                <div class="login-split">
+                    <div class="login-ui master">
+                        <div class="login-icon"><i class="fa-solid fa-lock"></i></div>
+                        <div class="login-title">Master Control</div>
+                        <div class="input-mock">••••••••• (Password)</div>
+                        <div class="btn-mock"></div>
+                    </div>
+                    <div class="login-ui client">
+                        <div class="login-icon"><i class="fa-solid fa-cloud"></i></div>
+                        <div class="login-title">Client Cloud</div>
+                        <div class="input-mock">••••••••• (Password)</div>
+                        <div class="btn-mock"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. PC to PC Sync Mockup -->
+            <div class="mockup-card">
+                <div class="mockup-header">
+                    <div class="mac-btn red"></div><div class="mac-btn yellow"></div><div class="mac-btn green"></div>
+                    <span class="mockup-header-text">Directory Sync</span>
+                </div>
+                <div class="sync-mockup">
+                    <i class="fa-solid fa-computer pc-icon active"></i>
+                    <div style="position:relative;">
+                        <i class="fa-solid fa-folder floating-folder" style="left:35px;"></i>
+                        <div class="sync-line"></div>
+                    </div>
+                    <i class="fa-solid fa-laptop pc-icon"></i>
+                </div>
+            </div>
+
+            <!-- 3. Directory Media Player Mockup -->
+            <div class="mockup-card">
+                <div class="mockup-header">
+                    <div class="mac-btn red"></div><div class="mac-btn yellow"></div><div class="mac-btn green"></div>
+                    <span class="mockup-header-text">Media Streaming</span>
+                </div>
+                <div class="media-mockup">
+                    <div class="dir-list">
+                        <i class="fa-solid fa-circle-play" style="color:#ef4444; font-size:20px;"></i>
+                        <span style="font-size:13px; color:var(--text-main); font-weight:600;">Avengers_Endgame.mp4</span>
+                    </div>
+                    <div class="video-player">
+                        <div class="play-btn"><i class="fa-solid fa-play" style="margin-left:4px;"></i></div>
+                        <div class="progress-bar"><div class="progress-fill"></div></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <h2 class="section-title">Powerful Features Under the Hood</h2>
+        <div class="grid">
+            
+            <div class="card">
+                <i class="fa-solid fa-user-lock"></i>
+                <h3>Dual Login Access</h3>
+                <p>Dedicated Master and Client pages. Set custom passwords to control exactly who enters your dashboard.</p>
+            </div>
+
+            <div class="card">
+                <i class="fa-solid fa-user-shield"></i>
+                <h3>Per-Client Permissions</h3>
+                <p>Grant or revoke specific permissions like upload, download, delete, or create folders for each IP.</p>
+            </div>
+
+            <div class="card">
+                <i class="fa-solid fa-network-wired"></i>
+                <h3>Cloudflare Links</h3>
+                <p>Generate secure online links instantly. Share your files globally with zero port forwarding required.</p>
+            </div>
+
+            <div class="card">
+                <i class="fa-solid fa-layer-group"></i>
+                <h3>OS-Like Interface</h3>
+                <p>Enjoy a beautiful, draggable, multi-window UI right in your browser. A true desktop experience online.</p>
+            </div>
+
+            <div class="card">
+                <i class="fa-solid fa-ban"></i>
+                <h3>100% Ad-Free</h3>
+                <p>No pop-ups, trackers, or hidden ads. Enjoy a premium, clean experience as promised by AdFree Haven.</p>
+            </div>
+
+            <div class="card">
+                <i class="fa-solid fa-shield-halved"></i>
+                <h3>Custom Security</h3>
+                <p>Full control over your data with custom security keys, root upload passwords, and IP blocking features.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Fixed Bottom Taskbar (Same as Main Hub) -->
+    <div class="taskbar">
+        <p>MADE BY TEAM <span class="highlight-1">ADFREE HAVEN</span> | POWERED BY <span class="highlight-2">JALAPGROUP</span></p>
+    </div>
+
+</body>
+</html>
