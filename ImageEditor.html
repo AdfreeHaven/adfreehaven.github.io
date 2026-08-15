@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ID Passport Tool X</title>
+  
+  <!-- Premium Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  
+  <!-- Cropper.js CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" />
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif; 
+      background: #eef2f5; margin: 0;
+      padding: 0 0 0 0; 
+      user-select: none; min-height: 100vh;
+      display: flex; flex-direction: column;
+      overflow-x: hidden;
+    }
+    
+    /* Top Bar */
+    .top-bar {
+      position: sticky; top: 0; left: 0; right: 0; 
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(10px); z-index: 1000; box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+      display: flex; flex-direction: column; border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .controls { padding: 8px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .brand-title { margin: 0; color: #fff; font-size: 30px; font-family: 'Caveat', cursive; font-weight: 700; letter-spacing: 1.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+    .brand-title span { color: #3b82f6; }
+
+    .control-buttons { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; align-items: center; }
+    .control-buttons button {
+      padding: 8px 16px; font-size: 13px; cursor: pointer; border: none; border-radius: 20px; background: #3b82f6; color: white; 
+      font-weight: 600; font-family: 'Poppins', sans-serif; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(59,130,246,0.2);
+    }
+    .control-buttons button:hover { transform: translateY(-2px); filter: brightness(1.1); }
+    .control-buttons button.bulk-btn { background: #10b981; } 
+    .control-buttons button.insert-crop-btn { background: #8b5cf6; }
+    .control-buttons button.pdf-btn { background: #ef4444; }
+    .control-buttons button.add-more-btn { background: #f59e0b; }
+    .control-buttons button.edit-img-btn { background: #ec4899; box-shadow: 0 4px 10px rgba(236,72,153,0.3); }
+
+    .dropdown { position: relative; display: inline-block; }
+    .dropdown-btn { background: #334155 !important; display: flex; align-items: center; gap: 5px; }
+    .dropdown-content { display: none; position: absolute; right: 0; top: 110%; background-color: #1e293b; min-width: 170px; box-shadow: 0px 8px 20px 0px rgba(0,0,0,0.4); z-index: 1001; border-radius: 8px; overflow: hidden; }
+    .dropdown-content a { color: white; padding: 8px 16px; text-decoration: none; display: block; font-size: 13px; font-weight: 500; transition: background 0.2s; }
+    .dropdown-content a:hover { background-color: #3b82f6; }
+    .dropdown:hover .dropdown-content { display: block; }
+    
+    .size-controls { padding: 8px 20px; display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; color: #cbd5e1; font-size: 13px; }
+    .size-group { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.05); padding: 4px 15px; border-radius: 8px; flex-wrap: wrap; justify-content: center;}
+    .size-controls select, .size-controls input { padding: 4px 10px; border-radius: 6px; border: 1px solid #475569; background: #1e293b; color: #fff; font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 13px; outline: none; }
+    .size-controls select:focus, .size-controls input:focus { border-color: #3b82f6; }
+    .size-controls input[readonly] { background: #0f172a; color: #94a3b8; cursor: not-allowed; }
+
+    .edit-controls button { background: #475569; color: white; border: none; padding: 8px 12px; margin: 3px; border-radius: 6px; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 13px; transition: 0.2s; }
+    .edit-controls button:hover { background: #64748b; }
+
+    #pages-container { flex: 1; padding-top: 30px; overflow-x: auto; width: 100%; display: flex; flex-direction: column; align-items: center;}
+    .page-wrapper { display: flex; flex-direction: column; align-items: center; margin-bottom: 50px; }
+    
+    .page-controls { width: 210mm; background: #334155; color: #fff; padding: 10px 15px; margin-top: 0; display: flex; justify-content: space-between; align-items: center; border-radius: 12px 12px 0 0; box-shadow: 0 4px 15px rgba(0,0,0,0.1); box-sizing: border-box; flex-wrap: wrap; gap: 10px; }
+    .page-wrapper.active-page .page-controls, .page-wrapper.active-page .page-footer-controls { background: #2563eb; } 
+    .page-title-container { display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
+    .page-title { font-size: 14px; font-weight: 700; letter-spacing: 0.5px; }
+    .page-controls-right { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    
+    .page-controls button, .page-footer-controls button { padding: 6px 10px; font-size: 13px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; color: white; font-family: 'Poppins', sans-serif; white-space: nowrap; }
+    .add-more-btn { background: #f59e0b; } .add-more-btn:hover { background: #d97706; }
+    .context-actions { display: none; padding-right: 10px; border-right: 1px solid rgba(255,255,255,0.3); margin-right: 2px; gap: 6px;}
+    .btn-change { background: #f59e0b; } .btn-delete-item { background: #ef4444; } .clear-page-btn { background: #64748b; } .delete-page-btn { background: #ef4444; }
+
+    .page { position: relative; width: 210mm; height: 297mm; background: white; margin: 0 auto; padding: 0; box-sizing: border-box; box-shadow: 0 15px 35px rgba(0,0,0,0.15); border-radius: 0; overflow: visible; flex-shrink: 0; }
+    
+    .page-footer-controls { width: 210mm; background: #334155; color: #fff; padding: 10px 15px; margin-bottom: 0; display: flex; justify-content: space-between; align-items: center; border-radius: 0 0 12px 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); box-sizing: border-box; flex-wrap: wrap; gap: 10px; }
+    .add-page-num-btn { background: #64748b; } .add-sign-btn { background: #8b5cf6; }
+
+    .page-actions { display: flex; gap: 15px; justify-content: center; width: 100%; margin-top: 20px; flex-wrap: wrap;}
+    .page-actions button { padding: 10px 22px; font-size: 14px; font-weight: 600; border: none; border-radius: 25px; cursor: pointer; color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.15); transition: 0.3s; }
+    .page-actions button:hover { transform: translateY(-2px); }
+    .btn-save-img { background: #10b981; } .btn-save-pdf { background: #ef4444; } .btn-print-single { background: #f59e0b; color: #fff; }
+
+    .movable-box { position: absolute; cursor: move; display: inline-block; touch-action: none; }
+    .movable-box input[type="file"] { position: absolute; top: -25px; left: 0; display: block; width: 180px; font-size: 11px; z-index: 10; background: #f8fafc; padding: 2px; border-radius: 4px; border: 1px solid #cbd5e1; }
+    
+    img.id-image { 
+      border: none; 
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.05); 
+      user-select: none; 
+      -webkit-user-drag: none; 
+      display: block; 
+      object-fit: fill; 
+      background: transparent; 
+      transition: box-shadow 0.2s; 
+      box-sizing: border-box; 
+    }
+    
+    .movable-box.selected img.id-image { outline: 2px solid #3b82f6; outline-offset: 1px; box-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
+    .movable-box.has-image input[type="file"] { display: none !important; }
+
+    .resize-handle { position: absolute; width: 24px; height: 24px; background: #ffffff; border: 2px solid #3b82f6; border-radius: 50%; display: none; z-index: 50; touch-action: none; }
+    body.is-original-size .movable-box.selected .resize-handle { display: block; }
+    .resize-handle.nw { top: -12px; left: -12px; cursor: nw-resize; } .resize-handle.ne { top: -12px; right: -12px; cursor: ne-resize; }
+    .resize-handle.sw { bottom: -12px; left: -12px; cursor: sw-resize; } .resize-handle.se { bottom: -12px; right: -12px; cursor: se-resize; }
+    .resize-handle.n { top: -12px; left: calc(50% - 12px); cursor: n-resize; } .resize-handle.s { bottom: -12px; left: calc(50% - 12px); cursor: s-resize; }
+    .resize-handle.e { top: calc(50% - 12px); right: -12px; cursor: e-resize; } .resize-handle.w { top: calc(50% - 12px); left: -12px; cursor: w-resize; }
+    .movable-box.locked-ratio .resize-handle.n, .movable-box.locked-ratio .resize-handle.s, .movable-box.locked-ratio .resize-handle.e, .movable-box.locked-ratio .resize-handle.w { display: none !important; }
+    
+    .sign-box { z-index: 999 !important; }
+    .page-number-box { z-index: 998 !important; }
+    .page-number-box span { font-size: 16px; font-weight: bold; color: #000; padding: 5px; cursor: pointer; display: block; min-width: 50px; text-align: center;}
+
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); }
+    #cropModal, #editModal { z-index: 3000; }
+    .modal { background: white; padding: 20px; border-radius: 12px; width: 600px; max-width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.3); animation: slideIn 0.3s ease; font-family: 'Poppins', sans-serif; }
+    @keyframes slideIn { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .modal h3 { margin-top: 0; color: #0f172a; border-bottom: 2px solid #3b82f6; padding-bottom: 10px; }
+    .modal-form { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    @media (max-width: 600px) { .modal-form { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 5px; font-size: 13px; font-weight: 600; color: #334155; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-group input[type="text"], .form-group input[type="number"], .form-group input[type="file"], .form-group select { padding: 8px; border: 1px solid #cbd5e1; border-radius: 5px; font-family: 'Poppins', sans-serif; }
+    
+    .crop-modal { background: white; padding: 15px; border-radius: 12px; width: 95%; max-width: 850px; height: 95vh; max-height: 750px; display: flex; flex-direction: column; box-shadow: 0 20px 50px rgba(0,0,0,0.3); animation: slideIn 0.3s ease; font-family: 'Poppins', sans-serif; }
+    .crop-modal h3 { margin-top: 0; color: #0f172a; border-bottom: 2px solid #3b82f6; padding-bottom: 5px; font-size: 18px;}
+    .crop-container { flex: 1; min-height: 0; background: #1e293b; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; touch-action: none; }
+    .crop-container img { max-width: 100%; display: block; }
+    .cropper-point { width: 20px !important; height: 20px !important; background-color: #3b82f6 !important; opacity: 0.9 !important; }
+    
+    .slider-group { display: flex; align-items: center; gap:8px; font-size: 13px; font-weight: 600; color: #334155;}
+    .stepper-btn { background: #e2e8f0; color: #1e293b; border: 1px solid #cbd5e1; border-radius: 4px; padding: 0 10px; height: 35px; width: 35px; cursor: pointer; font-weight: bold; font-size: 18px; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+    .modal-actions { display: flex; justify-content: space-between; align-items: center; width: 100%; gap: 10px; flex-wrap: wrap; padding-top: 10px;}
+    .modal-actions .right-buttons { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end;}
+    .modal-actions button { padding: 10px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; border: none; font-family: 'Poppins', sans-serif; }
+    
+    .btn-crop-now { background: #f59e0b; color: white; }
+    .btn-cancel { background: #64748b; color: white; }
+    .btn-full { background: #0ea5e9; color: white; }
+    .btn-confirm { background: #10b981; color: white; }
+    .btn-save-crop { background: #0f172a; color: #38bdf8; border: 1px solid #38bdf8; } 
+    .add-crop-mini-btn { background: #1e293b; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; white-space: nowrap; font-family: 'Poppins'; transition: 0.2s; font-weight: 600;}
+    .add-crop-mini-btn:hover { filter: brightness(1.1); transform: scale(1.02); }
+
+    /* --- EDIT IMAGE UI STYLING FIXES (100% Zoom Responsive) --- */
+    .edit-layout { 
+        display: flex; gap: 15px; flex: 1; min-height: 0; 
+        overflow: hidden; /* Important to keep layout inside modal */
+    }
+    
+    @media (max-width: 768px) {
+        .edit-layout { flex-direction: column; overflow-y: auto; }
+        .edit-controls-area { width: 100% !important; height: auto !important; overflow-y: visible !important; }
+    }
+
+    .edit-canvas-area { flex: 1; min-width: 0; background: #1e293b; border-radius: 8px; display: flex; justify-content: center; align-items: center; position: relative; overflow: hidden; padding: 10px;}
+    #editCanvas { max-width: 100%; max-height: 100%; object-fit: contain; box-sizing: border-box; }
+    
+    /* Strict height and scroll for the right panel */
+    .edit-controls-area { 
+        width: 280px; display: flex; flex-direction: column; gap: 8px; 
+        overflow-y: auto; padding-right: 5px; flex-shrink: 0; height: 100%;
+    }
+    
+    /* Compact slider rows to fit better */
+    .edit-slider-row { display: flex; flex-direction: column; gap: 0px; font-size: 12px; font-weight: 600; color: #334155; }
+    .edit-slider-row label { margin-bottom: 2px; }
+    .edit-slider-row input[type="range"] { width: 100%; cursor: pointer; margin: 0; }
+    
+    .bottom-action-area { display: flex; justify-content: center; margin: 0 0 40px 0; width: 100%; padding: 0 10px; box-sizing: border-box; }
+    .add-new-page-bottom-btn { padding: 12px 30px; font-size: 16px; cursor: pointer; border: none; border-radius: 30px; background: #3b82f6; color: white; font-weight: 600; font-family: 'Poppins', sans-serif; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(59,130,246,0.3); width: 100%; max-width: 300px; }
+    .custom-footer { background: #0b0f19; color: #94a3b8; text-align: center; padding: 5px 20px 10px; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.05); }
+    .footer-title { margin: 0 0 4px 0; font-size: 24px; color: #fff; font-family: 'Caveat', cursive; letter-spacing: 1.5px; font-weight: 700; }
+    .footer-desc { margin: 0 auto 6px auto; font-size: 13px; color: #cbd5e1; font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .export-mode .top-bar, .export-mode .page-controls, .export-mode .page-footer-controls, .export-mode input[type="file"], .export-mode .bottom-action-area, .export-mode .custom-footer, .export-mode .page-actions, .export-mode .resize-handle { display: none !important; }
+    .export-mode .movable-box:not(.has-image):not(.page-number-box) { display: none !important; }
+    .export-mode .page { box-shadow: none !important; margin: 0 auto !important; border: none !important; border-radius: 0 !important; }
+    .export-mode img.id-image { border-color: transparent !important; box-shadow: none !important; background: transparent !important; outline: none !important; }
+    .export-mode .movable-box.selected img.id-image { outline: none !important; box-shadow: none !important; }
+    body.print-single-mode .page-wrapper, body.print-single-mode .bottom-action-area { display: none; }
+    body.print-single-mode .page-wrapper.active-print { display: flex; }
+
+    @media print {
+      @page { size: A4 portrait; margin: 0; } 
+      html, body { background: white; padding: 0 !important; margin: 0 !important; min-height: auto !important; height: auto !important; }
+      .top-bar, .page-controls, .page-footer-controls, input[type="file"], .custom-footer, .page-actions, .modal-overlay, .resize-handle, .bottom-action-area { display: none !important; }
+      .movable-box:not(.has-image):not(.page-number-box) { display: none !important; }
+      #pages-container { padding: 0 !important; margin: 0 !important; display: block; overflow: visible;}
+      .page-wrapper { margin: 0 !important; padding: 0 !important; page-break-inside: avoid; page-break-after: avoid; }
+      .page { margin: 0; border-radius: 0; box-shadow: none; padding: 0; border: none !important; page-break-after: always; }
+      .page-wrapper:last-child .page { page-break-after: avoid !important; }
+      .movable-box.selected img.id-image { outline: none !important; box-shadow: none !important; }
+    }
+  </style>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
+</head>
+<body>
+
+  <!-- Hidden Inputs -->
+  <input type="file" id="globalCropInput" accept="image/*" style="display:none;" onchange="handleCropFileSelect(event)">
+  <input type="file" id="globalPdfCropInput" accept="application/pdf" style="display:none;" onchange="handlePdfCropFileSelect(event)">
+  <input type="file" id="multiImageInput" accept="image/*" multiple style="display:none;" onchange="handleMultiImageSelect(event)">
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="controls">
+      <h1 class="brand-title">ID Passport <span>Tool X</span></h1>
+      
+      <div class="control-buttons">
+        <button class="add-more-btn" onclick="triggerMultiImageUpload(activePageId)">➕ Add New Image(s)</button>
+        <button class="insert-crop-btn" onclick="triggerCropUpload('page', 'image')">✂️ Image Insert & Crop</button>
+        <button class="insert-crop-btn pdf-btn" onclick="triggerCropUpload('page', 'pdf')">📄 PDF Insert & Crop</button>
+        <button class="edit-img-btn" onclick="openEditModal()">🎨 Edit Photo</button>
+        <button class="bulk-btn" onclick="openBulkModal()">🚀 Bulk Add PASSPORT Photos</button>
+        
+        <!-- Export Dropdown -->
+        <div class="dropdown">
+          <button class="dropdown-btn">📤PRINT OPTIONS ⠇</button>
+          <div class="dropdown-content">
+            <a href="#" onclick="window.print(); return false;">🖨️ Print All</a>
+            <a href="#" onclick="downloadAllPDF(); return false;">📄 Export All PDF</a>
+            <a href="#" onclick="downloadAllJPEG(); return false;">🖼️ Save All JPEG</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="size-controls">
+      <div class="size-group">
+        <label><b>Image Size:</b></label>
+        <select id="sizeType" onchange="toggleCustomInputs()">
+          <option value="original" selected>Original Size (Resizable)</option>
+          <option value="document">Document (A4 Fit)</option>
+          <option value="pvc">PVC ID Size (85.6 x 54 mm)</option>
+          <option value="passport">Passport Size (35 x 45 mm)</option>
+          <option value="stamp">Stamp Size (20 x 25 mm)</option>
+          <option value="badge">Badge Size (60 x 90 mm)</option>
+        </select>
+        <label>W:</label> <input type="number" id="customW" value="" step="0.1" style="width:60px" oninput="applySizeToSelected(false); saveStateDebounced();"> mm 
+        <label>H:</label> <input type="number" id="customH" value="" step="0.1" style="width:60px" oninput="applySizeToSelected(false); saveStateDebounced();"> mm
+      </div>
+
+      <div class="edit-controls">
+        <button onclick="undoAction()" title="Ctrl+Z">↩️</button>
+        <button onclick="redoAction()" title="Ctrl+Y">↪️</button>
+        <button onclick="cutSelection()" title="Ctrl+X">✂️ Cut</button>
+        <button onclick="copySelection()" title="Ctrl+C">📋 Copy</button>
+        <button onclick="pasteClipboard()" title="Ctrl+V">📝 Paste</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Photo Modal (HEIGHT FIX APPLIED) -->
+  <div id="editModal" class="modal-overlay">
+    <!-- Height reduced slightly to 90vh, layout switched to strict flex column wrapper -->
+    <div class="crop-modal" style="max-width: 1050px; height: 90vh; display: flex; flex-direction: column;">
+      
+      <!-- Fixed Header Action Bar -->
+      <div style="flex-shrink: 0; display:flex; justify-content:space-between; align-items:center; border-bottom: 2px solid #3b82f6; padding-bottom: 8px; margin-bottom: 10px; flex-wrap:wrap; gap:10px;">
+        <h3 style="margin:0; border:none; padding:0;">🎨 Edit & Enhance Photo</h3>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+             <button class="add-crop-mini-btn" style="background:#64748b;" onclick="editUndo()" title="Ctrl+Z">↩️ Undo</button>
+             <button class="add-crop-mini-btn" style="background:#64748b;" onclick="editRedo()" title="Ctrl+Y">↪️ Redo</button>
+             <button class="add-crop-mini-btn" style="background:#8b5cf6;" onclick="openCropFromEdit()">✂️ Crop Image</button>
+             <button class="add-crop-mini-btn" style="background:#10b981;" onclick="bakeFilters()">✨ Bake / Apply Changes</button>
+        </div>
+      </div>
+
+      <!-- Main Scrollable/Flexible Content -->
+      <div class="edit-layout">
+         <!-- Canvas Area -->
+         <div class="edit-canvas-area">
+             <canvas id="editCanvas"></canvas>
+         </div>
+         
+         <!-- Edit Controls Right Side (Compact + Scrollable) -->
+         <div class="edit-controls-area">
+             
+             <!-- Filters Section -->
+             <div style="background:#f1f5f9; padding:8px 10px; border-radius:6px; display:flex; flex-direction:column; gap:6px;">
+                 <div class="edit-slider-row">
+                     <label>Brightness: <span id="valBright">100</span>%</label>
+                     <input type="range" id="editBrightness" min="0" max="200" value="100" oninput="updateCanvasFiltersUI()">
+                 </div>
+                 <div class="edit-slider-row">
+                     <label>Contrast: <span id="valContrast">100</span>%</label>
+                     <input type="range" id="editContrast" min="0" max="200" value="100" oninput="updateCanvasFiltersUI()">
+                 </div>
+                 <div class="edit-slider-row">
+                     <label>Saturation: <span id="valSat">100</span>%</label>
+                     <input type="range" id="editSaturation" min="0" max="200" value="100" oninput="updateCanvasFiltersUI()">
+                 </div>
+                 <div class="edit-slider-row">
+                     <label>Hue: <span id="valHue">0</span>°</label>
+                     <input type="range" id="editHue" min="-180" max="180" value="0" oninput="updateCanvasFiltersUI()">
+                 </div>
+                 <div class="edit-slider-row">
+                     <label>Blur: <span id="valBlur">0</span>px</label>
+                     <input type="range" id="editBlur" min="0" max="20" step="0.5" value="0" oninput="updateCanvasFiltersUI()">
+                 </div>
+                 <div class="edit-slider-row">
+                     <label style="margin-top:4px;">Color Filter</label>
+                     <select id="editFilter" style="width:100%; padding:4px; font-size:12px;" onchange="updateCanvasFiltersUI()">
+                        <option value="none">None</option>
+                        <option value="grayscale(100%)">Grayscale (B&W)</option>
+                        <option value="sepia(100%)">Sepia</option>
+                        <option value="invert(100%)">Invert</option>
+                     </select>
+                 </div>
+             </div>
+
+             <!-- Background Section -->
+             <div class="edit-slider-row" style="background:#f1f5f9; padding:8px 10px; border-radius:6px;">
+                 <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-weight:700;">
+                    <input type="checkbox" id="editBgToggle" onchange="updateCanvasFiltersUI()"> Solid Background
+                 </label>
+                 <input type="color" id="editBgColor" value="#3b82f6" style="width:100%; height:26px; margin-top:4px; border:1px solid #cbd5e1; border-radius:4px; cursor:pointer;" oninput="updateCanvasFiltersUI()">
+             </div>
+
+             <!-- Border Section -->
+             <div class="edit-slider-row" style="background:#f1f5f9; padding:8px 10px; border-radius:6px;">
+                 <label style="font-weight:700; margin-bottom:4px;">🖼️ Image Border</label>
+                 <div style="display:flex; gap:5px; align-items:center;">
+                     <select id="editBorderStyle" onchange="updateCanvasFiltersUI()" style="flex:1; padding:4px; font-size:12px;">
+                         <option value="none">None</option>
+                         <option value="solid">Solid</option>
+                         <option value="dashed">Dashed</option>
+                         <option value="dotted">Dotted</option>
+                     </select>
+                     <input type="number" id="editBorderWidth" value="1" min="0" max="50" style="width: 45px; padding:4px; text-align:center;" oninput="updateCanvasFiltersUI()"> px
+                     <input type="color" id="editBorderColor" value="#000000" oninput="updateCanvasFiltersUI()" style="width: 30px; height:24px; padding:0; border:none; cursor:pointer; background:transparent;">
+                 </div>
+             </div>
+         </div>
+      </div>
+      
+      <!-- Fixed Footer Action Bar -->
+      <div class="modal-actions full" style="flex-shrink: 0; margin-top: 10px; border-top:1px solid #cbd5e1; padding-top:10px;">
+          <button class="btn-cancel" onclick="closeEditModal()">Cancel</button>
+          <button class="btn-confirm" onclick="saveEditedImageFinal()">💾 Save & Update Photo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Crop Modal -->
+  <div id="cropModal" class="modal-overlay">
+    <div class="crop-modal">
+      <h3>✂️ Edit & Crop Image</h3>
+      
+      <div style="display:flex; flex:1; min-height:0; gap:10px; margin-bottom:15px; flex-direction: row;">
+        <div style="display:flex; flex-direction:column; flex:1; min-width:0;">
+            <div class="crop-container" style="flex: 1;">
+              <img id="cropImageTarget" src="">
+            </div>
+            
+            <div style="display:flex; flex-wrap:wrap; gap:10px; background:#f1f5f9; padding:10px; border-radius:8px; margin-top:10px; justify-content:center; align-items: center;">
+              <div class="slider-group">
+                <label>↔️ Pan X:</label>
+                <button type="button" class="stepper-btn" onclick="stepPanX(-1)">-</button>
+                <input type="range" id="panXSlider" min="-500" max="500" step="3" value="0" style="width: 150px;" oninput="sliderPanImage()">
+                <button type="button" class="stepper-btn" onclick="stepPanX(1)">+</button>
+              </div>
+              <div class="slider-group">
+                <label>🔍 Zoom:</label>
+                <button type="button" class="stepper-btn" onclick="stepZoomAmount(-0.1)">-</button>
+                <input type="range" id="zoomSlider" min="0.1" max="5" step="0.1" value="1" style="width: 120px;" oninput="sliderZoomImage()">
+                <button type="button" class="stepper-btn" onclick="stepZoomAmount(0.1)">+</button>
+              </div>
+            </div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; align-items:center; background:#f1f5f9; padding:10px; border-radius:8px; width:50px;">
+            <label style="font-size:13px; font-weight:600; color:#334155; margin-bottom:10px; writing-mode:vertical-rl; transform:rotate(180deg);">↕️ Pan Y</label>
+            <button type="button" class="stepper-btn" style="width: 100%; margin-bottom:5px;" onclick="stepPanY(-1)">-</button>
+            <input type="range" id="panYSlider" min="-500" max="500" step="3" value="0" oninput="sliderPanImage()" style="appearance:slider-vertical; flex:1; cursor:pointer;">
+            <button type="button" class="stepper-btn" style="width: 100%; margin-top:5px;" onclick="stepPanY(1)">+</button>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeCropModal()">Cancel</button>
+        <button class="btn-crop-now" onclick="applyCropPreview()">✂️ Crop Selection</button>
+        <div class="right-buttons">
+          <button class="btn-save-crop" onclick="downloadCroppedImage()">💾 Save Image</button>
+          <button class="btn-full" onclick="insertFullImage()">🔲 Insert Full</button>
+          <button class="btn-confirm" onclick="insertCroppedImage()">✅ Insert Crop</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bulk Add Modal -->
+  <div id="bulkModal" class="modal-overlay">
+    <div class="modal" style="width: 750px; max-width: 95%;">
+      <h3>🚀 Bulk Generate PASSPORT Photos</h3>
+      
+      <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+        <!-- Left Side: Controls -->
+        <div class="modal-form" style="flex: 1; min-width: 300px;">
+          <div class="form-group">
+            <label>Photo Size</label>
+            <select id="bulkSizeType">
+              <option value="passport" selected>Passport Size (35 x 45 mm)</option>
+              <option value="pvc">PVC ID Size (85.6 x 54 mm)</option>
+              <option value="stamp">Stamp Size (20 x 25 mm)</option>
+              <option value="badge">Badge Size (60 x 90 mm)</option>
+              <option value="original">Original Crop Size</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Number of Photos</label>
+            <input type="number" id="bulkCount" value="10" min="1">
+          </div>
+          <div class="form-group">
+            <label>Page Margins (mm)</label>
+            <input type="number" id="bulkMargin" value="4" min="0">
+          </div>
+          <div class="form-group">
+            <label>Horiz. Gap between photos (mm)</label>
+            <input type="number" id="bulkGapX" value="4" min="0">
+          </div>
+          <div class="form-group full">
+            <label>Vert. Gap between photos (mm)</label>
+            <input type="number" id="bulkGapY" value="4" min="0">
+          </div>
+        </div>
+
+        <!-- Right Side: Image Preview -->
+        <div style="width: 200px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px dashed #cbd5e1;">
+          <img id="bulkPreviewImg" src="" style="width: 100%; max-width: 150px; aspect-ratio: 35/45; object-fit: contain; background: transparent; border-radius: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); margin-bottom: 12px;">
+          <p style="color:#64748b; margin:0; font-size:12px; text-align: center; line-height: 1.4; font-weight: 500;">This photo will be used to generate bulk photos automatically.</p>
+        </div>
+      </div>
+      
+      <div class="modal-actions full" style="margin-top: 15px; border-top: 1px solid #cbd5e1; padding-top: 15px;">
+        <button class="btn-cancel" onclick="closeBulkModal()">Cancel</button>
+        <button class="btn-confirm" onclick="generateBulkPhotos()">✅ Generate Now</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="pages-container">
+    <div class="page-wrapper active-page" id="wrapper-page-1" onmousedown="setActivePage('page-1')" ontouchstart="setActivePage('page-1')">
+      <div class="page-controls">
+        <div class="page-title-container">
+          <span class="page-title">📄 Page 1</span>
+          <button class="add-more-btn" onclick="triggerMultiImageUpload('page-1')">➕ Add New Image(s)</button>
+        </div>
+        <div class="page-controls-right">
+          <div class="context-actions">
+            <button class="btn-change" onclick="triggerReplaceImage()">🔄 Change</button>
+            <button class="btn-delete-item" onclick="deleteSelectedBoxes()">🗑️ Delete</button>
+          </div>
+          <button class="clear-page-btn" onclick="clearPage('page-1')">🧹 Clear</button>
+        </div>
+      </div>
+
+      <div class="page" id="page-1"></div>
+
+      <div class="page-footer-controls">
+         <button class="add-page-num-btn" onclick="addPageNumberToPage('page-1')">📄 Add Page Number</button>
+         <button class="add-sign-btn" onclick="triggerCropUpload('sign', 'image')">✍️ Add Sign</button>
+      </div>
+      <div class="page-actions">
+        <button class="btn-print-single" onclick="printSinglePage('wrapper-page-1')">🖨️ Print Page</button>
+        <button class="btn-save-img" onclick="downloadSingleJPEG('page-1')">🖼️ Save Image</button>
+        <button class="btn-save-pdf" onclick="downloadSinglePDF('page-1')">📄 Save PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-action-area">
+      <button class="add-new-page-bottom-btn" onclick="addNewPage()">➕ Add New Page Here</button>
+  </div>
+
+  <div class="custom-footer">
+    <h3 class="footer-title">ID Passport Tool X</h3>
+    <p class="footer-desc">Ultimate tool for generating perfect passport-size photos and print ID cards straight from your device.</p>
+    <div class="footer-credits">Made with ❤️ by <span class="team-name">Team Adfreehaven</span> | Powered by <span class="group-name">Jalap Group</span></div>
+  </div>
+
+  <script>
+    let pageCount = 1;
+    let selectedBoxes = new Set();
+    let clipboard = [];
+    let pasteCounter = 0;
+    let activePageId = 'page-1';
+    let cropper = null;
+    let cropTargetMode = 'page'; 
+    let bulkSourceElement = null; 
+
+    function pxToMm(px) { return (px * 25.4) / 96; }
+    function mmToPx(mm) { return (mm * 96) / 25.4; }
+
+    function getPointerPos(e) {
+      if (e.touches && e.touches.length > 0) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      if (e.changedTouches && e.changedTouches.length > 0) return { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
+      return { x: e.clientX, y: e.clientY };
+    }
+
+    function rgbToHex(rgb) {
+        if (!rgb || rgb.indexOf('rgb') === -1) return '#000000';
+        let vals = rgb.match(/\d+/g);
+        if(!vals || vals.length < 3) return '#000000';
+        return "#" + (1 << 24 | vals[0] << 16 | vals[1] << 8 | vals[2]).toString(16).slice(1);
+    }
+
+    function setActivePage(pageId) {
+      activePageId = pageId;
+      document.querySelectorAll('.page-wrapper').forEach(w => w.classList.remove('active-page'));
+      const activeWrapper = document.getElementById('wrapper-' + pageId);
+      if (activeWrapper) activeWrapper.classList.add('active-page');
+    }
+
+    function selectBox(box) {
+        clearSelection();
+        if (!box) return;
+        box.classList.add('selected');
+        selectedBoxes.add(box);
+        setActivePage(box.closest('.page').id);
+        updateSizeUIFromSelection();
+        updateContextActions();
+    }
+
+    function updateContextActions() {
+      document.querySelectorAll('.context-actions').forEach(el => el.style.display = 'none');
+      if (selectedBoxes.size > 0) {
+        const activeWrapper = document.getElementById('wrapper-' + activePageId);
+        if (activeWrapper) {
+          let hasRealImage = false;
+          selectedBoxes.forEach(box => { if (box.classList.contains('has-image')) hasRealImage = true; });
+          const ctxMenu = activeWrapper.querySelector('.context-actions');
+          if (ctxMenu) {
+            ctxMenu.style.display = 'flex';
+            const changeBtn = ctxMenu.querySelector('.btn-change');
+            if(changeBtn) changeBtn.style.display = hasRealImage ? 'inline-block' : 'none';
+          }
+        }
+      }
+    }
+
+    function triggerReplaceImage() {
+      if(selectedBoxes.size > 0) {
+        const box = Array.from(selectedBoxes)[0];
+        const fileInput = box.querySelector('input[type="file"]');
+        if(fileInput) fileInput.click();
+      }
+    }
+
+    function deleteSelectedBoxes() {
+      if(selectedBoxes.size > 0) {
+        selectedBoxes.forEach(box => box.remove()); selectedBoxes.clear();
+        updateContextActions(); saveState();
+      }
+    }
+    
+    function clearPage(pageId) {
+      const targetPage = document.getElementById(pageId);
+      if (targetPage) {
+        const boxes = targetPage.querySelectorAll('.movable-box');
+        boxes.forEach(box => { selectedBoxes.delete(box); box.remove(); });
+        updateContextActions(); saveState();
+      }
+    }
+
+    function triggerCropUpload(mode, type) {
+        cropTargetMode = mode;
+        if (type === 'pdf') {
+            document.getElementById('globalPdfCropInput').value = ''; document.getElementById('globalPdfCropInput').click();
+        } else {
+            document.getElementById('globalCropInput').value = ''; document.getElementById('globalCropInput').click();
+        }
+    }
+
+    function triggerMultiImageUpload(pageId) {
+        if(pageId) setActivePage(pageId);
+        document.getElementById('multiImageInput').value = ''; document.getElementById('multiImageInput').click();
+    }
+
+    function handleMultiImageSelect(event) {
+        const files = event.target.files;
+        if (!files || files.length === 0) return;
+        const targetPage = document.getElementById(activePageId);
+        if(!targetPage) return;
+
+        const dims = getCurrentDimensions();
+        const existingCount = targetPage.querySelectorAll('.movable-box').length;
+        let loadedCount = 0;
+
+        Array.from(files).forEach((file, index) => {
+            if (!file.type.startsWith('image/')) { loadedCount++; return; }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const newImageBox = document.createElement('div');
+                newImageBox.className = 'movable-box has-image';
+                const offset = existingCount * 20 + index * 20;
+                newImageBox.style.left = (50 + (offset % 200)) + 'px'; newImageBox.style.top = (50 + (offset % 300)) + 'px'; 
+                
+                let styleW = dims.w === 'auto' ? '40mm' : dims.w; let styleH = dims.h === 'auto' ? '50mm' : dims.h;
+                newImageBox.innerHTML = `<input type="file" accept="image/*" onchange="triggerImageUpload(event, this)"><img src="${e.target.result}" class="id-image" style="width: ${styleW}; height: ${styleH};">`;
+                targetPage.appendChild(newImageBox); makeElementMovable(newImageBox);
+
+                const imgEl = newImageBox.querySelector('img');
+                imgEl.onload = function() {
+                    const sizeType = document.getElementById('sizeType').value;
+                    let nW = imgEl.naturalWidth; let nH = imgEl.naturalHeight; let mmW = pxToMm(nW); let mmH = pxToMm(nH);
+                    if (sizeType === 'document') {
+                        if (mmW > 170 || mmH > 257) { let ratio = Math.min(170/mmW, 257/mmH); mmW *= ratio; mmH *= ratio; }
+                        imgEl.style.width = mmW.toFixed(1) + 'mm'; imgEl.style.height = mmH.toFixed(1) + 'mm';
+                        newImageBox.classList.add('locked-ratio');
+                    } else if (sizeType === 'original') {
+                        if (nW > 350 || nH > 350) { const ratio = Math.min(350 / nW, 350 / nH); nW = nW * ratio; nH = nH * ratio; }
+                        mmW = pxToMm(nW).toFixed(1); mmH = pxToMm(nH).toFixed(1);
+                        imgEl.style.width = mmW + 'mm'; imgEl.style.height = mmH + 'mm';
+                    } else { imgEl.style.width = dims.w; imgEl.style.height = dims.h; }
+                    
+                    loadedCount++;
+                    if (loadedCount === files.length) { 
+                        updateContextActions(); 
+                        saveState(); 
+                        if(index === files.length - 1) selectBox(newImageBox);
+                    }
+                };
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function handleCropFileSelect(event) {
+      const file = event.target.files[0];
+      if (file) { const reader = new FileReader(); reader.onload = function(e) { openCropperWithImage(e.target.result); }; reader.readAsDataURL(file); }
+    }
+
+    function handlePdfCropFileSelect(event) {
+        const file = event.target.files[0]; if (!file) return;
+        const fileReader = new FileReader();
+        fileReader.onload = function(e) {
+            const typedarray = new Uint8Array(e.target.result);
+            pdfjsLib.getDocument(typedarray).promise.then(pdf => pdf.getPage(1)).then(page => {
+                const viewport = page.getViewport({ scale: 2.0 }); 
+                const canvas = document.createElement('canvas'); const context = canvas.getContext('2d');
+                canvas.height = viewport.height; canvas.width = viewport.width;
+                return page.render({ canvasContext: context, viewport: viewport }).promise.then(() => canvas.toDataURL('image/png'));
+            }).then(dataUrl => openCropperWithImage(dataUrl)).catch(err => alert("Could not load PDF."));
+        };
+        fileReader.readAsArrayBuffer(file);
+    }
+
+    function openCropperWithImage(imageSrc) {
+        const img = document.getElementById('cropImageTarget'); img.src = imageSrc;
+        document.getElementById('cropModal').style.display = 'flex';
+        if (cropper) cropper.destroy();
+        document.getElementById('zoomSlider').value = 1; document.getElementById('panXSlider').value = 0; document.getElementById('panYSlider').value = 0;
+          
+        cropper = new Cropper(img, {
+            viewMode: 1, dragMode: 'crop', autoCropArea: 0.8, responsive: true, restore: false, guides: true, center: true, highlight: false, cropBoxMovable: true, cropBoxResizable: true, toggleDragModeOnDblclick: false,
+            zoom: function(e) { document.getElementById('zoomSlider').value = e.detail.ratio; }
+        });
+    }
+
+    function applyCropPreview() {
+      if (!cropper) return;
+      const canvas = cropper.getCroppedCanvas(); if (!canvas) return;
+      const croppedDataUrl = canvas.toDataURL('image/png');
+      const img = document.getElementById('cropImageTarget'); img.src = croppedDataUrl;
+      cropper.destroy();
+      document.getElementById('zoomSlider').value = 1; document.getElementById('panXSlider').value = 0; document.getElementById('panYSlider').value = 0;
+      cropper = new Cropper(img, { viewMode: 1, dragMode: 'crop', autoCropArea: 1, responsive: true, restore: false, guides: true, center: true, highlight: false, cropBoxMovable: true, cropBoxResizable: true, toggleDragModeOnDblclick: false, zoom: function(e) { document.getElementById('zoomSlider').value = e.detail.ratio; } });
+    }
+
+    function sliderZoomImage() { if(cropper) cropper.zoomTo(parseFloat(document.getElementById('zoomSlider').value)); }
+    function sliderPanImage() { if(cropper) cropper.moveTo(parseFloat(document.getElementById('panXSlider').value), parseFloat(document.getElementById('panYSlider').value)); }
+    function stepPanX(amount) { if(cropper) { const slider = document.getElementById('panXSlider'); slider.value = Number(slider.value) + amount; sliderPanImage(); } }
+    function stepPanY(amount) { if(cropper) { const slider = document.getElementById('panYSlider'); slider.value = Number(slider.value) + amount; sliderPanImage(); } }
+    function stepZoomAmount(amount) { if(cropper) { const slider = document.getElementById('zoomSlider'); slider.value = Number(slider.value) + amount; sliderZoomImage(); } }
+
+    function closeCropModal() { document.getElementById('cropModal').style.display = 'none'; if (cropper) { cropper.destroy(); cropper = null; } }
+    function cropSelectFull() { if (cropper) { const d = cropper.getContainerData(); cropper.setCropBoxData({ left: 0, top: 0, width: d.width, height: d.height }); } }
+    function insertFullImage() { cropSelectFull(); insertCroppedImage(); }
+    function downloadCroppedImage() { if (!cropper) return; const canvas = cropper.getCroppedCanvas(); if (!canvas) return; const link = document.createElement('a'); link.download = `Cropped_ID_${new Date().getTime()}.png`; link.href = canvas.toDataURL('image/png'); link.click(); }
+
+    function insertCroppedImage() {
+      if (!cropper) return;
+      const canvas = cropper.getCroppedCanvas(); if (!canvas) return;
+      const croppedDataUrl = canvas.toDataURL('image/png');
+      
+      if(cropTargetMode === 'update_box' && targetEditBox) {
+          targetEditBox.querySelector('img.id-image').src = croppedDataUrl;
+          closeCropModal();
+          saveState();
+          selectBox(targetEditBox);
+          return;
+      }
+
+      const targetPage = document.getElementById(activePageId); if(!targetPage) return;
+      const isSign = cropTargetMode === 'sign';
+      const sizeType = document.getElementById('sizeType').value;
+      const dims = getCurrentDimensions();
+      
+      const newImageBox = document.createElement('div');
+      let boxClasses = 'movable-box has-image';
+      if (isSign) boxClasses += ' sign-box locked-ratio'; else if (sizeType === 'document') boxClasses += ' locked-ratio';
+      newImageBox.className = boxClasses; 
+      
+      const existingCount = targetPage.querySelectorAll('.movable-box').length;
+      newImageBox.style.left = (50 + (existingCount * 20)) + 'px'; newImageBox.style.top = (50 + (existingCount * 20)) + 'px'; 
+      let styleW = dims.w === 'auto' ? '40mm' : dims.w; let styleH = dims.h === 'auto' ? '50mm' : dims.h;
+      newImageBox.innerHTML = `<input type="file" accept="image/*" onchange="triggerImageUpload(event, this)"><img src="${croppedDataUrl}" class="id-image" style="width: ${styleW}; height: ${styleH};">`;
+      targetPage.appendChild(newImageBox); makeElementMovable(newImageBox);
+      
+      const imgEl = newImageBox.querySelector('img');
+      imgEl.onload = function() {
+        let nW = imgEl.naturalWidth; let nH = imgEl.naturalHeight; let mmW = pxToMm(nW); let mmH = pxToMm(nH);
+        if (isSign) {
+            if (mmW > 170) { let ratio = 170 / mmW; mmW *= ratio; mmH *= ratio; }
+            imgEl.style.width = mmW.toFixed(1) + 'mm'; imgEl.style.height = mmH.toFixed(1) + 'mm';
+        } else if (sizeType === 'document') {
+            if (mmW > 170 || mmH > 257) { let ratio = Math.min(170/mmW, 257/mmH); mmW *= ratio; mmH *= ratio; }
+            imgEl.style.width = mmW.toFixed(1) + 'mm'; imgEl.style.height = mmH.toFixed(1) + 'mm';
+        } else if (sizeType === 'original') {
+          if (nW > 350 || nH > 350) { const ratio = Math.min(350 / nW, 350 / nH); nW = nW * ratio; nH = nH * ratio; }
+          imgEl.style.width = pxToMm(nW).toFixed(1) + 'mm'; imgEl.style.height = pxToMm(nH).toFixed(1) + 'mm';
+        } else { imgEl.style.width = dims.w; imgEl.style.height = dims.h; }
+        
+        updateContextActions(); saveState();
+        selectBox(newImageBox);
+      };
+      closeCropModal();
+    }
+
+    // --- BULK ADD LOGIC ---
+    function openBulkModal() { 
+        if (selectedBoxes.size !== 1) { alert("Please select exactly ONE image on the page to Bulk Generate."); return; }
+        let box = Array.from(selectedBoxes)[0];
+        if (!box.classList.contains('has-image') || box.classList.contains('page-number-box')) { alert("Please select a valid photo."); return; }
+        bulkSourceElement = box; 
+        
+        let sourceImgEl = box.querySelector('img.id-image');
+        let previewImg = document.getElementById('bulkPreviewImg');
+        
+        // Copy the image source AND the border for the preview
+        previewImg.src = sourceImgEl.src;
+        previewImg.style.border = sourceImgEl.style.border; 
+        
+        document.getElementById('bulkSizeType').value = 'passport';
+        document.getElementById('bulkModal').style.display = 'flex'; 
+    }
+    
+    function closeBulkModal() { document.getElementById('bulkModal').style.display = 'none'; bulkSourceElement = null; }
+
+    function generateBulkPhotos() {
+      if (!bulkSourceElement) { alert("No image selected!"); return; }
+      const count = parseInt(document.getElementById('bulkCount').value) || 1;
+      const margin = parseFloat(document.getElementById('bulkMargin').value) || 0;
+      const gapX = parseFloat(document.getElementById('bulkGapX').value) || 0;
+      const gapY = parseFloat(document.getElementById('bulkGapY').value) || 0;
+      
+      const bSizeType = document.getElementById('bulkSizeType').value;
+      let pW, pH;
+      
+      const sourceImgEl = bulkSourceElement.querySelector('img.id-image');
+      const srcDataUrl = sourceImgEl.src; 
+      // CAPTURE THE BORDER STYLE FROM THE SOURCE
+      const sourceBorder = sourceImgEl.style.border; 
+
+      if (bSizeType === 'passport') { pW = 35; pH = 45; }
+      else if (bSizeType === 'pvc') { pW = 85.6; pH = 54; }
+      else if (bSizeType === 'stamp') { pW = 20; pH = 25; }
+      else if (bSizeType === 'badge') { pW = 60; pH = 90; }
+      else { pW = pxToMm(sourceImgEl.naturalWidth); pH = pxToMm(sourceImgEl.naturalHeight); }
+      
+      const styleW = pW + 'mm'; const styleH = pH + 'mm';
+      const pageEl = document.getElementById(activePageId);
+      if(!pageEl) return;
+
+      let pageW_mm = pxToMm(pageEl.clientWidth); let pageH_mm = pxToMm(pageEl.clientHeight);
+      let currentX = margin; let currentY = margin; let placed = 0;
+
+      for(let i = 0; i < count; i++) {
+        if(currentX + pW > pageW_mm - margin + 1) { currentX = margin; currentY += pH + gapY; }
+        if(currentY + pH > pageH_mm - margin + 1) { alert(`Not enough space on this page! Added ${placed} photos.`); break; }
+
+        const box = document.createElement('div');
+        box.className = 'movable-box has-image';
+        box.style.left = mmToPx(currentX) + 'px'; box.style.top = mmToPx(currentY) + 'px';
+        
+        // INJECT THE BORDER STYLE INTO THE NEW IMAGES HERE
+        box.innerHTML = `<input type="file" accept="image/*" onchange="triggerImageUpload(event, this)"><img src="${srcDataUrl}" class="id-image" style="width: ${styleW}; height: ${styleH}; border: ${sourceBorder};">`;
+        
+        pageEl.appendChild(box); makeElementMovable(box);
+        currentX += pW + gapX; placed++;
+      }
+      
+      bulkSourceElement.remove();
+      selectedBoxes.clear();
+      closeBulkModal(); updateContextActions(); saveState();
+    }
+
+    // --- EDIT IMAGE LOGIC ---
+    let editHistory = [];
+    let editHistoryIndex = -1;
+    let currentEditBaseImage = null; 
+    let targetEditBox = null;
+    const editCanvas = document.getElementById('editCanvas');
+    const editCtx = editCanvas.getContext('2d', {willReadFrequently: true});
+
+    function openEditModal() {
+        if (selectedBoxes.size !== 1) { alert("Please select exactly ONE image to Edit."); return; }
+        let box = Array.from(selectedBoxes)[0];
+        if (!box.classList.contains('has-image') || box.classList.contains('page-number-box')) { alert("Please select a valid photo."); return; }
+        
+        targetEditBox = box;
+        let imgEl = targetEditBox.querySelector('img.id-image');
+        let imgSrc = imgEl.src;
+        
+        let computedStyle = window.getComputedStyle(imgEl);
+        let currBStyle = imgEl.style.borderStyle || computedStyle.borderStyle;
+        document.getElementById('editBorderStyle').value = (currBStyle !== 'none' && currBStyle !== '') ? currBStyle : 'none';
+        document.getElementById('editBorderWidth').value = parseInt(imgEl.style.borderWidth) || 1;
+        document.getElementById('editBorderColor').value = rgbToHex(imgEl.style.borderColor || computedStyle.borderColor);
+
+        currentEditBaseImage = new Image();
+        currentEditBaseImage.crossOrigin = "anonymous";
+        currentEditBaseImage.onload = () => {
+            editCanvas.width = currentEditBaseImage.width;
+            editCanvas.height = currentEditBaseImage.height;
+            resetEditControls();
+            editHistory = []; editHistoryIndex = -1;
+            pushEditHistory(imgSrc); 
+            updateCanvasFiltersUI();
+            document.getElementById('editModal').style.display = 'flex';
+        };
+        currentEditBaseImage.src = imgSrc;
+    }
+
+    function closeEditModal() { document.getElementById('editModal').style.display = 'none'; targetEditBox = null; }
+
+    function resetEditControls() {
+        document.getElementById('editBrightness').value = 100; document.getElementById('valBright').innerText = "100";
+        document.getElementById('editContrast').value = 100; document.getElementById('valContrast').innerText = "100";
+        document.getElementById('editSaturation').value = 100; document.getElementById('valSat').innerText = "100";
+        document.getElementById('editHue').value = 0; document.getElementById('valHue').innerText = "0";
+        document.getElementById('editBlur').value = 0; document.getElementById('valBlur').innerText = "0";
+        document.getElementById('editFilter').value = "none";
+        document.getElementById('editBgToggle').checked = false;
+    }
+
+    function updateCanvasFiltersUI() {
+        let b = document.getElementById('editBrightness').value; document.getElementById('valBright').innerText = b;
+        let c = document.getElementById('editContrast').value; document.getElementById('valContrast').innerText = c;
+        let s = document.getElementById('editSaturation').value; document.getElementById('valSat').innerText = s;
+        let h = document.getElementById('editHue').value; document.getElementById('valHue').innerText = h;
+        let bl = document.getElementById('editBlur').value; document.getElementById('valBlur').innerText = bl;
+        let f = document.getElementById('editFilter').value;
+        
+        let filterStr = `brightness(${b}%) contrast(${c}%) saturate(${s}%) hue-rotate(${h}deg) blur(${bl}px)`;
+        if (f !== 'none') filterStr += ` ${f}`;
+        
+        editCtx.clearRect(0, 0, editCanvas.width, editCanvas.height);
+        
+        if (document.getElementById('editBgToggle').checked) {
+            editCtx.fillStyle = document.getElementById('editBgColor').value;
+            editCtx.fillRect(0, 0, editCanvas.width, editCanvas.height);
+        }
+
+        editCtx.filter = filterStr;
+        editCtx.drawImage(currentEditBaseImage, 0, 0, editCanvas.width, editCanvas.height);
+        editCtx.filter = 'none';
+
+        let bStyle = document.getElementById('editBorderStyle').value;
+        let bWidth = document.getElementById('editBorderWidth').value;
+        let bColor = document.getElementById('editBorderColor').value;
+        
+        if (bStyle !== 'none' && bWidth > 0) {
+            editCanvas.style.border = `${bWidth}px ${bStyle} ${bColor}`;
+        } else {
+            editCanvas.style.border = 'none';
+        }
+    }
+
+    function openCropFromEdit() {
+        if (!targetEditBox) return;
+        let finalSrc = editCanvas.toDataURL('image/png');
+        targetEditBox.querySelector('img.id-image').src = finalSrc; 
+        cropTargetMode = 'update_box'; 
+        closeEditModal();
+        openCropperWithImage(finalSrc);
+    }
+
+    function bakeFilters() {
+        let newSrc = editCanvas.toDataURL('image/png');
+        pushEditHistory(newSrc);
+        resetEditControls();
+    }
+
+    function pushEditHistory(srcUrl) {
+        if (editHistoryIndex < editHistory.length - 1) editHistory = editHistory.slice(0, editHistoryIndex + 1);
+        editHistory.push(srcUrl);
+        editHistoryIndex++;
+        currentEditBaseImage.onload = () => { updateCanvasFiltersUI(); };
+        currentEditBaseImage.src = srcUrl;
+    }
+
+    function editUndo() {
+        if (editHistoryIndex > 0) {
+            editHistoryIndex--;
+            resetEditControls();
+            currentEditBaseImage.src = editHistory[editHistoryIndex];
+        }
+    }
+    function editRedo() {
+        if (editHistoryIndex < editHistory.length - 1) {
+            editHistoryIndex++;
+            resetEditControls();
+            currentEditBaseImage.src = editHistory[editHistoryIndex];
+        }
+    }
+
+    function saveEditedImageFinal() {
+        if (!targetEditBox) return;
+        let finalSrc = editCanvas.toDataURL('image/png');
+        let imgEl = targetEditBox.querySelector('img.id-image');
+        imgEl.src = finalSrc;
+        
+        let bStyle = document.getElementById('editBorderStyle').value;
+        let bWidth = document.getElementById('editBorderWidth').value;
+        let bColor = document.getElementById('editBorderColor').value;
+        imgEl.style.border = (bStyle !== 'none' && bWidth > 0) ? `${bWidth}px ${bStyle} ${bColor}` : 'none';
+
+        closeEditModal();
+        saveState();
+    }
+
+    let historyStack = []; let historyIndex = -1; let isRestoring = false; let saveTimeout;
+    function saveStateDebounced() { clearTimeout(saveTimeout); saveTimeout = setTimeout(() => { saveState(); }, 500); }
+
+    function saveState() {
+      if (isRestoring) return; 
+      const state = { active: activePageId, pagesData: [] };
+      document.querySelectorAll('.page-wrapper').forEach((wrapper, index) => {
+        const page = wrapper.querySelector('.page');
+        const boxes = [];
+        page.querySelectorAll('.movable-box').forEach(box => {
+          const img = box.querySelector('img');
+          boxes.push({ 
+              left: box.style.left, top: box.style.top, w: img ? img.style.width : 'auto', h: img ? img.style.height : 'auto', 
+              src: img ? img.src : null, hasImage: box.classList.contains('has-image'), isLocked: box.classList.contains('locked-ratio'),
+              isSign: box.classList.contains('sign-box'), isPageNum: box.classList.contains('page-number-box'),
+              html: box.classList.contains('page-number-box') ? box.innerHTML : null,
+              border: img ? img.style.border : null 
+          });
+        });
+        state.pagesData.push({ pageId: page.id, pageNum: index + 1, boxes });
+      });
+      if (historyIndex < historyStack.length - 1) historyStack = historyStack.slice(0, historyIndex + 1);
+      historyStack.push(state); historyIndex++;
+    }
+
+    function restoreState(index) {
+      if (index < 0 || index >= historyStack.length) return;
+      isRestoring = true; historyIndex = index;
+      const state = historyStack[historyIndex];
+      const container = document.getElementById('pages-container'); container.innerHTML = ''; let maxPageCount = 1;
+      
+      state.pagesData.forEach(pageData => {
+        const pNum = parseInt(pageData.pageId.replace('page-', '')); if (pNum > maxPageCount) maxPageCount = pNum;
+        const wrapper = document.createElement('div'); wrapper.className = 'page-wrapper'; wrapper.id = 'wrapper-' + pageData.pageId;
+        wrapper.onmousedown = () => setActivePage(pageData.pageId); wrapper.ontouchstart = () => setActivePage(pageData.pageId);
+        let deleteBtnHtml = pageData.pageNum > 1 ? `<button class="delete-page-btn" onclick="deletePage(this)">❌ Delete Page</button>` : '';
+        wrapper.innerHTML = `
+          <div class="page-controls">
+            <div class="page-title-container"><span class="page-title">📄 Page ${pageData.pageNum}</span><button class="add-more-btn" onclick="triggerMultiImageUpload('${pageData.pageId}')">➕ Add New Image(s)</button></div>
+            <div class="page-controls-right">
+              <div class="context-actions"><button class="btn-change" onclick="triggerReplaceImage()">🔄 Change</button><button class="btn-delete-item" onclick="deleteSelectedBoxes()">🗑️ Delete</button></div>
+              <button class="clear-page-btn" onclick="clearPage('${pageData.pageId}')">🧹 Clear</button>${deleteBtnHtml}
+            </div>
+          </div>
+          <div class="page" id="${pageData.pageId}"></div>
+          <div class="page-footer-controls"><button class="add-page-num-btn" onclick="addPageNumberToPage('${pageData.pageId}')">📄 Add Page Number</button><button class="add-sign-btn" onclick="triggerCropUpload('sign', 'image')">✍️ Add Sign</button></div>
+          <div class="page-actions"><button class="btn-print-single" onclick="printSinglePage('${wrapper.id}')">🖨️ Print Page</button><button class="btn-save-img" onclick="downloadSingleJPEG('${pageData.pageId}')">🖼️ Save Image</button><button class="btn-save-pdf" onclick="downloadSinglePDF('${pageData.pageId}')">📄 Save PDF</button></div>
+        `;
+        const pageEl = wrapper.querySelector('.page');
+        pageData.boxes.forEach(boxData => {
+          const box = document.createElement('div'); let cls = 'movable-box';
+          if (boxData.hasImage) cls += ' has-image'; if (boxData.isLocked) cls += ' locked-ratio'; if (boxData.isSign) cls += ' sign-box'; if (boxData.isPageNum) cls += ' page-number-box';
+          box.className = cls; box.style.left = boxData.left; box.style.top = boxData.top;
+          if (boxData.isPageNum) { box.innerHTML = boxData.html || ''; } else { 
+              box.innerHTML = `<input type="file" accept="image/*" onchange="triggerImageUpload(event, this)"><img src="${boxData.src}" class="id-image" style="width: ${boxData.w}; height: ${boxData.h}; ${boxData.border ? `border: ${boxData.border}` : ''}">`; 
+          }
+          pageEl.appendChild(box);
+        });
+        container.appendChild(wrapper);
+      });
+      pageCount = maxPageCount; document.querySelectorAll('.movable-box').forEach(box => makeElementMovable(box));
+      clearSelection(); setActivePage(state.active); isRestoring = false;
+    }
+
+    function undoAction() { restoreState(historyIndex - 1); } function redoAction() { restoreState(historyIndex + 1); }
+
+    function toggleCustomInputs() {
+      const sizeType = document.getElementById('sizeType').value; const customW = document.getElementById('customW'); const customH = document.getElementById('customH');
+      if(sizeType === 'original' || sizeType === 'document') { document.body.classList.add('is-original-size'); customW.readOnly = false; customH.readOnly = false; if(sizeType === 'document') { customW.readOnly = true; customH.readOnly = true; } } 
+      else { 
+        document.body.classList.remove('is-original-size'); customW.readOnly = true; customH.readOnly = true;
+        if (sizeType === 'pvc') { customW.value = 85.6; customH.value = 54.0; } else if (sizeType === 'passport') { customW.value = 35.0; customH.value = 45.0; } else if (sizeType === 'stamp') { customW.value = 20.0; customH.value = 25.0; } else if (sizeType === 'badge') { customW.value = 60.0; customH.value = 90.0; }
+      }
+      applySizeToSelected(false); saveStateDebounced();
+    }
+
+    function getCurrentDimensions() {
+      let w = document.getElementById('customW').value; let h = document.getElementById('customH').value;
+      if (!w || !h) return { w: 'auto', h: 'auto' }; return { w: w + 'mm', h: h + 'mm' };
+    }
+
+    function applySizeToSelected() {
+      if (selectedBoxes.size === 0) return; const dims = getCurrentDimensions(); if (dims.w === 'auto') return; 
+      selectedBoxes.forEach(box => { if(!box.classList.contains('locked-ratio') && !box.classList.contains('page-number-box')){ const img = box.querySelector('.id-image'); if(img) { img.style.width = dims.w; img.style.height = dims.h; } } });
+    }
+
+    function updateSizeUIFromSelection() {
+      if (selectedBoxes.size > 0) {
+        const firstBox = Array.from(selectedBoxes)[0]; if(firstBox.classList.contains('page-number-box')) return;
+        const img = firstBox.querySelector('.id-image');
+        if (img) {
+          let wVal = parseFloat(img.style.width) || 0; let hVal = parseFloat(img.style.height) || 0;
+          if (img.style.width.includes('px')) wVal = pxToMm(wVal); if (img.style.height.includes('px')) hVal = pxToMm(hVal); wVal = parseFloat(wVal.toFixed(1)); hVal = parseFloat(hVal.toFixed(1));
+          let matchedSize = 'original'; 
+          if(firstBox.classList.contains('locked-ratio') && !firstBox.classList.contains('sign-box')) { matchedSize = 'document'; } 
+          else {
+              if (Math.abs(wVal - 85.6) < 0.5 && Math.abs(hVal - 54.0) < 0.5) matchedSize = 'pvc'; else if (Math.abs(wVal - 35.0) < 0.5 && Math.abs(hVal - 45.0) < 0.5) matchedSize = 'passport'; else if (Math.abs(wVal - 20.0) < 0.5 && Math.abs(hVal - 25.0) < 0.5) matchedSize = 'stamp'; else if (Math.abs(wVal - 60.0) < 0.5 && Math.abs(hVal - 90.0) < 0.5) matchedSize = 'badge';
+          }
+          document.getElementById('sizeType').value = matchedSize; document.getElementById('customW').value = wVal || ''; document.getElementById('customH').value = hVal || '';
+          if (matchedSize === 'original' || matchedSize === 'document') { document.getElementById('customW').readOnly = (matchedSize === 'document'); document.getElementById('customH').readOnly = (matchedSize === 'document'); document.body.classList.add('is-original-size'); } else { document.getElementById('customW').readOnly = true; document.getElementById('customH').readOnly = true; document.body.classList.remove('is-original-size'); }
+        }
+      }
+    }
+
+    function addNewPage() {
+      pageCount++; const container = document.getElementById('pages-container'); const pageId = 'page-' + pageCount; const logicalPageNum = document.querySelectorAll('.page-wrapper').length + 1;
+      const newWrapper = document.createElement('div'); newWrapper.className = 'page-wrapper'; newWrapper.id = 'wrapper-' + pageId;
+      newWrapper.onmousedown = () => setActivePage(pageId); newWrapper.ontouchstart = () => setActivePage(pageId);
+      newWrapper.innerHTML = `
+        <div class="page-controls"><div class="page-title-container"><span class="page-title">📄 Page ${logicalPageNum}</span><button class="add-more-btn" onclick="triggerMultiImageUpload('${pageId}')">➕ Add New Image(s)</button></div><div class="page-controls-right"><div class="context-actions"><button class="btn-change" onclick="triggerReplaceImage()">🔄 Change</button><button class="btn-delete-item" onclick="deleteSelectedBoxes()">🗑️ Delete</button></div><button class="clear-page-btn" onclick="clearPage('${pageId}')">🧹 Clear</button><button class="delete-page-btn" onclick="deletePage(this)">❌ Delete Page</button></div></div>
+        <div class="page" id="${pageId}"></div>
+        <div class="page-footer-controls"><button class="add-page-num-btn" onclick="addPageNumberToPage('${pageId}')">📄 Add Page Number</button><button class="add-sign-btn" onclick="triggerCropUpload('sign', 'image')">✍️ Add Sign</button></div>
+        <div class="page-actions"><button class="btn-print-single" onclick="printSinglePage('wrapper-${pageId}')">🖨️ Print Page</button><button class="btn-save-img" onclick="downloadSingleJPEG('${pageId}')">🖼️ Save Image</button><button class="btn-save-pdf" onclick="downloadSinglePDF('${pageId}')">📄 Save PDF</button></div>
+      `;
+      container.appendChild(newWrapper); setActivePage(pageId); updateContextActions(); saveState(); window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+    
+    function deletePage(btn) { 
+      const wrapper = btn.closest('.page-wrapper'); 
+      if(wrapper) { wrapper.remove(); const remaining = document.querySelectorAll('.page-wrapper'); remaining.forEach((wrp, idx) => { wrp.querySelector('.page-title').innerText = `📄 Page ${idx + 1}`; }); if (remaining.length > 0) setActivePage(remaining[remaining.length - 1].querySelector('.page').id); clearSelection(); saveState(); } 
+    }
+
+    function addPageNumberToPage(pageId) {
+        const page = document.getElementById(pageId); if (!page) return;
+        const wrapper = document.getElementById('wrapper-' + pageId); const titleText = wrapper.querySelector('.page-title').innerText; const numMatch = titleText.match(/\d+/); const displayNum = numMatch ? numMatch[0] : '1';
+        const box = document.createElement('div'); box.className = 'movable-box page-number-box locked-ratio'; box.style.left = mmToPx(105) - 30 + 'px'; box.style.top = mmToPx(280) + 'px'; box.innerHTML = `<span>Page ${displayNum}</span>`;
+        page.appendChild(box); makeElementMovable(box); saveState();
+    }
+
+    function triggerImageUpload(event, inputElement) {
+      const file = event.target.files;
+      if (file && file[0]) {
+        const reader = new FileReader();
+        reader.onload = function () {
+          const box = inputElement.parentElement; const targetImg = box.querySelector('img');
+          targetImg.onload = function() {
+            const sizeType = document.getElementById('sizeType').value;
+            let nW = targetImg.naturalWidth; let nH = targetImg.naturalHeight; let mmW = pxToMm(nW); let mmH = pxToMm(nH);
+            if (sizeType === 'document') {
+                if (mmW > 170 || mmH > 257) { let ratio = Math.min(170/mmW, 257/mmH); mmW *= ratio; mmH *= ratio; }
+                targetImg.style.width = mmW.toFixed(1) + 'mm'; targetImg.style.height = mmH.toFixed(1) + 'mm'; box.classList.add('locked-ratio');
+                if (box.classList.contains('selected')) { document.getElementById('customW').value = mmW.toFixed(1); document.getElementById('customH').value = mmH.toFixed(1); }
+            } else if (sizeType === 'original') {
+                if (nW > 350 || nH > 350) { const ratio = Math.min(350 / nW, 350 / nH); nW = nW * ratio; nH = nH * ratio; }
+                mmW = pxToMm(nW).toFixed(1); mmH = pxToMm(nH).toFixed(1); targetImg.style.width = mmW + 'mm'; targetImg.style.height = mmH + 'mm'; box.classList.remove('locked-ratio');
+                if (box.classList.contains('selected')) { document.getElementById('customW').value = mmW; document.getElementById('customH').value = mmH; }
+            } else { const dims = getCurrentDimensions(); targetImg.style.width = dims.w; targetImg.style.height = dims.h; box.classList.remove('locked-ratio'); }
+            box.classList.add('has-image'); updateContextActions(); saveState(); 
+            selectBox(box); 
+          };
+          targetImg.src = reader.result;
+        }; reader.readAsDataURL(file[0]); event.target.value = ''; 
+      }
+    }
+
+    function clearSelection() { selectedBoxes.forEach(box => box.classList.remove('selected')); selectedBoxes.clear(); updateContextActions(); }
+    document.addEventListener('mousedown', closeSelectionIfOutside); document.addEventListener('touchstart', closeSelectionIfOutside, {passive: true});
+
+    function closeSelectionIfOutside(e) {
+      if (e.target.classList.contains('resize-handle') || e.target.closest('.size-controls') || e.target.closest('.modal-overlay')) return;
+      if (!e.target.closest('.movable-box') && !e.target.closest('.controls') && !e.target.closest('.page-controls') && !e.target.closest('.page-footer-controls') && !e.target.closest('.page-actions') && !e.target.closest('.dropdown')) { clearSelection(); }
+    }
+
+    function makeElementMovable(el) {
+      if (!el.querySelector('.resize-handle')) { el.insertAdjacentHTML('beforeend', `<div class="resize-handle nw" data-dir="nw"></div><div class="resize-handle n" data-dir="n"></div><div class="resize-handle ne" data-dir="ne"></div><div class="resize-handle e" data-dir="e"></div><div class="resize-handle se" data-dir="se"></div><div class="resize-handle s" data-dir="s"></div><div class="resize-handle sw" data-dir="sw"></div><div class="resize-handle w" data-dir="w"></div>`); }
+      let startX = 0, startY = 0, moved = false;
+      el.addEventListener('mousedown', dragStart); el.addEventListener('touchstart', dragStart, { passive: false });
+
+      function dragStart(e) {
+        if (e.target.tagName.toLowerCase() === 'input' || e.target.classList.contains('resize-handle')) return;
+        if (!e.ctrlKey && !e.shiftKey && !selectedBoxes.has(el)) clearSelection(); 
+        el.classList.add('selected'); selectedBoxes.add(el); setActivePage(el.closest('.page').id); updateSizeUIFromSelection(); updateContextActions();
+        const pos = getPointerPos(e); startX = pos.x; startY = pos.y; moved = false;
+        selectedBoxes.forEach(box => { box.dataset.initLeft = parseInt(window.getComputedStyle(box).left, 10) || 0; box.dataset.initTop = parseInt(window.getComputedStyle(box).top, 10) || 0; });
+        if (e.type === 'touchstart') { document.addEventListener('touchmove', dragMove, { passive: false }); document.addEventListener('touchend', dragEnd); } else { document.addEventListener('mousemove', dragMove); document.addEventListener('mouseup', dragEnd); }
+        if(e.cancelable) e.preventDefault();
+      }
+
+      function dragMove(e) {
+        const pos = getPointerPos(e); let dx = pos.x - startX; let dy = pos.y - startY; if (Math.abs(dx) > 2 || Math.abs(dy) > 2) moved = true; let allowedDx = dx, allowedDy = dy;
+        selectedBoxes.forEach(box => {
+          const page = box.closest('.page'); const initLeft = parseInt(box.dataset.initLeft, 10) || 0; const initTop = parseInt(box.dataset.initTop, 10) || 0;
+          const maxLeft = page.clientWidth - box.offsetWidth; const maxTop = page.clientHeight - box.offsetHeight;
+          if (initLeft + allowedDx < 0) allowedDx = -initLeft; if (initLeft + allowedDx > maxLeft) allowedDx = maxLeft - initLeft;
+          if (initTop + allowedDy < 0) allowedDy = -initTop; if (initTop + allowedDy > maxTop) allowedDy = maxTop - initTop;
+        });
+        selectedBoxes.forEach(box => { box.style.left = (parseInt(box.dataset.initLeft, 10) + allowedDx) + 'px'; box.style.top = (parseInt(box.dataset.initTop, 10) + allowedDy) + 'px'; });
+        if(e.cancelable) e.preventDefault();
+      }
+      function dragEnd() { document.removeEventListener('mousemove', dragMove); document.removeEventListener('mouseup', dragEnd); document.removeEventListener('touchmove', dragMove); document.removeEventListener('touchend', dragEnd); if (moved) saveState(); }
+    }
+
+    let isResizing = false, resizeHandleDir = null, resizeBox = null, resizeImg = null; let startW, startH, startAspectRatio, rStartX, rStartY;
+    document.addEventListener('mousedown', initResize, { passive: false }); document.addEventListener('touchstart', initResize, { passive: false });
+
+    function initResize(e) {
+      if (e.target.classList.contains('resize-handle')) {
+        isResizing = true; resizeHandleDir = e.target.dataset.dir; resizeBox = e.target.closest('.movable-box'); resizeImg = resizeBox.querySelector('.id-image');
+        if(!resizeImg) { isResizing = false; return; } 
+        startW = resizeImg.offsetWidth; startH = resizeImg.offsetHeight; startAspectRatio = startW / startH;
+        const pos = getPointerPos(e); rStartX = pos.x; rStartY = pos.y;
+        resizeBox.dataset.initLeft = parseInt(window.getComputedStyle(resizeBox).left, 10) || 0; resizeBox.dataset.initTop = parseInt(window.getComputedStyle(resizeBox).top, 10) || 0;
+        if(e.cancelable) { e.preventDefault(); e.stopPropagation(); }
+      }
+    }
+
+    document.addEventListener('mousemove', handleResizeMove, { passive: false }); document.addEventListener('touchmove', handleResizeMove, { passive: false });
+    document.addEventListener('mouseup', stopResize); document.addEventListener('touchend', stopResize);
+
+    function handleResizeMove(e) {
+      if (isResizing && resizeBox && resizeImg) {
+        const pos = getPointerPos(e); let dx = pos.x - rStartX; let dy = pos.y - rStartY; let newW = startW, newH = startH;
+        let newLeft = parseInt(resizeBox.dataset.initLeft, 10), newTop = parseInt(resizeBox.dataset.initTop, 10);
+        let dirX = resizeHandleDir.includes('e') ? 1 : (resizeHandleDir.includes('w') ? -1 : 0); let dirY = resizeHandleDir.includes('s') ? 1 : (resizeHandleDir.includes('n') ? -1 : 0);
+
+        if (dirX !== 0 && dirY !== 0) {
+            let moveX = dx * dirX; let moveY = dy * dirY;
+            if (Math.abs(moveX) > Math.abs(moveY)) { newW = startW + moveX; newH = newW / startAspectRatio; } else { newH = startH + moveY; newW = newH * startAspectRatio; }
+            if (dirX === -1) newLeft = parseInt(resizeBox.dataset.initLeft, 10) + (startW - newW); if (dirY === -1) newTop = parseInt(resizeBox.dataset.initTop, 10) + (startH - newH);
+        } else {
+            if (dirX !== 0) { newW = startW + (dx * dirX); if (dirX === -1) newLeft = parseInt(resizeBox.dataset.initLeft, 10) + (startW - newW); }
+            if (dirY !== 0) { newH = startH + (dy * dirY); if (dirY === -1) newTop = parseInt(resizeBox.dataset.initTop, 10) + (startH - newH); }
+        }
+
+        const page = resizeBox.closest('.page');
+        if (page) {
+            const maxW = page.clientWidth; const maxH = page.clientHeight;
+            if (newLeft < 0) { newW += newLeft; newLeft = 0; } if (newTop < 0) { newH += newTop; newTop = 0; }
+            if (newLeft + newW > maxW) { newW = maxW - newLeft; } if (newTop + newH > maxH) { newH = maxH - newTop; }
+            if (dirX !== 0 && dirY !== 0) {
+                if (newW / startAspectRatio > newH) newW = newH * startAspectRatio; else newH = newW / startAspectRatio;
+                if (dirX === -1) newLeft = parseInt(resizeBox.dataset.initLeft, 10) + (startW - newW); if (dirY === -1) newTop = parseInt(resizeBox.dataset.initTop, 10) + (startH - newH);
+            }
+            if (newLeft < 0 || newTop < 0 || newLeft + newW > maxW || newTop + newH > maxH) return;
+        }
+
+        if (newW > 30 && newH > 30) { 
+          resizeImg.style.width = newW + 'px'; resizeImg.style.height = newH + 'px';
+          resizeBox.style.left = newLeft + 'px'; resizeBox.style.top = newTop + 'px';
+          document.getElementById('customW').value = pxToMm(newW).toFixed(1); document.getElementById('customH').value = pxToMm(newH).toFixed(1);
+        }
+        if(e.cancelable) e.preventDefault();
+      }
+    }
+    
+    function stopResize() { if (isResizing) { isResizing = false; saveState(); } }
+
+    let arrowMoved = false;
+    document.addEventListener('keydown', function(e) {
+      if(document.activeElement.tagName === 'INPUT') return;
+      
+      if (document.getElementById('editModal').style.display === 'flex') {
+          if (e.ctrlKey || e.metaKey) {
+            if (e.key === 'z' || e.key === 'Z') { editUndo(); e.preventDefault(); }
+            if (e.key === 'y' || e.key === 'Y') { editRedo(); e.preventDefault(); }
+          } return;
+      }
+      
+      if(document.getElementById('cropModal').style.display === 'flex') {
+        if(cropper && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+            const step = e.shiftKey ? 10 : 2; let cropData = cropper.getCropBoxData();
+            if(e.key === 'ArrowUp') cropData.top -= step; else if(e.key === 'ArrowDown') cropData.top += step; else if(e.key === 'ArrowLeft') cropData.left -= step; else if(e.key === 'ArrowRight') cropData.left += step;
+            cropper.setCropBoxData(cropData); e.preventDefault();
+        } return; 
+      }
+      
+      if (selectedBoxes.size === 0) return;
+      if (e.ctrlKey || e.metaKey) {
+        if (e.key === 'c' || e.key === 'C') { copySelection(); e.preventDefault(); }
+        if (e.key === 'x' || e.key === 'X') { cutSelection(); e.preventDefault(); }
+        if (e.key === 'v' || e.key === 'V') { pasteClipboard(); e.preventDefault(); }
+        if (e.key === 'z' || e.key === 'Z') { undoAction(); e.preventDefault(); }
+        if (e.key === 'y' || e.key === 'Y') { redoAction(); e.preventDefault(); }
+      }
+      if(e.key === 'Delete' || e.key === 'Backspace') { if (selectedBoxes.size > 0) deleteSelectedBoxes(); }
+
+      const step = e.shiftKey ? 10 : 2; let dx = 0, dy = 0;
+      if(e.key === 'ArrowUp') dy = -step; else if(e.key === 'ArrowDown') dy = step; else if(e.key === 'ArrowLeft') dx = -step; else if(e.key === 'ArrowRight') dx = step;
+      if(dx !== 0 || dy !== 0) {
+        e.preventDefault(); arrowMoved = true;
+        selectedBoxes.forEach(box => { let currentLeft = parseInt(window.getComputedStyle(box).left, 10) || 0; let currentTop = parseInt(window.getComputedStyle(box).top, 10) || 0; box.style.left = (currentLeft + dx) + 'px'; box.style.top = (currentTop + dy) + 'px'; });
+      }
+    });
+    
+    document.addEventListener('keyup', function(e) {
+      if (document.getElementById('cropModal').style.display === 'flex' || document.getElementById('editModal').style.display === 'flex') return;
+      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key) && arrowMoved) { saveState(); arrowMoved = false; }
+    });
+
+    function copySelection() {
+      if(selectedBoxes.size === 0) return; clipboard = []; pasteCounter = 0; 
+      selectedBoxes.forEach(box => { const img = box.querySelector('img.id-image'); if(!img) return; clipboard.push({ src: img.src, width: img.style.width, height: img.style.height, border: img.style.border, left: parseInt(window.getComputedStyle(box).left, 10) || 0, top: parseInt(window.getComputedStyle(box).top, 10) || 0, hasImage: box.classList.contains('has-image'), isLocked: box.classList.contains('locked-ratio'), isSign: box.classList.contains('sign-box') }); });
+    }
+    function cutSelection() { if(selectedBoxes.size === 0) return; copySelection(); deleteSelectedBoxes(); }
+    function pasteClipboard() {
+      if (clipboard.length === 0) return; pasteCounter++; const targetPage = document.getElementById(activePageId); if (!targetPage) return; clearSelection(); 
+      clipboard.forEach(data => {
+        const newBox = document.createElement('div'); let cls = 'movable-box selected'; if(data.hasImage) cls += ' has-image'; if(data.isLocked) cls += ' locked-ratio'; if(data.isSign) cls += ' sign-box'; newBox.className = cls;
+        let newLeft = data.left + (20 * pasteCounter), newTop = data.top + (20 * pasteCounter); const maxLeft = targetPage.clientWidth - parseFloat(data.width), maxTop = targetPage.clientHeight - parseFloat(data.height);
+        if(newLeft > maxLeft) newLeft = maxLeft; if(newTop > maxTop) newTop = maxTop; newBox.style.left = newLeft + 'px'; newBox.style.top = newTop + 'px';
+        newBox.innerHTML = `<input type="file" accept="image/*" onchange="triggerImageUpload(event, this)"><img src="${data.src}" class="id-image" style="width: ${data.width}; height: ${data.height}; ${data.border ? `border: ${data.border}` : ''}">`;
+        targetPage.appendChild(newBox); makeElementMovable(newBox); selectedBoxes.add(newBox);
+      });
+      updateSizeUIFromSelection(); updateContextActions(); saveState();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => { 
+      document.getElementById('customW').value = ''; document.getElementById('customH').value = '';
+      toggleCustomInputs(); saveState(); 
+    });
+
+    function toggleExportMode(enable) { clearSelection(); if(enable) document.body.classList.add('export-mode'); else document.body.classList.remove('export-mode'); }
+    function printSinglePage(wrapperId) { clearSelection(); document.body.classList.add('print-single-mode'); document.getElementById(wrapperId).classList.add('active-print'); window.print(); document.body.classList.remove('print-single-mode'); document.getElementById(wrapperId).classList.remove('active-print'); }
+    async function downloadAllPDF() { toggleExportMode(true); const { jsPDF } = window.jspdf; const pdf = new jsPDF('p', 'mm', 'a4'); const pages = document.querySelectorAll('.page'); for (let i = 0; i < pages.length; i++) { const canvas = await html2canvas(pages[i], { scale: 2, useCORS: true }); if (i > 0) pdf.addPage(); pdf.addImage(canvas.toDataURL('image/jpeg', 1.0), 'JPEG', 0, 0, 210, 297); } pdf.save('All_ID_Cards.pdf'); toggleExportMode(false); }
+    async function downloadAllJPEG() { toggleExportMode(true); const pages = document.querySelectorAll('.page'); for (let i = 0; i < pages.length; i++) { const canvas = await html2canvas(pages[i], { scale: 2, useCORS: true }); const link = document.createElement('a'); link.download = `ID_Cards_Page_${i+1}.jpg`; link.href = canvas.toDataURL('image/jpeg', 1.0); link.click(); } toggleExportMode(false); }
+    async function downloadSinglePDF(pageId) { toggleExportMode(true); const { jsPDF } = window.jspdf; const pdf = new jsPDF('p', 'mm', 'a4'); const canvas = await html2canvas(document.getElementById(pageId), { scale: 2, useCORS: true }); pdf.addImage(canvas.toDataURL('image/jpeg', 1.0), 'JPEG', 0, 0, 210, 297); pdf.save(`${pageId}_ID_Card.pdf`); toggleExportMode(false); }
+    async function downloadSingleJPEG(pageId) { toggleExportMode(true); const canvas = await html2canvas(document.getElementById(pageId), { scale: 2, useCORS: true }); const link = document.createElement('a'); link.download = `${pageId}_ID_Card.jpg`; link.href = canvas.toDataURL('image/jpeg', 1.0); link.click(); toggleExportMode(false); }
+  </script>
+</body>
+</html>

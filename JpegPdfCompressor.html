@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Img PDF Converter & Compressor Pro X</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+
+  <style>
+    /* GLOBAL BOX SIZING */
+    * { box-sizing: border-box; }
+    
+    body {
+      font-family: 'Poppins', sans-serif; 
+      background: #cbd5e1; 
+      margin: 0; padding: 0; color: #334155; 
+      display: flex; justify-content: center; align-items: center;
+      min-height: 100vh; min-height: 100dvh; overflow: hidden;
+    }
+
+    /* === MAIN APP FRAME === */
+    .app-frame {
+      width: 100%; max-width: 1000px; 
+      height: 98vh; height: 98dvh;
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      border: 3px solid #94a3b8; border-radius: 16px;
+      display: flex; flex-direction: column; overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+    
+    /* === 1. TOP HEADER === */
+    .top-bar {
+      background: #0f172a; color: white; display: flex; justify-content: center; align-items: center; 
+      padding: 8px 15px; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.3); text-align: center;
+      flex-shrink: 0; width: 100%;
+    }
+    
+    .brand-title { 
+      margin: 0; font-size: 22px; font-weight: 700; letter-spacing: 1px; 
+      display: flex; align-items: center; gap: 6px; justify-content: center;
+      font-family: 'Caveat', cursive; white-space: nowrap;
+    }
+    .brand-title span { color: #10b981; font-family: 'Caveat', cursive; font-size: 26px; letter-spacing: 1px;}
+
+    /* === 2. TOP CONTROL PANEL === */
+    .top-controls {
+      margin: 5px 10px 0 10px; border-radius: 12px; 
+      display: grid; grid-template-columns: 1fr 2.2fr 1fr; gap: 5px; 
+      z-index: 100; flex-shrink: 0; width: calc(100% - 20px);
+    }
+
+    .control-card {
+      border-radius: 10px; padding: 5px;
+      display: flex; flex-direction: column; gap: 3px; justify-content: center;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.06); width: 100%; overflow: hidden;
+    }
+    .card-upload { background: linear-gradient(145deg, #eff6ff, #e0f2fe); border: 1px solid #bae6fd; }
+    .card-custom { background: linear-gradient(145deg, #ffffff, #f1f5f9); border: 1px solid #e2e8f0; }
+    .card-download { background: linear-gradient(145deg, #f0fdf4, #dcfce7); border: 1px solid #bbf7d0; }
+
+    .card-title {
+      font-size: 12px; font-weight: 700; color: #475569; text-transform: uppercase; 
+      margin-bottom: 2px; border-bottom: 2px solid rgba(0,0,0,0.05); padding-bottom: 2px; text-align: center;
+    }
+
+    .btn {
+      padding: 6px 4px; font-size: 11px; font-weight: 600; cursor: pointer; border: none; border-radius: 6px;
+      display: flex; align-items: center; justify-content: center; gap: 4px; transition: 0.2s; font-family: 'Poppins'; box-shadow: 0 2px 4px rgba(0,0,0,0.08); white-space: nowrap; width: 100%; min-width: 0;
+    }
+    .btn:hover { filter: brightness(1.05); transform: translateY(-2px); }
+    .btn:active { transform: translateY(0); }
+    
+    .btn-blue { background: #3b82f6; color: white; }
+    .btn-green { background: #10b981; color: white; }
+    .btn-red { background: #ef4444; color: white; }
+    .btn-dark { background: #475569; color: white; }
+    
+    .btn-dl-png { background: #8b5cf6; color: white; }
+    .btn-dl-jpg { background: #0284c7; color: white; }
+    .btn-dl-pdf { background: #e11d48; color: white; }
+    .dl-btn:disabled { background: #94a3b8 !important; cursor: not-allowed; transform: none; box-shadow: none; opacity: 0.6;}
+
+    .btn-grid-2 { display: flex; flex-wrap: wrap; gap: 4px; width: 100%; }
+    .btn-grid-2 .btn { flex: 1 1 calc(50% - 4px); min-width: 70px; }
+    .btn-grid-3 { display: flex; flex-wrap: wrap; gap: 4px; width: 100%; }
+    .btn-grid-3 .btn { flex: 1 1 calc(33% - 4px); min-width: 50px; }
+
+    .input-box {
+      padding: 0px 4px; border: 1px solid #cbd5e1; border-radius: 4px; font-family: 'Poppins'; 
+      font-size: 12px; outline: none; transition: 0.3s; background: #fff; width: 100%; min-width: 0; min-height: 24px;
+    }
+    .input-box:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
+
+    .compact-row {
+      display: flex; align-items: center; justify-content: space-between; 
+      gap: 4px; margin-bottom: 3px; width: 100%;
+      flex-wrap: nowrap !important; 
+      overflow: hidden;
+    }
+
+    .info-text { font-size: 11px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+    .text-green { color: #059669; }
+    .unit-radios { display: flex; gap: 4px; align-items: center; flex-wrap: nowrap; flex-shrink: 0; }
+    .unit-radios label { cursor: pointer; font-size: 10px; font-weight: 700; color: #475569; display: flex; align-items: center; white-space: nowrap; margin: 0; }
+    .unit-radios input { margin: 0 2px 0 0; }
+    
+    .setting-label { font-size: 11px; font-weight: 700; color: #475569; margin: 0; white-space: nowrap; flex-shrink: 0;}
+    .icon-btn { background: transparent; border: none; font-size: 14px; cursor: pointer; padding: 0 2px; flex-shrink: 0; }
+    .icon-btn.active { color: #3b82f6; }
+    
+    /* === 3. WORKSPACE (Previews) === */
+    .workspace-wrapper { flex: 1; min-height: 0; display: flex; padding: 5px 10px; overflow: hidden; width: 100%; }
+    
+    .dual-preview-container { 
+      flex: 1; display: flex; flex-direction: row; width: 100%; background: #ffffff; 
+      border-radius: 12px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.05); overflow: hidden; border: 1px solid #cbd5e1; 
+    }
+    
+    .preview-pane { 
+      flex: 1; position: relative; overflow: auto; display: block; cursor: grab;
+      background: #e2e8f0; text-align: center; white-space: nowrap; touch-action: pan-x pan-y;
+    }
+    .preview-pane:active { cursor: grabbing; }
+    .preview-pane.left { border-right: 2px solid #3b82f6; }
+    .preview-pane::before {
+      content: ''; display: inline-block; height: 100%; vertical-align: middle; width: 0;
+    }
+    
+    .pane-badge { position: absolute; top: 10px; left: 10px; background: rgba(15,23,42,0.85); color: white; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; z-index: 10; backdrop-filter: blur(4px); pointer-events: none;}
+    .empty-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #64748b; font-weight: 600; font-size: 12px; background: rgba(255,255,255,0.95); padding: 8px 12px; border-radius: 6px; border: 1px dashed #cbd5e1; z-index: 5; text-align: center; white-space: nowrap; pointer-events: none;}
+    
+    .img-wrapper { 
+      position: relative; display: inline-block; vertical-align: middle; white-space: normal;
+      margin: 20px;
+    }
+    .img-wrapper img, .img-wrapper canvas { 
+      display: block; box-shadow: 0 4px 20px rgba(0,0,0,0.3); pointer-events: none; background: white;
+      width: 100%; height: 100%; object-fit: contain;
+    }
+
+    input[type="file"] { display: none; }
+    .overlay { position: absolute; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.85); display:none; justify-content:center; align-items:center; font-weight:700; color:#3b82f6; font-size:14px; z-index: 50; pointer-events: none; }
+
+    /* === 4. BOTTOM FOOTER === */
+    .bottom-footer {
+      background: #0f172a; padding: 6px 10px; text-align: center; z-index: 1000; box-shadow: 0 -4px 15px rgba(0,0,0,0.2);
+      flex-shrink: 0; width: 100%;
+    }
+    .footer-credits { font-size: 12px; font-weight: 500; color: #cbd5e1; margin: 0; display: inline-flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap; }
+    .team-name { color: #38bdf8; font-family: 'Caveat', cursive; font-size: 15px; font-weight: 700; letter-spacing: 1px;}
+    .group-name { color: #f59e0b; font-family: 'Caveat', cursive; font-size: 15px; font-weight: 700; letter-spacing: 1px;}
+
+    /* === 5. CROP MODAL === */
+    .crop-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.95); z-index:9999; flex-direction:column; padding:10px; box-sizing:border-box; }
+    .crop-header { background:#fff; padding:8px 10px; display:flex; justify-content:center; align-items:center; border-radius:12px 12px 0 0; flex-wrap: wrap; gap: 12px;}
+    .crop-header-group { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px;}
+    
+    .crop-body { flex:1; background:#e2e8f0; overflow:auto; position:relative; border-radius:0 0 12px 12px; border:2px solid #fff; border-top:none; touch-action: none; cursor: crosshair;}
+    .crop-workspace { position:relative; display:inline-block; transform-origin: top left; margin:0; padding:0; touch-action: none;}
+    .crop-img { display:block; max-width:none; pointer-events:none; }
+    
+    .crop-box { position:absolute; border:2px dashed #10b981; box-shadow: 0 0 0 9999px rgba(0,0,0,0.7); cursor:move; box-sizing: border-box; touch-action: none; z-index: 5;}
+    .crop-handle { position:absolute; width:16px; height:16px; background:#3b82f6; border:2px solid #fff; border-radius:50%; box-shadow:0 2px 4px rgba(0,0,0,0.3); z-index: 10; touch-action: none;}
+    
+    .crop-handle.nw { top:-8px; left:-8px; cursor:nwse-resize; }
+    .crop-handle.ne { top:-8px; right:-8px; cursor:nesw-resize; }
+    .crop-handle.sw { bottom:-8px; left:-8px; cursor:nesw-resize; }
+    .crop-handle.se { bottom:-8px; right:-8px; cursor:nwse-resize; }
+    .crop-handle.n { top:-8px; left:calc(50% - 8px); cursor:ns-resize; }
+    .crop-handle.s { bottom:-8px; left:calc(50% - 8px); cursor:ns-resize; }
+    .crop-handle.e { top:calc(50% - 8px); right:-8px; cursor:ew-resize; }
+    .crop-handle.w { top:calc(50% - 8px); left:-8px; cursor:ew-resize; }
+
+    @media (max-width: 900px) {
+      body { padding: 0; background: none; }
+      .app-frame { border: none; border-radius: 0; max-width: 100%; height: 100vh; height: 100dvh; box-shadow: none; display: flex; flex-direction: column; }
+      .top-controls { grid-template-columns: 1fr; }
+      .workspace-wrapper { flex: 1; min-height: 0; height: auto; }
+      .btn-grid-3 .btn { flex: 1 1 calc(33% - 4px); } 
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-frame">
+  <!-- HEADER -->
+  <div class="top-bar">
+    <h1 class="brand-title">Img PDF Converter & Compressor <span>Pro X</span></h1>
+  </div>
+
+  <!-- CONTROL PANEL -->
+  <div class="top-controls">
+    <!-- UPLOAD -->
+    <div class="control-card card-upload">
+      <div class="card-title">1. Upload File</div>
+      <div class="btn-grid-2">
+        <button class="btn btn-blue" onclick="document.getElementById('imgUpload').click()">🖼️ Image</button>
+        <button class="btn btn-green" onclick="document.getElementById('cropUpload').click()">🖼️📄 Crop</button>
+        <button class="btn btn-red" onclick="document.getElementById('pdfUpload').click()">📄 PDF</button>
+        <button class="btn btn-dark" onclick="removeFile()">🗑️ Clear</button>
+      </div>
+      <input type="file" id="imgUpload" accept=".jpg, .jpeg, .png" onchange="handleUpload(event, 'image')">
+      <input type="file" id="cropUpload" accept=".jpg, .jpeg, .png, .pdf" onchange="openCropModule(event)">
+      <input type="file" id="pdfUpload" accept=".pdf" onchange="handleUpload(event, 'pdf')">
+    </div>
+
+    <!-- CUSTOMIZATION -->
+    <div class="control-card card-custom">
+      <div class="card-title">2. Customization</div>
+      <div class="compact-row" style="background: rgba(255,255,255,0.7); padding: 4px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.05);">
+        <div class="info-text"><span id="lblOrig">0 KB</span> ➔ <span id="lblComp" class="text-green">0 KB</span></div>
+        <div class="unit-radios">
+          <label><input type="radio" name="units" value="px" checked onchange="updateDisplays()">PX</label>
+          <label><input type="radio" name="units" value="mm" onchange="updateDisplays()">MM</label>
+          <label><input type="radio" name="units" value="in" onchange="updateDisplays()">IN</label>
+        </div>
+      </div>
+      <div class="compact-row">
+        <span class="setting-label">Qual:</span>
+        <input type="range" id="qualitySlider" min="1" max="100" value="100" oninput="onSliderChange()" style="flex:1; min-width:30px; margin:0; cursor:pointer;">
+        <span id="qVal" style="color:#3b82f6; font-weight:bold; font-size:11px; width:28px; text-align:right; flex-shrink:0;">100%</span>
+        <span class="setting-label" style="margin-left:4px;">Fix KB:</span>
+        <input type="number" id="targetKb" class="input-box" style="width:50px; text-align:center; flex-shrink:0;" placeholder="KB" oninput="onTargetKbChange()">
+      </div>
+      <div class="compact-row">
+        <span class="setting-label">Dims:</span>
+        <input type="number" id="targetW" class="input-box" placeholder="Width" oninput="handleDimInput('w')" style="flex:1; min-width:30px; text-align:center;">
+        <button class="icon-btn active" id="aspectBtn" onclick="toggleAspect()" title="Link aspect ratio">🔒</button>
+        <input type="number" id="targetH" class="input-box" placeholder="Height" oninput="handleDimInput('h')" style="flex:1; min-width:30px; text-align:center;">
+        <button class="btn btn-blue" style="width: max-content; padding: 2px 12px; flex-shrink:0;" onclick="applySettings()">Apply</button>
+      </div>
+    </div>
+
+    <!-- DOWNLOAD -->
+    <div class="control-card card-download">
+      <div class="card-title">3. Download</div>
+      <input type="text" id="outFileName" class="input-box" placeholder="Rename File (e.g. Doc)" style="padding: 2px 6px; font-weight:600; margin-bottom: 4px;">
+      <div class="btn-grid-3" style="margin-top: auto;">
+        <button class="btn dl-btn btn-dl-png" disabled onclick="downloadFile('png')">⬇️ PNG</button>
+        <button class="btn dl-btn btn-dl-jpg" disabled onclick="downloadFile('jpeg')">⬇️ JPEG</button>
+        <button class="btn dl-btn btn-dl-pdf" disabled onclick="downloadFile('pdf')">⬇️ PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORKSPACE -->
+  <div class="workspace-wrapper">
+    <div class="dual-preview-container">
+      <!-- LEFT ORIG -->
+      <div class="preview-pane left" id="origBox">
+        <div class="pane-badge">Original</div>
+        <div class="empty-text" id="origEmpty">Input Preview</div>
+        <div class="img-wrapper" id="origWrap" style="display:none;">
+          <img id="origImg" style="display:none;">
+          <canvas id="origCanvas" style="display:none;"></canvas>
+        </div>
+      </div>
+      <!-- RIGHT COMP -->
+      <div class="preview-pane right" id="compBox">
+        <div class="pane-badge" style="background: rgba(16,185,129,0.85);">Output</div>
+        <div class="overlay" id="overlay">Processing...</div>
+        <div class="empty-text" id="compEmpty">Output Preview</div>
+        <div class="img-wrapper" id="compWrap" style="display:none;">
+          <img id="compImg" style="display:none;">
+          <canvas id="compCanvas" style="display:none;"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM FOOTER -->
+  <footer class="bottom-footer">
+    <div class="footer-credits">
+      <span class="team-name">Team Adfreehaven</span> powered by <span class="group-name">Jalap Group</span>
+    </div>
+  </footer>
+</div>
+
+  <!-- CROP MODAL -->
+  <div id="cropModal" class="crop-modal">
+    <div class="crop-header">
+      <div class="crop-header-group">
+        <button id="toolPan" class="btn btn-blue" style="width: auto; padding: 6px 10px;" onclick="setCropTool('pan')">🖐️ Pan</button>
+        <button id="toolCrop" class="btn btn-dark" style="width: auto; padding: 6px 10px;" onclick="setCropTool('crop')">🔲 Select Area</button>
+      </div>
+      <div class="crop-header-group" style="font-size:12px; font-weight:700; color:#475569;">
+        Zoom: <input type="range" id="cropZoomSlider" min="0.1" max="5" step="0.1" value="1" oninput="manualCropZoom()" style="width:80px; margin:0 5px;">
+      </div>
+      <div class="crop-header-group">
+        <button class="btn btn-dark" style="width: auto;" onclick="closeCropModule()">Cancel</button>
+        <button class="btn btn-blue" style="width: auto;" onclick="saveCropOnly()">💾 Save</button> 
+        <button class="btn btn-green" style="width: auto;" onclick="applyAndInsertCrop()">✅ Insert</button>
+      </div>
+    </div>
+    <div id="cropScrollArea" class="crop-body">
+      <div id="cropWorkspace" class="crop-workspace">
+        <img id="cropTargetImg" class="crop-img" src="">
+        <div id="cropBox" class="crop-box">
+          <div class="crop-handle n"></div><div class="crop-handle s"></div>
+          <div class="crop-handle e"></div><div class="crop-handle w"></div>
+          <div class="crop-handle nw"></div><div class="crop-handle ne"></div>
+          <div class="crop-handle sw"></div><div class="crop-handle se"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+    let currentMode = null; 
+    let origImageObj = new Image();
+    let rawPdfBytes = null;
+    let originalPdfDoc = null; 
+    
+    let origW = 0, origH = 0, origSize = 0;
+    let targetW = 0, targetH = 0, compSize = 0;
+    let origAspect = 1;
+    let origMime = 'image/jpeg'; 
+    let cropMimeType = 'image/jpeg'; 
+
+    let exportCanvas = null; 
+    let finalPdfBytes = null;
+    let timer;
+    let isLinked = true;
+    let zOrig = 1, zComp = 1; 
+    let globalFinalQ = 1.0; 
+
+    const factors = { 'px': 1, 'mm': 25.4/96, 'in': 1/96 };
+
+    function getUnit() { return document.querySelector('input[name="units"]:checked').value; }
+    function formatKB(bytes) { return bytes === 0 ? '0 KB' : Math.round(bytes / 1024) + ' KB'; }
+
+    const getExactBlob = (canvas, mime, quality) => {
+        return new Promise(resolve => {
+            canvas.toBlob(blob => resolve(blob), mime, quality);
+        });
+    };
+
+    // ==========================================
+    // HELPER: APPLY ZOOM VALUE FOR PREVIEWS
+    // ==========================================
+    function performZoom(newZ, isOrig) {
+      const wrap = isOrig ? document.getElementById('origWrap') : document.getElementById('compWrap');
+      if(wrap.style.display === 'none') return;
+      newZ = Math.max(0.1, Math.min(10, newZ)); // Limit max zoom 10x, min 0.1x
+      
+      if(isOrig) {
+        zOrig = newZ;
+        wrap.style.width = (origW * zOrig) + 'px';
+        wrap.style.height = (origH * zOrig) + 'px';
+      } else {
+        zComp = newZ;
+        wrap.style.width = (targetW * zComp) + 'px';
+        wrap.style.height = (targetH * zComp) + 'px';
+      }
+    }
+
+    // ==========================================
+    // PAN / DRAG & PINCH-TO-ZOOM LOGIC FOR PREVIEWS 
+    // ==========================================
+    function setupDragToScroll(paneId) {
+      const pane = document.getElementById(paneId);
+      const isOrig = (paneId === 'origBox');
+      let isDown = false, startX, startY, scrollLeft, scrollTop;
+      let initialPinchDist = null; // Track distance for pinch zoom
+      
+      const getPos = (e) => ({ x: e.touches ? e.touches[0].pageX : e.pageX, y: e.touches ? e.touches[0].pageY : e.pageY });
+
+      const start = (e) => {
+        // Multi-touch Zoom Start
+        if (e.touches && e.touches.length === 2) {
+          initialPinchDist = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+          return;
+        }
+        // Pan Start
+        isDown = true; const pos = getPos(e);
+        startX = pos.x - pane.offsetLeft; startY = pos.y - pane.offsetTop;
+        scrollLeft = pane.scrollLeft; scrollTop = pane.scrollTop;
+      };
+      
+      const move = (e) => {
+        // Multi-touch Zoom Move
+        if (e.touches && e.touches.length === 2) {
+          e.preventDefault(); // Stop native zoom/scroll
+          if (!initialPinchDist) return;
+          const currentPinchDist = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+          const scaleMultiplier = currentPinchDist / initialPinchDist;
+          const currentZ = isOrig ? zOrig : zComp;
+          
+          performZoom(currentZ * scaleMultiplier, isOrig);
+          initialPinchDist = currentPinchDist;
+          return;
+        }
+        // Pan Move
+        if(!isDown) return; e.preventDefault(); const pos = getPos(e);
+        const x = pos.x - pane.offsetLeft; const y = pos.y - pane.offsetTop;
+        pane.scrollLeft = scrollLeft - (x - startX); pane.scrollTop = scrollTop - (y - startY);
+      };
+      
+      const end = (e) => { 
+        if (e.touches && e.touches.length < 2) initialPinchDist = null;
+        isDown = false; 
+      };
+
+      pane.addEventListener('mousedown', start); pane.addEventListener('touchstart', start, {passive: false});
+      pane.addEventListener('mousemove', move); pane.addEventListener('touchmove', move, {passive: false});
+      pane.addEventListener('mouseup', end); pane.addEventListener('mouseleave', end); pane.addEventListener('touchend', end);
+    }
+    
+    setupDragToScroll('origBox'); setupDragToScroll('compBox');
+
+    // Mouse Wheel Zoom
+    function handleMouseZoom(e, paneId, isOrig) {
+      e.preventDefault();
+      let zoomDelta = e.deltaY < 0 ? 0.1 : -0.1;
+      if (Math.abs(e.deltaY) > 40) zoomDelta = e.deltaY < 0 ? 0.3 : -0.3;
+      let currentZ = isOrig ? zOrig : zComp;
+      performZoom(currentZ + zoomDelta, isOrig);
+    }
+    document.getElementById('origBox').addEventListener('wheel', (e) => handleMouseZoom(e, 'origBox', true), {passive: false});
+    document.getElementById('compBox').addEventListener('wheel', (e) => handleMouseZoom(e, 'compBox', false), {passive: false});
+
+
+    // ==========================================
+    // UI INPUT HANDLERS
+    // ==========================================
+    function onSliderChange() {
+      document.getElementById('targetKb').value = ''; 
+      debounceComp();
+    }
+    function onTargetKbChange() { debounceComp(); }
+    
+    function toggleAspect() {
+      isLinked = !isLinked;
+      const btn = document.getElementById('aspectBtn');
+      btn.innerText = isLinked ? '🔒' : '🔓'; btn.className = isLinked ? 'icon-btn active' : 'icon-btn';
+    }
+
+    function handleDimInput(axis) {
+      if(!isLinked || origAspect === 0) return;
+      let u = getUnit(); let f = factors[u]; let d = (u === 'px') ? 0 : 2;
+      let val = parseFloat(document.getElementById(axis === 'w' ? 'targetW' : 'targetH').value);
+      if(!val) return;
+      if(axis === 'w') document.getElementById('targetH').value = (val / origAspect).toFixed(d);
+      else document.getElementById('targetW').value = (val * origAspect).toFixed(d);
+    }
+
+    function applySettings() {
+      if(!currentMode) return;
+      let f = factors[getUnit()];
+      let tw = parseFloat(document.getElementById('targetW').value);
+      let th = parseFloat(document.getElementById('targetH').value);
+      if(tw && th) { targetW = Math.max(1, Math.round(tw / f)); targetH = Math.max(1, Math.round(th / f)); }
+      runCompression();
+    }
+
+    // ==========================================
+    // CROP MODULE WITH PINCH ZOOM SUPPORT
+    // ==========================================
+    let cropImgNode = document.getElementById('cropTargetImg');
+    let cropBoxNode = document.getElementById('cropBox');
+    let cropWorkspace = document.getElementById('cropWorkspace');
+    let cropScrollArea = document.getElementById('cropScrollArea');
+    let cNatW=0, cNatH=0, cZoom=1;
+    let cx=0, cy=0, cw=0, ch=0; 
+    
+    let cropTool = 'pan'; 
+    let isPanDrag = false, panStartX = 0, panStartY = 0, panScrollL = 0, panScrollT = 0;
+    let isDrawDrag = false, drawStartX = 0, drawStartY = 0;
+    let isCropDrag = false, dragAction = '', sX=0, sY=0, sCX=0, sCY=0, sCW=0, sCH=0;
+    let cropInitialPinchDist = null; // Track distance for crop pinch zoom
+
+    function setCropTool(tool) {
+        cropTool = tool;
+        document.getElementById('toolPan').className = tool === 'pan' ? 'btn btn-blue' : 'btn btn-dark';
+        document.getElementById('toolCrop').className = tool === 'crop' ? 'btn btn-blue' : 'btn btn-dark';
+        cropScrollArea.style.cursor = tool === 'pan' ? 'grab' : 'crosshair';
+
+        if(tool === 'crop' && cropBoxNode.style.display === 'none') {
+            let sl = cropScrollArea.scrollLeft, st = cropScrollArea.scrollTop;
+            let vw = cropScrollArea.clientWidth, vh = cropScrollArea.clientHeight;
+            cx = (sl + vw/2)/cZoom - 100; cy = (st + vh/2)/cZoom - 100;
+            cw = 200; ch = 200;
+            if(cx < 0) cx = 0; if(cy < 0) cy = 0;
+            cropBoxNode.style.display = 'block';
+            updateCropUI();
+        }
+    }
+
+    async function openCropModule(e) {
+      const file = e.target.files[0]; if(!file) return;
+      if (file.type === 'application/pdf') {
+         cropMimeType = 'image/jpeg';
+         const rawBytes = new Uint8Array(await file.arrayBuffer());
+         const pdfDoc = await pdfjsLib.getDocument({data: rawBytes}).promise;
+         const page1 = await pdfDoc.getPage(1);
+         const vp = page1.getViewport({ scale: 2.0 }); 
+         const tempCanvas = document.createElement('canvas');
+         tempCanvas.width = vp.width; tempCanvas.height = vp.height;
+         const ctx = tempCanvas.getContext('2d');
+         ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0,0, tempCanvas.width, tempCanvas.height);
+         await page1.render({ canvasContext: ctx, viewport: vp }).promise;
+         
+         cNatW = tempCanvas.width; cNatH = tempCanvas.height;
+         cropImgNode.src = tempCanvas.toDataURL('image/jpeg', 1.0);
+         initCropWorkspace(); e.target.value = ''; return;
+      }
+
+      cropMimeType = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        let tempImg = new Image();
+        tempImg.onload = () => {
+          cNatW = tempImg.width; cNatH = tempImg.height;
+          cropImgNode.src = tempImg.src;
+          initCropWorkspace();
+        }
+        tempImg.src = ev.target.result;
+      };
+      reader.readAsDataURL(file); e.target.value = '';
+    }
+
+    function initCropWorkspace() {
+      cZoom = 1;
+      let availW = window.innerWidth - 40; let availH = window.innerHeight - 150;
+      if(cNatW > availW || cNatH > availH) { cZoom = Math.min(availW / cNatW, availH / cNatH); }
+      document.getElementById('cropZoomSlider').value = cZoom;
+      cropBoxNode.style.display = 'none';
+      setCropTool('pan');
+      document.getElementById('cropModal').style.display = 'flex';
+      applyCropZoom();
+    }
+
+    function closeCropModule() { document.getElementById('cropModal').style.display = 'none'; }
+
+    function applyCropZoom() {
+      cropImgNode.style.width = (cNatW * cZoom) + 'px'; cropImgNode.style.height = (cNatH * cZoom) + 'px';
+      cropWorkspace.style.width = (cNatW * cZoom) + 'px'; cropWorkspace.style.height = (cNatH * cZoom) + 'px';
+      if(cropBoxNode.style.display !== 'none') updateCropUI();
+    }
+    function manualCropZoom() { cZoom = parseFloat(document.getElementById('cropZoomSlider').value); applyCropZoom(); }
+    
+    // Mouse Wheel Zoom for crop
+    cropScrollArea.addEventListener('wheel', (e) => {
+       e.preventDefault();
+       let delta = e.deltaY > 0 ? -0.1 : 0.1;
+       cZoom = Math.max(0.1, Math.min(5, cZoom + delta));
+       document.getElementById('cropZoomSlider').value = cZoom;
+       applyCropZoom();
+    });
+
+    // Touch Pinch Zoom for crop
+    cropScrollArea.addEventListener('touchstart', (e) => {
+        if (e.touches && e.touches.length === 2) {
+            cropInitialPinchDist = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+        }
+    }, {passive: false});
+
+    cropScrollArea.addEventListener('touchmove', (e) => {
+        if (e.touches && e.touches.length === 2 && cropInitialPinchDist) {
+            e.preventDefault(); // Stop native zoom
+            const currentDist = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+            const scaleMultiplier = currentDist / cropInitialPinchDist;
+            cZoom = Math.max(0.1, Math.min(5, cZoom * scaleMultiplier));
+            document.getElementById('cropZoomSlider').value = cZoom.toFixed(2);
+            applyCropZoom();
+            cropInitialPinchDist = currentDist;
+        }
+    }, {passive: false});
+
+    cropScrollArea.addEventListener('touchend', (e) => {
+         if (e.touches && e.touches.length < 2) cropInitialPinchDist = null;
+    });
+
+    function updateCropUI() {
+      if(cw < 20) cw = 20; if(ch < 20) ch = 20;
+      if(cx < 0) cx = 0; if(cy < 0) cy = 0;
+      if(cx + cw > cNatW) cx = cNatW - cw; if(cy + ch > cNatH) cy = cNatH - ch;
+      cropBoxNode.style.left = (cx * cZoom) + 'px'; cropBoxNode.style.top = (cy * cZoom) + 'px';
+      cropBoxNode.style.width = (cw * cZoom) + 'px'; cropBoxNode.style.height = (ch * cZoom) + 'px';
+    }
+
+    const getEvtPos = (e) => ({ x: e.touches ? e.touches[0].clientX : e.clientX, y: e.touches ? e.touches[0].clientY : e.clientY });
+
+    const cropStart = (e) => {
+       if (e.touches && e.touches.length >= 2) return; // ignore if multi-touch
+       e.preventDefault(); e.stopPropagation(); isCropDrag = true;
+       const pos = getEvtPos(e); sX = pos.x; sY = pos.y;
+       sCX = cx; sCY = cy; sCW = cw; sCH = ch;
+       dragAction = e.target.classList.contains('crop-handle') ? e.target.className.split(' ')[1] : 'move';
+    };
+
+    cropBoxNode.addEventListener('mousedown', cropStart); 
+    cropBoxNode.addEventListener('touchstart', cropStart, {passive: false});
+
+    const wsStart = (e) => {
+        if (e.touches && e.touches.length >= 2) return; // Prevent pan/draw if pinch-zooming
+        if (e.target.closest('#cropBox')) return;
+        const pos = getEvtPos(e);
+        if (cropTool === 'pan') {
+            if (e.type === 'mousedown' || (e.touches && e.touches.length === 1)) {
+                // Remove e.preventDefault() for touch to allow native scrolling if needed, but for custom pan we keep it
+                if (e.type !== 'touchstart') e.preventDefault(); 
+                isPanDrag = true;
+                panStartX = pos.x; panStartY = pos.y;
+                panScrollL = cropScrollArea.scrollLeft; panScrollT = cropScrollArea.scrollTop;
+                cropScrollArea.style.cursor = 'grabbing';
+            }
+        } else if (cropTool === 'crop') {
+            e.preventDefault(); isDrawDrag = true;
+            let rect = cropWorkspace.getBoundingClientRect();
+            drawStartX = (pos.x - rect.left) / cZoom; drawStartY = (pos.y - rect.top) / cZoom;
+            cx = drawStartX; cy = drawStartY; cw = 0; ch = 0;
+            cropBoxNode.style.display = 'block'; updateCropUI();
+        }
+    };
+
+    const wsMove = (e) => {
+        if (e.touches && e.touches.length >= 2) return; // Let pinch listener handle it
+        const pos = getEvtPos(e);
+        if (isCropDrag) {
+            e.preventDefault();
+            let dx = (pos.x - sX) / cZoom; let dy = (pos.y - sY) / cZoom;
+            if(dragAction === 'move') { cx = sCX + dx; cy = sCY + dy; }
+            else {
+                if(dragAction.includes('e')) { cw = sCW + dx; }
+                if(dragAction.includes('w')) { cx = sCX + dx; cw = sCW - dx; }
+                if(dragAction.includes('s')) { ch = sCH + dy; }
+                if(dragAction.includes('n')) { cy = sCY + dy; ch = sCH - dy; }
+            }
+            updateCropUI();
+        } else if (isPanDrag) {
+            e.preventDefault();
+            cropScrollArea.scrollLeft = panScrollL - (pos.x - panStartX);
+            cropScrollArea.scrollTop = panScrollT - (pos.y - panStartY);
+        } else if (isDrawDrag) {
+            e.preventDefault();
+            let rect = cropWorkspace.getBoundingClientRect();
+            let curX = (pos.x - rect.left) / cZoom; let curY = (pos.y - rect.top) / cZoom;
+            curX = Math.max(0, Math.min(curX, cNatW)); curY = Math.max(0, Math.min(curY, cNatH));
+            cx = Math.min(drawStartX, curX); cy = Math.min(drawStartY, curY);
+            cw = Math.abs(curX - drawStartX); ch = Math.abs(curY - drawStartY);
+            updateCropUI();
+        }
+    };
+
+    const wsEnd = () => { 
+        isCropDrag = false; isPanDrag = false; isDrawDrag = false; 
+        if (cropTool === 'pan') cropScrollArea.style.cursor = 'grab';
+    };
+
+    cropWorkspace.addEventListener('mousedown', wsStart);
+    cropWorkspace.addEventListener('touchstart', wsStart, {passive: false});
+    window.addEventListener('mousemove', wsMove);
+    window.addEventListener('touchmove', wsMove, {passive: false});
+    window.addEventListener('mouseup', wsEnd);
+    window.addEventListener('touchend', wsEnd);
+
+    function checkCropValid() {
+        if (cropBoxNode.style.display === 'none' || cw < 10 || ch < 10) {
+            alert("Please draw or select an area to crop first!"); return false;
+        }
+        return true;
+    }
+
+    function applyAndInsertCrop() {
+       if(!checkCropValid()) return;
+       const canvas = document.createElement('canvas'); canvas.width = cw; canvas.height = ch;
+       const ctx = canvas.getContext('2d');
+       if (cropMimeType === 'image/jpeg') { ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, cw, ch); }
+       ctx.drawImage(cropImgNode, cx, cy, cw, ch, 0, 0, cw, ch);
+       canvas.toBlob(blob => {
+           let ext = cropMimeType === 'image/png' ? 'png' : 'jpg';
+           const file = new File([blob], `cropped_image.${ext}`, {type: cropMimeType});
+           handleUpload({target:{files:[file]}}, 'image'); closeCropModule();
+       }, cropMimeType, 1.0);
+    }
+
+    function saveCropOnly() {
+       if(!checkCropValid()) return;
+       const canvas = document.createElement('canvas'); canvas.width = cw; canvas.height = ch;
+       const ctx = canvas.getContext('2d');
+       if (cropMimeType === 'image/jpeg') { ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, cw, ch); }
+       ctx.drawImage(cropImgNode, cx, cy, cw, ch, 0, 0, cw, ch);
+       const url = canvas.toDataURL(cropMimeType, 1.0);
+       const a = document.createElement('a'); a.href = url; a.download = `Cropped_Image.${cropMimeType === 'image/png' ? 'png' : 'jpg'}`; a.click();
+    }
+
+    // ==========================================
+    // UPLOAD & CORE LOGIC
+    // ==========================================
+    async function handleUpload(e, type) {
+      const file = e.target.files[0]; if(!file) return;
+      currentMode = type; origMime = file.type || 'image/jpeg'; 
+      let baseName = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
+      document.getElementById('outFileName').value = baseName + '_Conv';
+      
+      document.getElementById('origWrap').style.transform = `none`; 
+      document.getElementById('compWrap').style.transform = `none`;
+      
+      document.getElementById('origEmpty').style.display = 'none'; document.getElementById('compEmpty').style.display = 'none';
+      document.getElementById('origWrap').style.display = 'inline-block'; document.getElementById('compWrap').style.display = 'inline-block';
+
+      if (type === 'image') {
+        document.getElementById('origCanvas').style.display = 'none'; document.getElementById('compCanvas').style.display = 'none';
+        const imgEl = document.getElementById('origImg'); const reader = new FileReader();
+        reader.onload = (event) => {
+          origImageObj.src = event.target.result;
+          origImageObj.onload = async () => {
+            origW = origImageObj.width; origH = origImageObj.height; origAspect = origW / origH; 
+            targetW = origW; targetH = origH;
+
+            // Auto-fit initial load mapping
+            let paneW = document.getElementById('origBox').clientWidth - 40;
+            let paneH = document.getElementById('origBox').clientHeight - 40;
+            if(paneW <= 0) paneW = 300; if(paneH <= 0) paneH = 300;
+            let initZ = 1;
+            if (origW > paneW || origH > paneH) { initZ = Math.min(paneW / origW, paneH / origH); }
+            zOrig = initZ; zComp = initZ;
+
+            let tC = document.createElement('canvas'); tC.width = origW; tC.height = origH;
+            let tCtx = tC.getContext('2d'); tCtx.fillStyle = '#FFFFFF'; tCtx.fillRect(0,0,origW,origH);
+            tCtx.drawImage(origImageObj, 0, 0);
+            let exactCanvasBlob = await getExactBlob(tC, 'image/jpeg', 1.0);
+            origSize = exactCanvasBlob.size;
+
+            imgEl.src = origImageObj.src; imgEl.style.display = 'block'; 
+            imgEl.style.width = '100%'; imgEl.style.height = '100%'; 
+            
+            // Assign true dimensions for container
+            document.getElementById('origWrap').style.width = (origW * zOrig) + 'px'; 
+            document.getElementById('origWrap').style.height = (origH * zOrig) + 'px';
+            
+            document.getElementById('qualitySlider').value = 100; document.getElementById('qVal').innerText = '100%'; document.getElementById('targetKb').value = '';
+            runCompression(); 
+          };
+        };
+        reader.readAsDataURL(file);
+      } else {
+        document.getElementById('origImg').style.display = 'none'; document.getElementById('compImg').style.display = 'none';
+        const origCanvas = document.getElementById('origCanvas');
+        rawPdfBytes = new Uint8Array(await file.arrayBuffer());
+        originalPdfDoc = await pdfjsLib.getDocument({data: rawPdfBytes}).promise;
+        const page1 = await originalPdfDoc.getPage(1); const vp = page1.getViewport({ scale: 1.5 });
+        origCanvas.width = vp.width; origCanvas.height = vp.height; origCanvas.style.display = 'block';
+        await page1.render({ canvasContext: origCanvas.getContext('2d'), viewport: vp }).promise;
+        
+        origW = Math.round(vp.width); origH = Math.round(vp.height); origAspect = origW / origH; 
+        targetW = origW; targetH = origH;
+        
+        // Auto-fit initial zoom mapping
+        let paneW = document.getElementById('origBox').clientWidth - 40;
+        let paneH = document.getElementById('origBox').clientHeight - 40;
+        if(paneW <= 0) paneW = 300; if(paneH <= 0) paneH = 300;
+        let initZ = 1;
+        if (origW > paneW || origH > paneH) { initZ = Math.min(paneW / origW, paneH / origH); }
+        zOrig = initZ; zComp = initZ;
+
+        let exactCanvasBlob = await getExactBlob(origCanvas, 'image/jpeg', 1.0);
+        origSize = exactCanvasBlob.size;
+        if(originalPdfDoc.numPages > 1) origSize *= originalPdfDoc.numPages;
+
+        document.getElementById('origWrap').style.width = (origW * zOrig) + 'px'; 
+        document.getElementById('origWrap').style.height = (origH * zOrig) + 'px';
+        origCanvas.style.width = '100%'; origCanvas.style.height = '100%';
+        
+        document.getElementById('qualitySlider').value = 100; document.getElementById('qVal').innerText = '100%'; document.getElementById('targetKb').value = '';
+        runCompression(); 
+      }
+      if(e.target) e.target.value = '';
+    }
+
+    function removeFile() {
+      currentMode = null; originalPdfDoc = null; exportCanvas = null; finalPdfBytes = null;
+      document.getElementById('origEmpty').style.display = 'block'; document.getElementById('compEmpty').style.display = 'block';
+      document.getElementById('origWrap').style.display = 'none'; document.getElementById('compWrap').style.display = 'none';
+      document.getElementById('origImg').style.display = 'none'; document.getElementById('origCanvas').style.display = 'none';
+      document.getElementById('compImg').style.display = 'none'; document.getElementById('compCanvas').style.display = 'none';
+      document.getElementById('lblOrig').innerHTML = `0 KB`; document.getElementById('lblComp').innerHTML = `0 KB`;
+      document.getElementById('targetW').value = ''; document.getElementById('targetH').value = '';
+      document.querySelectorAll('.dl-btn').forEach(btn => btn.disabled = true);
+    }
+
+    function updateDisplays() {
+      if(!currentMode) return;
+      let u = getUnit(); let f = factors[u]; let d = (u === 'px') ? 0 : 2;
+      document.getElementById('lblOrig').innerHTML = `${formatKB(origSize)} | ${Math.round(origW*f)}x${Math.round(origH*f)}`;
+      document.getElementById('lblComp').innerHTML = `${formatKB(compSize)} | ${Math.round(targetW*f)}x${Math.round(targetH*f)}`;
+      document.getElementById('targetW').value = (targetW*f).toFixed(d); document.getElementById('targetH').value = (targetH*f).toFixed(d);
+    }
+
+    function debounceComp() {
+      let sl = document.getElementById('qualitySlider');
+      if(!document.getElementById('targetKb').value) { document.getElementById('qVal').innerText = sl.value + '%'; }
+      clearTimeout(timer); timer = setTimeout(() => { runCompression(); }, 80); 
+    }
+
+    async function runCompression() {
+      if(!currentMode) return;
+      document.querySelectorAll('.dl-btn').forEach(btn => btn.disabled = true);
+      
+      let targetFormat = 'image/jpeg'; 
+      let baseQ = parseInt(document.getElementById('qualitySlider').value) / 100;
+      let tKbStr = document.getElementById('targetKb').value;
+      let finalQ = baseQ; 
+      
+      exportCanvas = document.createElement('canvas'); 
+      exportCanvas.width = targetW; exportCanvas.height = targetH;
+      const ctx = exportCanvas.getContext('2d');
+      ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
+
+      let previewB64 = "";
+
+      if (currentMode === 'image') {
+        if (targetFormat === 'image/jpeg') { ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, targetW, targetH); }
+        ctx.drawImage(origImageObj, 0, 0, targetW, targetH);
+
+        if (tKbStr) {
+          let tKb = parseFloat(tKbStr); 
+          let minQ = 0.01, maxQ = 1.0, bestQ = baseQ;
+          for(let i=0; i<6; i++) { 
+            let midQ = (minQ + maxQ) / 2;
+            let tempBlob = await getExactBlob(exportCanvas, targetFormat, midQ);
+            if(tempBlob.size > tKb * 1024) maxQ = midQ; else { minQ = midQ; bestQ = midQ; }
+          }
+          finalQ = bestQ;
+          document.getElementById('qualitySlider').value = Math.round(finalQ * 100);
+          document.getElementById('qVal').innerText = Math.round(finalQ * 100) + '%';
+        }
+
+        let finalBlob = await getExactBlob(exportCanvas, targetFormat, finalQ);
+        compSize = finalBlob.size;
+        previewB64 = exportCanvas.toDataURL(targetFormat, finalQ); 
+        globalFinalQ = finalQ; 
+        
+        const compImg = document.getElementById('compImg');
+        compImg.src = previewB64; compImg.style.display = 'block'; 
+        compImg.style.width = '100%'; compImg.style.height = '100%';
+        
+        document.getElementById('compWrap').style.width = (targetW * zComp) + 'px'; 
+        document.getElementById('compWrap').style.height = (targetH * zComp) + 'px';
+      } 
+      else if (currentMode === 'pdf') {
+        const newDoc = await PDFLib.PDFDocument.create();
+        let pages = originalPdfDoc.numPages;
+        let kbPerPage = tKbStr ? parseFloat(tKbStr) / pages : null;
+
+        for (let i = 1; i <= pages; i++) {
+          const pg = await originalPdfDoc.getPage(i);
+          const vp = pg.getViewport({ scale: targetW / origW });
+          let pgCanvas = document.createElement('canvas'); pgCanvas.width = vp.width; pgCanvas.height = vp.height;
+          let pgCtx = pgCanvas.getContext('2d');
+          pgCtx.imageSmoothingEnabled = true; pgCtx.imageSmoothingQuality = 'high';
+          pgCtx.fillStyle = '#FFFFFF'; pgCtx.fillRect(0, 0, pgCanvas.width, pgCanvas.height);
+          await pg.render({ canvasContext: pgCtx, viewport: vp }).promise;
+
+          if (i === 1) { 
+              ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0,0,targetW,targetH);
+              ctx.drawImage(pgCanvas, 0, 0, targetW, targetH); 
+          }
+
+          let pQ = finalQ;
+          if(kbPerPage && targetFormat !== 'image/png') {
+            if(i === 1) { 
+              let minQ = 0.01, maxQ = 1.0, bestQ = baseQ;
+              for(let j=0; j<6; j++) { 
+                let midQ = (minQ+maxQ)/2;
+                let tempBlob = await getExactBlob(pgCanvas, targetFormat, midQ);
+                if(tempBlob.size > kbPerPage * 1024) maxQ = midQ; else { minQ = midQ; bestQ = midQ; }
+              }
+              finalQ = bestQ;
+              document.getElementById('qualitySlider').value = Math.round(finalQ * 100);
+              document.getElementById('qVal').innerText = Math.round(finalQ * 100) + '%';
+            }
+            pQ = finalQ; 
+          }
+
+          let dataUrl = pgCanvas.toDataURL(targetFormat, pQ);
+          const embedImg = (targetFormat === 'image/png') ? await newDoc.embedPng(dataUrl) : await newDoc.embedJpg(dataUrl);
+          const pdfPg = newDoc.addPage([vp.width, vp.height]);
+          pdfPg.drawImage(embedImg, { x: 0, y: 0, width: vp.width, height: vp.height });
+        }
+
+        finalPdfBytes = await newDoc.save(); 
+        globalFinalQ = finalQ;
+
+        let exactCanvasBlob = await getExactBlob(exportCanvas, targetFormat, finalQ);
+        compSize = exactCanvasBlob.size;
+        if(pages > 1) compSize *= pages; 
+
+        const cCanvas = document.getElementById('compCanvas');
+        const cPdf = await pdfjsLib.getDocument({data: finalPdfBytes}).promise;
+        const cPage1 = await cPdf.getPage(1); const cVp = cPage1.getViewport({ scale: 1.5 });
+        cCanvas.width = cVp.width; cCanvas.height = cVp.height; cCanvas.style.display = 'block';
+        await cPage1.render({ canvasContext: cCanvas.getContext('2d'), viewport: cVp }).promise;
+        
+        cCanvas.style.width = '100%'; cCanvas.style.height = '100%';
+        document.getElementById('compWrap').style.width = (targetW * zComp) + 'px'; 
+        document.getElementById('compWrap').style.height = (targetH * zComp) + 'px';
+      }
+      
+      updateDisplays(); 
+      document.querySelectorAll('.dl-btn').forEach(btn => btn.disabled = false); 
+    }
+
+    async function downloadFile(format) {
+      if (!currentMode) return;
+      let outName = document.getElementById('outFileName').value.trim() || 'Converted_File';
+      let url = ''; 
+
+      if (format === 'png' || format === 'jpeg') {
+         let mime = format === 'png' ? 'image/png' : 'image/jpeg';
+         exportCanvas.toBlob((b) => {
+             url = URL.createObjectURL(b);
+             triggerDownload(url, `${outName}.${format}`);
+         }, mime, globalFinalQ);
+      } 
+      else if (format === 'pdf') {
+         if (currentMode === 'pdf') {
+            let blob = new Blob([finalPdfBytes], { type: 'application/pdf' });
+            url = URL.createObjectURL(blob);
+            triggerDownload(url, `${outName}.pdf`);
+         } else {
+            const pdfDoc = await PDFLib.PDFDocument.create();
+            let mimeType = 'image/jpeg'; 
+            let imgData = exportCanvas.toDataURL(mimeType, globalFinalQ);
+            let imgObj = await pdfDoc.embedJpg(imgData);
+            const page = pdfDoc.addPage([targetW, targetH]);
+            page.drawImage(imgObj, { x: 0, y: 0, width: targetW, height: targetH });
+            const pdfBytes = await pdfDoc.save();
+            let blob = new Blob([pdfBytes], { type: 'application/pdf' });
+            url = URL.createObjectURL(blob);
+            triggerDownload(url, `${outName}.pdf`);
+         }
+      }
+    }
+
+    function triggerDownload(url, filename) {
+       const a = document.createElement('a'); a.href = url; a.download = filename; a.click();
+    }
+  </script>
+</body>
+</html>
