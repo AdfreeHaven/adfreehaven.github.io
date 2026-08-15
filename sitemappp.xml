@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
-  <!-- Main Website -->
+  <!-- 1. Main Website Hub -->
   <url>
     <loc>https://adfreehaven.github.io/</loc>
     <lastmod>2026-08-15</lastmod>
@@ -9,9 +9,25 @@
     <priority>1.0</priority>
   </url>
 
-  <!-- CloudServer-PC Tool -->
+  <!-- 2. Windows Software: CloudServer-PC -->
   <url>
     <loc>https://adfreehaven.github.io/CloudServer-PC/</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 3. Browser App: Image Editor -->
+  <url>
+    <loc>https://adfreehaven.github.io/ImageEditor.html</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 4. Browser App: JPEG/PDF Compressor -->
+  <url>
+    <loc>https://adfreehaven.github.io/JpegPdfCompressor.html</loc>
     <lastmod>2026-08-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
