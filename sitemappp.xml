@@ -19,7 +19,7 @@
 
   <!-- 3. Browser App: Image Editor -->
   <url>
-    <loc>https://adfreehaven.github.io/ImageEditor.html</loc>
+    <loc>https://adfreehaven.github.io/ImageEditor</loc>
     <lastmod>2026-08-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -27,7 +27,7 @@
 
   <!-- 4. Browser App: JPEG/PDF Compressor -->
   <url>
-    <loc>https://adfreehaven.github.io/JpegPdfCompressor.html</loc>
+    <loc>https://adfreehaven.github.io/JpegPdfCompressor</loc>
     <lastmod>2026-08-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
