@@ -112,8 +112,26 @@
         .sidebar-buttons {
             display: flex; flex-direction: column; gap: 15px;
         }
-         .lefttext p { 
-             font-size: 0.75rem; font-weight: 700; letter-spacing: 1.5px; color: var(--text-muted); margin: 0;
+         ./* lefttext container ko bottom me bhejne aur spacing ke liye */
+.lefttext {
+    margin-top: auto;          /* Sidebar ke sabse bottom me push karega */
+    padding-top: 20px;         /* Buttons se gap maintain karega */
+    border-top: 1px solid var(--border-color); /* Subtle divider (optional) */
+}
+
+/* Text readable aur neatly wrapped dikhne ke liye */
+.lefttext p { 
+    font-size: 0.65rem;        /* 260px width ke hisab se perfect scale */
+    font-weight: 700; 
+    letter-spacing: 0.8px;      /* 1.5px se ghata kar clean look diya */
+    line-height: 1.4;          /* Line break hone par text aapas me mix nahi hoga */
+    color: var(--text-muted); 
+    margin: 0;
+}
+
+/* Span highlight colors */
+.lefttext .highlight-1 { color: #3b82f6; }
+.lefttext .highlight-2 { color: #10b981; }
          }
         .side-btn {
             padding: 12px 15px; font-size: 0.9rem; cursor: pointer; border: none; border-radius: 10px; 
@@ -332,8 +350,9 @@
               <button class="side-btn btn-pdf" onclick="triggerCropUpload('page', 'pdf')"><i class="fa-solid fa-file-pdf"></i> Insert PDF Crop</button>
           </div>
           <div class="lefttext">
-      <p>MADE BY TEAM <span class="highlight-1">ADFREE HAVEN</span> | POWERED BY <span class="highlight-2">JALAPGROUP</span></p>
-  </div>
+    <p>MADE BY TEAM <span class="highlight-1">ADFREE HAVEN</span></p>
+    <p>POWERED BY <span class="highlight-2">JALAPGROUP</span></p>
+</div>
       </aside>
 
       <!-- MAIN WORKSPACE -->
