@@ -112,8 +112,9 @@
         .sidebar-buttons {
             display: flex; flex-direction: column; gap: 15px;
         }
-         .taskbar p { font-size: 0.75rem; font-weight: 700; letter-spacing: 1.5px; color: var(--text-muted); margin: 0;}
-
+         .lefttext p { 
+             font-size: 0.75rem; font-weight: 700; letter-spacing: 1.5px; color: var(--text-muted); margin: 0;
+         }
         .side-btn {
             padding: 12px 15px; font-size: 0.9rem; cursor: pointer; border: none; border-radius: 10px; 
             color: white; font-weight: 600; transition: all 0.2s ease; display: flex; align-items: center; gap: 10px;
@@ -329,10 +330,10 @@
               <button class="side-btn btn-crop" onclick="triggerCropUpload('page', 'image')"><i class="fa-solid fa-crop"></i> Insert & Crop</button>
               <button class="side-btn btn-bulk" onclick="openBulkModal()"><i class="fa-solid fa-layer-group"></i> Bulk PASSPORT</button>
               <button class="side-btn btn-pdf" onclick="triggerCropUpload('page', 'pdf')"><i class="fa-solid fa-file-pdf"></i> Insert PDF Crop</button>
-               <div class="taskbar">
+          </div>
+          <div class="lefttext">
       <p>MADE BY TEAM <span class="highlight-1">ADFREE HAVEN</span> | POWERED BY <span class="highlight-2">JALAPGROUP</span></p>
   </div>
-          </div>
       </aside>
 
       <!-- MAIN WORKSPACE -->
