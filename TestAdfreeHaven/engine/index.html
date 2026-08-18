@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Test Engine - TestAdfreeHaven</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📝</text></svg>">
+    
+    <!-- Favicon (Aapka diya gaya logo) -->
+    <link rel="icon" type="image/jpeg" href="../logo.jpeg">
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root { --bg-color: #fbfbfd; --surface-color: #ffffff; --text-main: #1d1d1f; --text-muted: #86868b; --border-color: #d2d2d7; --accent-blue: #0071e3; --danger-color: #ff3b30; --success-color: #34c759; }
@@ -102,13 +105,13 @@
         <button class="btn btn-submit" id="submitTestBtn">Submit Test</button>
     </div>
 
-    <!-- Review Mode Bottom Bar -->
+    <!-- Review Mode Bottom Bar (Paths updated to ../student/index.html) -->
     <div class="bottom-bar" id="reviewBottomBar" style="display: none; justify-content: space-between;">
         <button class="btn btn-outline" onclick="renderQuestion(currentQIndex - 1)" id="revPrevBtn">Previous</button>
         <span style="font-weight: 600; color: var(--accent-blue);">REVIEW MODE</span>
         <div>
             <button class="btn btn-outline" onclick="renderQuestion(currentQIndex + 1)" id="revNextBtn" style="margin-right:10px;">Next</button>
-            <button class="btn btn-submit" onclick="window.location.href='student.html'">Exit Review</button>
+            <button class="btn btn-submit" onclick="window.location.href='../student/index.html'">Exit Review</button>
         </div>
     </div>
 
@@ -118,7 +121,8 @@
             <div class="score-circle" id="finalScoreDisplay">0</div>
             <p id="accuracyText" style="margin-bottom: 20px; font-weight: 600;"></p>
             <button class="btn btn-outline" style="width: 100%; margin-bottom: 10px;" id="reviewAnswersBtn">Review Answers & Solutions</button>
-            <button class="btn btn-primary" style="width: 100%;" onclick="window.location.href='student.html'">Return to Dashboard</button>
+            <!-- Path updated to ../student/index.html -->
+            <button class="btn btn-primary" style="width: 100%;" onclick="window.location.href='../student/index.html'">Return to Dashboard</button>
         </div>
     </div>
 
@@ -148,7 +152,10 @@
                     document.getElementById("studentNameDisplay").innerText = currentUser.name;
                     loadTestDetails();
                 }
-            } else window.location.href = "index.html";
+            } else {
+                // If not logged in, go to main login page
+                window.location.href = "../index.html";
+            }
         });
 
         async function loadTestDetails() {
@@ -160,7 +167,10 @@
                 timeRemaining = testData.durationMinutes * 60;
                 startTimer(); generatePalette(); window.renderQuestion(0);
                 document.getElementById("pageLoader").style.display = "none";
-            } else window.location.href = "student.html";
+            } else {
+                // If test is not found, go back to student dashboard
+                window.location.href = "../student/index.html";
+            }
         }
 
         function startTimer() {
