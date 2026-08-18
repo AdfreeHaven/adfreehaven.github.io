@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Test Engine - TestAdfreeHaven</title>
     
-    <!-- Favicon (Aapka diya gaya logo) -->
+    <!-- Favicon (Main folder se logo.jpeg fetch kar raha hai) -->
     <link rel="icon" type="image/jpeg" href="../logo.jpeg">
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -22,7 +22,7 @@
         .q-header { display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: 600; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
         .q-text { font-size: 1.2rem; line-height: 1.6; margin-bottom: 15px; }
         
-        /* NEW: Image Container */
+        /* Image Container */
         .q-image { max-width: 100%; max-height: 300px; object-fit: contain; margin-bottom: 25px; border-radius: 8px; border: 1px solid var(--border-color); display: none; }
         
         .options-list { display: flex; flex-direction: column; gap: 12px; }
@@ -105,12 +105,13 @@
         <button class="btn btn-submit" id="submitTestBtn">Submit Test</button>
     </div>
 
-    <!-- Review Mode Bottom Bar (Paths updated to ../student/index.html) -->
+    <!-- Review Mode Bottom Bar (Redirect to Student Folder) -->
     <div class="bottom-bar" id="reviewBottomBar" style="display: none; justify-content: space-between;">
         <button class="btn btn-outline" onclick="renderQuestion(currentQIndex - 1)" id="revPrevBtn">Previous</button>
         <span style="font-weight: 600; color: var(--accent-blue);">REVIEW MODE</span>
         <div>
             <button class="btn btn-outline" onclick="renderQuestion(currentQIndex + 1)" id="revNextBtn" style="margin-right:10px;">Next</button>
+            <!-- Correct Path to Student Dashboard -->
             <button class="btn btn-submit" onclick="window.location.href='../student/index.html'">Exit Review</button>
         </div>
     </div>
@@ -121,7 +122,7 @@
             <div class="score-circle" id="finalScoreDisplay">0</div>
             <p id="accuracyText" style="margin-bottom: 20px; font-weight: 600;"></p>
             <button class="btn btn-outline" style="width: 100%; margin-bottom: 10px;" id="reviewAnswersBtn">Review Answers & Solutions</button>
-            <!-- Path updated to ../student/index.html -->
+            <!-- Correct Path to Student Dashboard -->
             <button class="btn btn-primary" style="width: 100%;" onclick="window.location.href='../student/index.html'">Return to Dashboard</button>
         </div>
     </div>
@@ -151,6 +152,9 @@
                     currentUser = { uid: user.uid, name: docSnap.data().name };
                     document.getElementById("studentNameDisplay").innerText = currentUser.name;
                     loadTestDetails();
+                } else {
+                    // User data not found, Redirect to Main Login Page
+                    window.location.href = "../index.html"; 
                 }
             } else {
                 // If not logged in, go to main login page
@@ -168,7 +172,7 @@
                 startTimer(); generatePalette(); window.renderQuestion(0);
                 document.getElementById("pageLoader").style.display = "none";
             } else {
-                // If test is not found, go back to student dashboard
+                // Test not found, redirect to Student Dashboard
                 window.location.href = "../student/index.html";
             }
         }
