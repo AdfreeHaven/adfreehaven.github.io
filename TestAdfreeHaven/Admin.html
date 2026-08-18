@@ -7,7 +7,7 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* --- CORE STYLES FROM INDEX.HTML --- */
+        /* --- CORE STYLES --- */
         :root {
             --bg-gradient: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
             --surface-color: rgba(255, 255, 255, 0.85);
@@ -27,205 +27,59 @@
             --text-main: #ffffff;
             --text-muted: #aaaaaa;
             --border-color: rgba(255, 255, 255, 0.1);
-            --accent-color: #00d2ff;
-            --accent-hover: #3a7bd5;
             --nav-bg: rgba(15, 15, 20, 0.6);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        body {
-            background: var(--bg-gradient);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            color: var(--text-main);
-            min-height: 100vh;
-        }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; transition: background-color 0.3s ease, color 0.3s ease; }
+        body { background: var(--bg-gradient); background-size: 400% 400%; animation: gradientBG 15s ease infinite; color: var(--text-main); min-height: 100vh; }
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
         /* --- NAVBAR --- */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            height: 60px;
-            background: var(--nav-bg);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 30px;
-            z-index: 1000;
-        }
+        nav { position: fixed; top: 0; width: 100%; height: 60px; background: var(--nav-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; padding: 0 30px; z-index: 1000; }
+        .logo { font-weight: 700; font-size: 1.2rem; background: -webkit-linear-gradient(45deg, var(--accent-color), var(--accent-hover)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .nav-actions { display: flex; align-items: center; gap: 15px; }
+        .theme-toggle { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--text-main); outline: none; }
+        .logout-btn { background: rgba(255, 71, 87, 0.1); color: var(--danger-color); border: 1px solid rgba(255, 71, 87, 0.3); padding: 6px 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .logout-btn:hover { background: var(--danger-color); color: white; }
 
-        .logo {
-            font-weight: 700;
-            font-size: 1.2rem;
-            background: -webkit-linear-gradient(45deg, var(--accent-color), var(--accent-hover));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        /* --- DASHBOARD --- */
+        .container { padding: 90px 20px 40px; max-width: 1200px; margin: 0 auto; }
+        .header-section { margin-bottom: 30px; }
+        .header-section h1 { font-size: 2rem; font-weight: 700; }
+        .header-section p { color: var(--text-muted); font-size: 0.95rem; }
+        .grid-container { display: grid; grid-template-columns: 1fr 2fr; gap: 25px; }
+        @media (max-width: 768px) { .grid-container { grid-template-columns: 1fr; } }
 
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .theme-toggle {
-            background: none;
-            border: none;
-            font-size: 1.4rem;
-            cursor: pointer;
-            color: var(--text-main);
-            outline: none;
-        }
-
-        .logout-btn {
-            background: rgba(255, 71, 87, 0.1);
-            color: var(--danger-color);
-            border: 1px solid rgba(255, 71, 87, 0.3);
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .logout-btn:hover {
-            background: var(--danger-color);
-            color: white;
-        }
-
-        /* --- DASHBOARD LAYOUT --- */
-        .container {
-            padding: 90px 20px 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .header-section {
-            margin-bottom: 30px;
-        }
-
-        .header-section h1 {
-            font-size: 2rem;
-            font-weight: 700;
-        }
-
-        .header-section p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-
-        .grid-container {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 25px;
-        }
-
-        @media (max-width: 768px) {
-            .grid-container { grid-template-columns: 1fr; }
-        }
-
-        /* --- CARDS (Glassmorphism) --- */
-        .glass-card {
-            background: var(--surface-color);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: var(--card-shadow);
-            border: 1px solid var(--border-color);
-        }
-
-        .glass-card h3 {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 10px;
-        }
-
-        /* --- FORM ELEMENTS --- */
-        .input-group {
-            margin-bottom: 15px;
-        }
-
-        .input-group label {
-            display: block;
-            font-size: 0.85rem;
-            margin-bottom: 6px;
-            color: var(--text-main);
-            font-weight: 500;
-        }
-
-        .input-group input, .input-group select {
-            width: 100%;
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid var(--border-color);
-            background: rgba(255, 255, 255, 0.2);
-            color: var(--text-main);
-            font-size: 0.95rem;
-            outline: none;
-            transition: all 0.3s;
-        }
-
-        [data-theme="dark"] .input-group input, [data-theme="dark"] .input-group select {
-            background: rgba(0, 0, 0, 0.2);
-        }
-
-        .input-group input:focus, .input-group select:focus {
-            border-color: var(--accent-color);
-        }
-
-        button.btn-primary {
-            width: 100%;
-            padding: 12px;
-            border-radius: 10px;
-            border: none;
-            background: linear-gradient(45deg, var(--accent-color), var(--accent-hover));
-            color: white;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: opacity 0.2s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
+        /* --- CARDS & FORMS --- */
+        .glass-card { background: var(--surface-color); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 20px; padding: 25px; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); }
+        .glass-card h3 { font-size: 1.2rem; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 0.85rem; margin-bottom: 6px; color: var(--text-main); font-weight: 500; }
+        .input-group input, .input-group select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); background: rgba(255, 255, 255, 0.2); color: var(--text-main); font-size: 0.95rem; outline: none; transition: all 0.3s; }
+        [data-theme="dark"] .input-group input, [data-theme="dark"] .input-group select { background: rgba(0, 0, 0, 0.2); }
+        .input-group input:focus, .input-group select:focus { border-color: var(--accent-color); }
+        
+        button.btn-primary { width: 100%; padding: 12px; border-radius: 10px; border: none; background: linear-gradient(45deg, var(--accent-color), var(--accent-hover)); color: white; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 10px; transition: opacity 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         button.btn-primary:hover { opacity: 0.9; }
 
-        /* Loader */
-        #pageLoader {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-gradient);
-            z-index: 2000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--text-main);
-        }
+        /* --- TEST LIST ITEMS --- */
+        .test-item { padding: 15px; border-radius: 12px; background: rgba(255,255,255,0.15); border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; transition: transform 0.2s; }
+        [data-theme="dark"] .test-item { background: rgba(0,0,0,0.15); }
+        .test-item:hover { transform: scale(1.01); }
+        .test-info h4 { margin-bottom: 4px; font-size: 1.05rem; }
+        .test-info span { font-size: 0.8rem; color: var(--text-muted); background: var(--border-color); padding: 3px 8px; border-radius: 5px; margin-right: 5px;}
+
+        /* --- MODAL (POPUP) FOR QUESTIONS --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 2000; display: none; justify-content: center; align-items: center; padding: 20px; }
+        .modal-content { width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
+        .modal-content::-webkit-scrollbar { width: 6px; }
+        .modal-content::-webkit-scrollbar-thumb { background: var(--accent-color); border-radius: 10px; }
+        
+        #pageLoader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-gradient); z-index: 3000; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; font-weight: bold; color: var(--text-main); }
     </style>
 </head>
 <body>
 
-    <!-- Security Loader (Hides content until admin is verified) -->
     <div id="pageLoader">Verifying Admin Access...</div>
 
     <nav>
@@ -240,57 +94,102 @@
     <div class="container">
         <div class="header-section">
             <h1>Dashboard</h1>
-            <p>Manage your tests, questions, and students from here.</p>
+            <p>Manage your tests and build question banks easily.</p>
         </div>
 
         <div class="grid-container">
-            <!-- Left Column: Create New Test -->
-            <div class="glass-card">
+            <!-- Create Test Form -->
+            <div class="glass-card" style="height: fit-content;">
                 <h3>Create New Test</h3>
                 <form id="createTestForm">
                     <div class="input-group">
                         <label>Test Title</label>
                         <input type="text" id="testTitle" placeholder="e.g. Computer Science Mock 1" required>
                     </div>
-                    
                     <div class="input-group">
                         <label>Duration (Minutes)</label>
                         <input type="number" id="testDuration" placeholder="e.g. 30" required>
                     </div>
-
                     <div class="input-group">
                         <label>Price (₹) - Enter 0 for Free</label>
                         <input type="number" id="testPrice" placeholder="0" required>
                     </div>
-
                     <button type="submit" class="btn-primary" id="createTestBtn">Create Test</button>
                     <div id="testMsg" style="margin-top:10px; font-size:0.85rem; color:#2ed573; text-align:center;"></div>
                 </form>
             </div>
 
-            <!-- Right Column: Existing Tests / Add Questions (UI Placeholder for now) -->
+            <!-- Existing Tests List -->
             <div class="glass-card">
-                <h3>Your Tests</h3>
-                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;">
-                    Once you create a test, it will appear here. You can click on it to add questions.
-                </p>
-                <div id="testList" style="display:flex; flex-direction:column; gap:10px;">
-                    <!-- Tests will be loaded here dynamically from Firebase later -->
+                <h3>Your Active Tests</h3>
+                <div id="testList" style="display:flex; flex-direction:column;">
                     <div style="padding: 15px; border-radius: 10px; border: 1px dashed var(--border-color); text-align: center; color: var(--text-muted);">
-                        No tests created yet.
+                        Loading tests...
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Firebase SDK -->
+    <!-- Question Modal Popup -->
+    <div id="questionModal" class="modal-overlay">
+        <div class="glass-card modal-content">
+            <h3 id="modalTestTitle">Add Question</h3>
+            <form id="addQuestionForm">
+                <div class="input-group">
+                    <label>Question Text</label>
+                    <input type="text" id="qText" placeholder="What is the capital of India?" required>
+                </div>
+                <div class="input-group">
+                    <label>Option A</label>
+                    <input type="text" id="optA" required>
+                </div>
+                <div class="input-group">
+                    <label>Option B</label>
+                    <input type="text" id="optB" required>
+                </div>
+                <div class="input-group">
+                    <label>Option C</label>
+                    <input type="text" id="optC" required>
+                </div>
+                <div class="input-group">
+                    <label>Option D</label>
+                    <input type="text" id="optD" required>
+                </div>
+                <div class="input-group">
+                    <label>Correct Answer</label>
+                    <select id="qCorrect" required>
+                        <option value="0">Option A</option>
+                        <option value="1">Option B</option>
+                        <option value="2">Option C</option>
+                        <option value="3">Option D</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <div class="input-group" style="flex: 1;">
+                        <label>Marks (Correct)</label>
+                        <input type="number" id="qMarks" value="2" required>
+                    </div>
+                    <div class="input-group" style="flex: 1;">
+                        <label>Negative Marks</label>
+                        <input type="number" step="0.1" id="qNegative" value="0.5" required>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button type="submit" class="btn-primary" style="flex: 2;">Save Question</button>
+                    <button type="button" class="btn-primary" id="closeModalBtn" style="flex: 1; background: var(--danger-color);">Cancel</button>
+                </div>
+                <div id="qMsg" style="margin-top:10px; font-size:0.85rem; color:#2ed573; text-align:center;"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase Scripts -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, setDoc, doc as docRef } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, collection, setDoc, getDocs, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-        // Your Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyA68qtMRSc_ypJLfp1_WrHj2WwTsn5tXwc",
             authDomain: "free-test-portal.firebaseapp.com",
@@ -305,65 +204,82 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Security Check: Is User Logged In & Is Admin?
+        // Security Check
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const docSnap = await getDoc(doc(db, "users", user.uid));
                 if (docSnap.exists() && docSnap.data().role === "admin") {
-                    // Valid Admin
                     document.getElementById("pageLoader").style.display = "none";
-                    document.getElementById("adminName").innerText = docSnap.data().name.split(" ")[0]; // Show First Name
+                    document.getElementById("adminName").innerText = docSnap.data().name.split(" ")[0];
+                    loadTests(); // Admin verified, load the tests!
                 } else {
-                    // Logged in but NOT Admin (Kick to index.html)
-                    alert("Unauthorized Access! Only Admins allowed.");
+                    alert("Unauthorized Access!");
                     window.location.href = "index.html";
                 }
             } else {
-                // Not logged in at all
                 window.location.href = "index.html";
             }
         });
 
-        // Logout Logic
-        document.getElementById("logoutBtn").addEventListener("click", () => {
-            signOut(auth).then(() => {
-                window.location.href = "index.html";
-            });
-        });
+        // Logout
+        document.getElementById("logoutBtn").addEventListener("click", () => signOut(auth).then(() => window.location.href = "index.html"));
 
-        // Create Test Logic (Saving to Firestore Database)
+        // Load Tests from Database
+        async function loadTests() {
+            const testList = document.getElementById("testList");
+            try {
+                const querySnapshot = await getDocs(collection(db, "tests"));
+                if (querySnapshot.empty) {
+                    testList.innerHTML = `<div style="padding: 15px; border-radius: 10px; border: 1px dashed var(--border-color); text-align: center; color: var(--text-muted);">No tests created yet.</div>`;
+                    return;
+                }
+                testList.innerHTML = "";
+                querySnapshot.forEach((docSnap) => {
+                    const test = docSnap.data();
+                    const qCount = test.questions ? test.questions.length : 0; // Check how many questions exist
+                    
+                    const div = document.createElement("div");
+                    div.className = "test-item";
+                    div.innerHTML = `
+                        <div class="test-info">
+                            <h4>${test.title}</h4>
+                            <span>⏱ ${test.durationMinutes} Min</span>
+                            <span>₹ ${test.price}</span>
+                            <span>📝 ${qCount} Qs</span>
+                        </div>
+                        <button class="btn-primary" style="width: auto; padding: 6px 12px; margin: 0; font-size: 0.85rem;" data-id="${test.testId}" data-title="${test.title}">+ Add Qs</button>
+                    `;
+                    testList.appendChild(div);
+                });
+            } catch (error) {
+                testList.innerHTML = `<span style="color: #ff4757;">Error loading tests. Check console.</span>`;
+            }
+        }
+
+        // Create New Test
         document.getElementById("createTestForm").addEventListener("submit", async (e) => {
             e.preventDefault();
             const btn = document.getElementById("createTestBtn");
             const msg = document.getElementById("testMsg");
-            
-            const title = document.getElementById("testTitle").value;
-            const duration = parseInt(document.getElementById("testDuration").value);
-            const price = parseInt(document.getElementById("testPrice").value);
-
             btn.innerText = "Creating...";
             
             try {
-                // Generate a unique ID based on timestamp
                 const testId = "test_" + Date.now();
-                
-                await setDoc(docRef(db, "tests", testId), {
+                await setDoc(doc(db, "tests", testId), {
                     testId: testId,
-                    title: title,
-                    durationMinutes: duration,
-                    price: price,
-                    isPaid: price > 0,
+                    title: document.getElementById("testTitle").value,
+                    durationMinutes: parseInt(document.getElementById("testDuration").value),
+                    price: parseInt(document.getElementById("testPrice").value),
+                    isPaid: parseInt(document.getElementById("testPrice").value) > 0,
+                    questions: [], // Empty questions array initially
                     createdAt: new Date().toISOString()
                 });
-
                 msg.style.color = "#2ed573";
                 msg.innerText = "Test created successfully!";
                 document.getElementById("createTestForm").reset();
-                
                 setTimeout(() => { msg.innerText = ""; }, 3000);
                 
-                // TODO in Next Step: Reload test list on the right side
-                
+                loadTests(); // Refresh right side list
             } catch (error) {
                 msg.style.color = "#ff4757";
                 msg.innerText = "Error: " + error.message;
@@ -372,7 +288,66 @@
             }
         });
 
-        // Theme Toggle Logic
+        // Open Modal to Add Questions
+        let currentTestId = "";
+        const modal = document.getElementById("questionModal");
+        
+        document.getElementById("testList").addEventListener("click", (e) => {
+            if (e.target.tagName === "BUTTON") {
+                currentTestId = e.target.getAttribute("data-id");
+                document.getElementById("modalTestTitle").innerText = `Add Qs to: ${e.target.getAttribute("data-title")}`;
+                modal.style.display = "flex";
+            }
+        });
+
+        // Close Modal
+        document.getElementById("closeModalBtn").addEventListener("click", () => {
+            modal.style.display = "none";
+            document.getElementById("addQuestionForm").reset();
+        });
+
+        // Save Question to Database
+        document.getElementById("addQuestionForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector("button[type='submit']");
+            const msg = document.getElementById("qMsg");
+            btn.innerText = "Saving...";
+
+            const newQuestion = {
+                id: Date.now(),
+                question: document.getElementById("qText").value,
+                options: [
+                    document.getElementById("optA").value,
+                    document.getElementById("optB").value,
+                    document.getElementById("optC").value,
+                    document.getElementById("optD").value
+                ],
+                correctAnswer: parseInt(document.getElementById("qCorrect").value),
+                marks: parseFloat(document.getElementById("qMarks").value),
+                negativeMarks: parseFloat(document.getElementById("qNegative").value)
+            };
+
+            try {
+                // Update the array inside the test document
+                await updateDoc(doc(db, "tests", currentTestId), {
+                    questions: arrayUnion(newQuestion)
+                });
+                
+                msg.style.color = "#2ed573";
+                msg.innerText = "Question added!";
+                e.target.reset(); // Clear form so admin can quickly add next question
+                setTimeout(() => { msg.innerText = ""; }, 2000);
+                
+                loadTests(); // Update Question Count on dashboard
+            } catch(error) {
+                msg.style.color = "#ff4757";
+                msg.innerText = "Error: " + error.message;
+            } finally {
+                btn.innerText = "Save Question";
+            }
+        });
+
+        // Theme Toggle
         const themeBtn = document.getElementById("themeBtn");
         if(localStorage.getItem("theme") === "dark") {
             document.documentElement.setAttribute("data-theme", "dark");
