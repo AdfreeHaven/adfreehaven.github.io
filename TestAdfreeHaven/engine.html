@@ -421,12 +421,13 @@
             const submissionId = currentUser.uid + "_" + Date.now();
             
             try {
-                // Save Result to Database
+                // Save Result to Database (FIXED ERROR HERE)
+                // request.data.userId को Firestore Rules में पास करने के लिए यह स्ट्रक्चर ज़रूरी है
                 await setDoc(doc(db, "results", submissionId), {
-                    userId: currentUser.uid,
-                    userName: currentUser.name,
+                    userId: currentUser.uid,          // Rule के लिए ज़रूरी
+                    userName: currentUser.name || "Student",
                     testId: testId,
-                    testTitle: testData.title,
+                    testTitle: testData.title || "Mock Test",
                     score: score,
                     totalMarks: totalMaxMarks,
                     userAnswers: userAnswers,
@@ -440,7 +441,9 @@
                 document.getElementById("accuracyText").innerText = `Correct: ${correctCount} / ${questions.length} | Total Marks: ${totalMaxMarks}`;
 
             } catch(e) {
+                // अब अगर कोई एरर आएगी तो वह एग्ज़ैक्ट कारण बताएगी (Permission denied etc.)
                 alert("Error saving result: " + e.message);
+                console.error("Firebase Error: ", e);
                 document.getElementById("pageLoader").style.display = "none";
             }
         }
