@@ -182,17 +182,17 @@
                     // Load Available Tests
                     fetchAndDisplayTests();
                 } else {
-                    window.location.href = "index.html";
+                    window.location.href = "../index.html";
                 }
             } else {
-                window.location.href = "index.html";
+                window.location.href = "../index.html";
             }
         });
 
         // --- LOGOUT LOGIC ---
         document.getElementById("logoutBtn").addEventListener("click", () => {
             signOut(auth).then(() => {
-                window.location.href = "index.html";
+                window.location.href = "../index.html";
             });
         });
 
