@@ -5,15 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Test Engine - TestAdfreeHaven</title>
     
-    <!-- Favicon (Main folder se logo.jpeg fetch kar raha hai) -->
+    <!-- Favicon -->
     <link rel="icon" type="image/jpeg" href="../logo.jpeg">
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- PDF Generate karne ke liye library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
     <style>
         :root { --bg-color: #fbfbfd; --surface-color: #ffffff; --text-main: #1d1d1f; --text-muted: #86868b; --border-color: #d2d2d7; --accent-blue: #0071e3; --danger-color: #ff3b30; --success-color: #34c759; }
         [data-theme="dark"] { --bg-color: #000000; --surface-color: #1c1c1e; --text-main: #f5f5f7; --text-muted: #a1a1a6; --border-color: #38383a; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; user-select: none; }
         body { background-color: var(--bg-color); color: var(--text-main); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        
+        /* Start Screen Modal (For Fullscreen) */
+        #startModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 3000; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; display: none; }
+        #startModal h1 { margin-bottom: 20px; font-size: 2rem; color: var(--text-main); }
+        #startModal p { margin-bottom: 30px; color: var(--text-muted); font-size: 1.1rem; }
+        
         header { background: var(--surface-color); border-bottom: 1px solid var(--border-color); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
         .timer-box { font-size: 1.4rem; font-weight: 700; color: var(--danger-color); }
         .engine-container { display: flex; flex: 1; overflow: hidden; }
@@ -40,27 +50,38 @@
         .sidebar { width: 320px; background: var(--surface-color); border-left: 1px solid var(--border-color); display: flex; flex-direction: column; }
         .student-info { padding: 20px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 15px; }
         .palette-container { padding: 20px; flex: 1; overflow-y: auto; }
-        .grid-palette { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-        .palette-btn { width: 100%; aspect-ratio: 1; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-main); font-weight: 600; cursor: pointer; }
+        
+        /* CHANGE: Grid Columns 4 se 5 ki gayi hain taki box chhote dikhein */
+        .grid-palette { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+        .palette-btn { width: 100%; aspect-ratio: 1; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-main); font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        
         .status-not-visited { background: var(--bg-color); }
         .status-not-answered { background: var(--danger-color); color: white; border-color: var(--danger-color); }
         .status-answered { background: var(--success-color); color: white; border-color: var(--success-color); }
-        .palette-btn.active-q { border: 3px solid var(--accent-blue); transform: scale(1.1); }
+        .palette-btn.active-q { border: 2px solid var(--accent-blue); transform: scale(1.1); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
 
         .bottom-bar { background: var(--surface-color); border-top: 1px solid var(--border-color); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
-        .btn { padding: 12px 24px; border-radius: 10px; border: none; font-size: 1rem; font-weight: 600; cursor: pointer; }
+        .btn { padding: 12px 24px; border-radius: 10px; border: none; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .btn:hover { opacity: 0.9; }
         .btn-outline { background: transparent; border: 2px solid var(--border-color); color: var(--text-main); }
         .btn-primary { background: var(--accent-blue); color: white; }
         .btn-submit { background: var(--success-color); color: white; }
 
-        #pageLoader, #resultModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 2000; display: flex; justify-content: center; align-items: center; }
-        .result-card { background: var(--surface-color); padding: 40px; border-radius: 20px; text-align: center; max-width: 400px; width: 90%; }
+        #pageLoader, #resultModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 4000; display: flex; justify-content: center; align-items: center; }
+        .result-card { background: var(--surface-color); padding: 40px; border-radius: 20px; text-align: center; max-width: 420px; width: 90%; }
         .score-circle { width: 120px; height: 120px; border-radius: 50%; border: 8px solid var(--success-color); display: flex; justify-content: center; align-items: center; margin: 20px auto; font-size: 2.5rem; font-weight: 700; }
         @media (max-width: 900px) { .engine-container { flex-direction: column; } .sidebar { width: 100%; height: 250px; } }
     </style>
 </head>
 <body>
     <div id="pageLoader"><div style="color:white; font-size:1.5rem; font-weight:bold;">Loading Test...</div></div>
+
+    <!-- Start Modal for Fullscreen Requirement -->
+    <div id="startModal">
+        <h1 id="startTestTitle">Ready to Begin?</h1>
+        <p>This test will run in Full Screen Mode.</p>
+        <button class="btn btn-primary" id="startTestBtn" style="padding: 15px 40px; font-size: 1.2rem;">Start Test</button>
+    </div>
 
     <header>
         <div style="font-size: 1.2rem; font-weight: 700;" id="displayTestTitle">TestAdfreeHaven Engine</div>
@@ -75,12 +96,10 @@
             </div>
             <div class="q-text" id="questionText">Loading...</div>
             
-            <!-- IMAGE TAG -->
             <img id="questionImage" class="q-image" src="" alt="Question Image">
             
             <div class="options-list" id="optionsContainer"></div>
 
-            <!-- SOLUTION BOX (Hidden until Review Mode) -->
             <div class="solution-box" id="solutionBox">
                 <strong>Explanation:</strong> <span id="explanationText"></span>
             </div>
@@ -105,14 +124,12 @@
         <button class="btn btn-submit" id="submitTestBtn">Submit Test</button>
     </div>
 
-    <!-- Review Mode Bottom Bar (Redirect to Student Folder) -->
     <div class="bottom-bar" id="reviewBottomBar" style="display: none; justify-content: space-between;">
         <button class="btn btn-outline" onclick="renderQuestion(currentQIndex - 1)" id="revPrevBtn">Previous</button>
         <span style="font-weight: 600; color: var(--accent-blue);">REVIEW MODE</span>
         <div>
             <button class="btn btn-outline" onclick="renderQuestion(currentQIndex + 1)" id="revNextBtn" style="margin-right:10px;">Next</button>
-            <!-- Correct Path to Student Dashboard -->
-            <button class="btn btn-submit" onclick="window.location.href='../student/index.html'">Exit Review</button>
+            <button class="btn btn-submit" onclick="exitFullScreenAndRedirect()">Exit Review</button>
         </div>
     </div>
 
@@ -121,9 +138,12 @@
             <h2>Test Submitted!</h2>
             <div class="score-circle" id="finalScoreDisplay">0</div>
             <p id="accuracyText" style="margin-bottom: 20px; font-weight: 600;"></p>
+            
+            <!-- NEW: PDF Download Button -->
+            <button class="btn btn-primary" style="width: 100%; margin-bottom: 10px; background: #8e44ad;" id="downloadPdfBtn">📥 Download Test PDF</button>
+            
             <button class="btn btn-outline" style="width: 100%; margin-bottom: 10px;" id="reviewAnswersBtn">Review Answers & Solutions</button>
-            <!-- Correct Path to Student Dashboard -->
-            <button class="btn btn-primary" style="width: 100%;" onclick="window.location.href='../student/index.html'">Return to Dashboard</button>
+            <button class="btn btn-primary" style="width: 100%;" onclick="exitFullScreenAndRedirect()">Return to Dashboard</button>
         </div>
     </div>
 
@@ -137,7 +157,7 @@
 
         let currentUser = null; let testData = null; let questions = []; let currentQIndex = 0;
         let qStatus = []; let userAnswers = {}; let timeRemaining = 0; let timerInterval = null;
-        let isReviewMode = false; // REVIEW FLAG
+        let isReviewMode = false;
 
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('copy', e => { e.preventDefault(); alert("Copying is prohibited!"); });
@@ -152,14 +172,8 @@
                     currentUser = { uid: user.uid, name: docSnap.data().name };
                     document.getElementById("studentNameDisplay").innerText = currentUser.name;
                     loadTestDetails();
-                } else {
-                    // User data not found, Redirect to Main Login Page
-                    window.location.href = "../index.html"; 
-                }
-            } else {
-                // If not logged in, go to main login page
-                window.location.href = "../index.html";
-            }
+                } else window.location.href = "../index.html";
+            } else window.location.href = "../index.html";
         });
 
         async function loadTestDetails() {
@@ -167,15 +181,35 @@
             if(testSnap.exists()) {
                 testData = testSnap.data(); questions = testData.questions || [];
                 document.getElementById("displayTestTitle").innerText = testData.title;
+                document.getElementById("startTestTitle").innerText = testData.title;
                 qStatus = new Array(questions.length).fill(0); qStatus[0] = 1;
                 timeRemaining = testData.durationMinutes * 60;
-                startTimer(); generatePalette(); window.renderQuestion(0);
+                
+                // Hide Loader and Show Start Modal (for Fullscreen)
                 document.getElementById("pageLoader").style.display = "none";
-            } else {
-                // Test not found, redirect to Student Dashboard
-                window.location.href = "../student/index.html";
-            }
+                document.getElementById("startModal").style.display = "flex";
+            } else window.location.href = "../student/index.html";
         }
+
+        // FULLSCREEN & START TEST LOGIC
+        document.getElementById("startTestBtn").addEventListener("click", () => {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) { elem.requestFullscreen().catch(e=>{}); } 
+            else if (elem.webkitRequestFullscreen) { elem.webkitRequestFullscreen().catch(e=>{}); } 
+            else if (elem.msRequestFullscreen) { elem.msRequestFullscreen().catch(e=>{}); }
+            
+            document.getElementById("startModal").style.display = "none";
+            startTimer(); 
+            generatePalette(); 
+            window.renderQuestion(0);
+        });
+
+        window.exitFullScreenAndRedirect = function() {
+            if (document.exitFullscreen) { document.exitFullscreen().catch(e=>{}); }
+            else if (document.webkitExitFullscreen) { document.webkitExitFullscreen().catch(e=>{}); }
+            else if (document.msExitFullscreen) { document.msExitFullscreen().catch(e=>{}); }
+            window.location.href = '../student/index.html';
+        };
 
         function startTimer() {
             timerInterval = setInterval(() => {
@@ -196,12 +230,11 @@
 
             document.getElementById("qNumberText").innerText = `Question ${index + 1} of ${questions.length}`;
             document.getElementById("questionText").innerText = q.question;
+            document.getElementById("qMarksText").innerText = `Marks: +${q.marks} | -${q.negativeMarks}`;
 
-            // HANDLE IMAGE
             const imgEl = document.getElementById("questionImage");
-            if(q.imageUrl && q.imageUrl.trim() !== "") {
-                imgEl.src = q.imageUrl; imgEl.style.display = "block";
-            } else { imgEl.style.display = "none"; }
+            if(q.imageUrl && q.imageUrl.trim() !== "") { imgEl.src = q.imageUrl; imgEl.style.display = "block"; } 
+            else { imgEl.style.display = "none"; }
 
             const optsContainer = document.getElementById("optionsContainer");
             optsContainer.innerHTML = "";
@@ -209,7 +242,6 @@
             q.options.forEach((optText, optIndex) => {
                 const label = document.createElement("label");
                 label.className = "option-label";
-                
                 const radio = document.createElement("input");
                 radio.type = "radio"; radio.name = "qOption"; radio.value = optIndex;
                 if(userAnswers[index] === optIndex) radio.checked = true;
@@ -222,27 +254,20 @@
                         userAnswers[index] = optIndex; qStatus[index] = 2; updatePaletteUI();
                     });
                 } else {
-                    radio.disabled = true; // Lock inputs in review mode
-                    // Show correct and wrong colors
+                    radio.disabled = true;
                     if(optIndex === q.correctAnswer) label.classList.add("correct-ans");
                     else if(userAnswers[index] === optIndex && optIndex !== q.correctAnswer) label.classList.add("wrong-ans");
                 }
-
                 label.appendChild(radio); label.appendChild(document.createTextNode(optText)); optsContainer.appendChild(label);
             });
 
-            // HANDLE SOLUTION BOX IN REVIEW MODE
             const solBox = document.getElementById("solutionBox");
             if(isReviewMode) {
                 solBox.style.display = "block";
-                document.getElementById("explanationText").innerText = q.explanation ? q.explanation : "No specific explanation provided by admin.";
-                // Hide Previous/Next buttons appropriately
+                document.getElementById("explanationText").innerText = q.explanation ? q.explanation : "No specific explanation provided.";
                 document.getElementById("revPrevBtn").style.visibility = index === 0 ? "hidden" : "visible";
                 document.getElementById("revNextBtn").style.visibility = index === questions.length - 1 ? "hidden" : "visible";
-            } else {
-                solBox.style.display = "none";
-            }
-
+            } else { solBox.style.display = "none"; }
             updatePaletteUI();
         }
 
@@ -260,12 +285,10 @@
                 const btn = document.getElementById(`palBtn_${i}`);
                 btn.className = "palette-btn";
                 if(i === currentQIndex) btn.classList.add("active-q");
-                
                 if(isReviewMode) {
-                    // In review mode, show green if correct, red if wrong, grey if skipped
                     if(userAnswers[i] === undefined) btn.style.background = "#e0e0e0";
-                    else if(userAnswers[i] === questions[i].correctAnswer) { btn.style.background = "var(--success-color)"; btn.style.color = "white"; }
-                    else { btn.style.background = "var(--danger-color)"; btn.style.color = "white"; }
+                    else if(userAnswers[i] === questions[i].correctAnswer) { btn.style.background = "var(--success-color)"; btn.style.color = "white"; border: "none"; }
+                    else { btn.style.background = "var(--danger-color)"; btn.style.color = "white"; border: "none"; }
                 } else {
                     if(qStatus[i] === 0) btn.classList.add("status-not-visited");
                     else if(qStatus[i] === 1) btn.classList.add("status-not-answered");
@@ -289,7 +312,6 @@
                 }
             });
             score = Math.max(0, parseFloat(score.toFixed(2))); 
-            
             try {
                 await setDoc(doc(db, "results", currentUser.uid + "_" + Date.now()), {
                     userId: currentUser.uid, userName: currentUser.name || "Student", testId: testId,
@@ -301,14 +323,77 @@
             } catch(e) { alert("Error saving result."); }
         }
 
-        // --- START REVIEW MODE ---
         document.getElementById("reviewAnswersBtn").addEventListener("click", () => {
             document.getElementById("resultModal").style.display = "none";
             document.getElementById("timerDisplay").innerText = "Review Mode";
             document.getElementById("normalBottomBar").style.display = "none";
             document.getElementById("reviewBottomBar").style.display = "flex";
             isReviewMode = true;
-            window.renderQuestion(0); // Restart from Q1 in review mode
+            window.renderQuestion(0);
+        });
+
+        // --- PDF DOWNLOAD LOGIC ---
+        document.getElementById("downloadPdfBtn").addEventListener("click", async () => {
+            const btn = document.getElementById("downloadPdfBtn");
+            btn.innerText = "Generating PDF... Please Wait";
+            btn.disabled = true;
+
+            const element = document.createElement('div');
+            element.style.padding = '20px';
+            element.style.fontFamily = 'Arial, sans-serif';
+            element.style.color = '#333';
+            
+            let html = `<h1 style="text-align:center; color: #0071e3; margin-bottom: 5px;">${testData.title} - Result Report</h1>`;
+            html += `<p style="text-align:center; font-size:18px;"><strong>Student:</strong> ${currentUser.name}</p><hr style="margin: 20px 0;">`;
+            
+            questions.forEach((q, i) => {
+                const uAns = userAnswers[i];
+                const isCorrect = uAns === q.correctAnswer;
+                
+                html += `<div style="margin-bottom: 25px; page-break-inside: avoid; background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eee;">`;
+                html += `<p style="font-size: 16px; margin-bottom: 10px;"><strong>Q${i+1}: ${q.question}</strong></p>`;
+                
+                if(q.imageUrl) { html += `<img src="${q.imageUrl}" style="max-height:150px; display:block; margin:10px 0;">`; }
+                
+                q.options.forEach((opt, optIdx) => {
+                    let optStyle = "margin: 5px 0; padding: 8px; border-radius: 5px; border: 1px solid #ccc; font-size:14px;";
+                    let icon = "";
+                    
+                    if (optIdx === q.correctAnswer) {
+                        optStyle += "background-color: #d4edda; border-color: #28a745; color: #155724;";
+                        icon = " <strong>✔️ (Correct Answer)</strong>";
+                    } else if (uAns === optIdx && uAns !== q.correctAnswer) {
+                        optStyle += "background-color: #f8d7da; border-color: #dc3545; color: #721c24;";
+                        icon = " <strong>❌ (Your Answer)</strong>";
+                    }
+                    
+                    html += `<div style="${optStyle}">${String.fromCharCode(65 + optIdx)}. ${opt} ${icon}</div>`;
+                });
+                
+                if(!isCorrect && uAns === undefined) {
+                    html += `<p style="color: #dc3545; font-size:14px; margin-top:10px;"><em>You skipped this question.</em></p>`;
+                }
+                
+                if (q.explanation) {
+                    html += `<div style="font-size: 14px; background: #e2e8f0; padding: 10px; border-radius: 5px; margin-top: 10px;"><strong>Solution:</strong> ${q.explanation}</div>`;
+                }
+                html += `</div>`;
+            });
+            
+            element.innerHTML = html;
+            
+            const opt = {
+                margin:       0.5,
+                filename:     `${testData.title.replace(/\s+/g, '_')}_Result.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            
+            html2pdf().set(opt).from(element).save().then(() => {
+                btn.innerText = "📥 Download Test PDF";
+                btn.disabled = false;
+            });
         });
     </script>
 </body>
