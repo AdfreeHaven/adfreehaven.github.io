@@ -223,11 +223,11 @@
                     document.getElementById("pageLoader").style.display = "none";
                     document.getElementById("adminName").innerText = "Hi, " + docSnap.data().name.split(" ")[0];
                     loadTests();
-                } else window.location.href = "index";
-            } else window.location.href = "index";
+                } else window.location.href = "../index.html";
+            } else window.location.href = "../index.html";
         });
 
-        document.getElementById("logoutBtn").addEventListener("click", () => signOut(auth).then(() => window.location.href = "index.html"));
+        document.getElementById("logoutBtn").addEventListener("click", () => signOut(auth).then(() => window.location.href = "../index.html"));
 
         async function loadTests() {
             const testList = document.getElementById("testList");
