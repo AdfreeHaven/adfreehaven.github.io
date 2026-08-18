@@ -4,15 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
      <nav>
-    <!-- लोगो इमेज -->
-    <a href="index.html">
-        <img src="logo.jpeg" alt="TestAdfreeHaven Logo" style="height: 40px; vertical-align: middle;">
-    </a>
-    
-    <!-- अगर आप लोगो के साथ नाम भी दिखाना चाहते हैं -->
-    <div class="logo">TestAdfreeHaven</div>
     
     <button class="theme-toggle" id="themeBtn">🌙</button>
+</nav>
+
+     <nav>
+    <img src="../logo.jpeg" alt="TestAdfreeHaven Logo" style="height: 40px; vertical-align: middle;">
+    <div class="logo">test Panel</div>
 </nav>
     <!-- SEO Meta Tags -->
     <title>TestAdfreeHaven - Online Examination & Assessment Portal</title>
@@ -67,14 +65,14 @@
             --google-btn: #2a2a2a;
             --google-text: #ffffff;
         }
-nav img { max-width: 100%; height: auto; }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
+nav img {
+    height: 40px;          
+    width: auto;           
+    border-radius: 8px;    
+    object-fit: contain;  
+    vertical-align: middle; 
+    margin-right: 10px;     
+}
 
         body {
             background: var(--bg-gradient);
