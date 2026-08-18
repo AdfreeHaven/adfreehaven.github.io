@@ -7,352 +7,236 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📝</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-color: #fbfbfd;
-            --surface-color: #ffffff;
-            --text-main: #1d1d1f;
-            --text-muted: #86868b;
-            --border-color: #d2d2d7;
-            --accent-blue: #0071e3;
-            --accent-hover: #0077ed;
-            --danger-color: #ff3b30;
-            --success-color: #34c759;
-            --warning-color: #ff9500;
-        }
-
-        [data-theme="dark"] {
-            --bg-color: #000000;
-            --surface-color: #1c1c1e;
-            --text-main: #f5f5f7;
-            --text-muted: #a1a1a6;
-            --border-color: #38383a;
-        }
-
+        :root { --bg-color: #fbfbfd; --surface-color: #ffffff; --text-main: #1d1d1f; --text-muted: #86868b; --border-color: #d2d2d7; --accent-blue: #0071e3; --danger-color: #ff3b30; --success-color: #34c759; }
+        [data-theme="dark"] { --bg-color: #000000; --surface-color: #1c1c1e; --text-main: #f5f5f7; --text-muted: #a1a1a6; --border-color: #38383a; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; user-select: none; }
         body { background-color: var(--bg-color); color: var(--text-main); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-
-        /* --- HEADER --- */
-        header { background: var(--surface-color); border-bottom: 1px solid var(--border-color); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; z-index: 10; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
-        .test-title { font-size: 1.2rem; font-weight: 700; }
-        .timer-box { font-size: 1.4rem; font-weight: 700; color: var(--danger-color); display: flex; align-items: center; gap: 8px; background: rgba(255, 59, 48, 0.1); padding: 8px 15px; border-radius: 10px; }
-        
-        /* --- MAIN LAYOUT --- */
+        header { background: var(--surface-color); border-bottom: 1px solid var(--border-color); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .timer-box { font-size: 1.4rem; font-weight: 700; color: var(--danger-color); }
         .engine-container { display: flex; flex: 1; overflow: hidden; }
         
-        /* Left: Question Area */
         .question-area { flex: 1; padding: 40px; overflow-y: auto; display: flex; flex-direction: column; }
-        .q-header { display: flex; justify-content: space-between; margin-bottom: 25px; font-weight: 600; font-size: 1.1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
-        .q-text { font-size: 1.3rem; line-height: 1.6; margin-bottom: 30px; }
+        .q-header { display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: 600; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
+        .q-text { font-size: 1.2rem; line-height: 1.6; margin-bottom: 15px; }
         
-        .options-list { display: flex; flex-direction: column; gap: 15px; }
-        .option-label { display: flex; align-items: center; padding: 15px 20px; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.2s; font-size: 1.1rem; background: var(--surface-color); }
-        .option-label:hover { border-color: var(--accent-blue); background: rgba(0, 113, 227, 0.05); }
+        /* NEW: Image Container */
+        .q-image { max-width: 100%; max-height: 300px; object-fit: contain; margin-bottom: 25px; border-radius: 8px; border: 1px solid var(--border-color); display: none; }
+        
+        .options-list { display: flex; flex-direction: column; gap: 12px; }
+        .option-label { display: flex; align-items: center; padding: 12px 20px; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; font-size: 1.1rem; background: var(--surface-color); }
         .option-label input { margin-right: 15px; transform: scale(1.3); accent-color: var(--accent-blue); cursor: pointer; }
         .option-label.selected { border-color: var(--accent-blue); background: rgba(0, 113, 227, 0.1); }
 
-        /* Right: Sidebar Palette */
+        /* Review Mode Colors */
+        .option-label.correct-ans { border-color: var(--success-color); background: rgba(52, 199, 89, 0.1); }
+        .option-label.wrong-ans { border-color: var(--danger-color); background: rgba(255, 59, 48, 0.1); }
+        
+        /* Solution Box */
+        .solution-box { margin-top: 20px; padding: 15px; background: rgba(0, 113, 227, 0.1); border-left: 4px solid var(--accent-blue); border-radius: 5px; display: none; font-size: 0.95rem; line-height: 1.5; }
+
         .sidebar { width: 320px; background: var(--surface-color); border-left: 1px solid var(--border-color); display: flex; flex-direction: column; }
         .student-info { padding: 20px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 15px; }
-        .avatar { width: 45px; height: 45px; border-radius: 50%; background: var(--accent-blue); color: white; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; font-weight: 600; }
-        
         .palette-container { padding: 20px; flex: 1; overflow-y: auto; }
-        .palette-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 15px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
         .grid-palette { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-        .palette-btn { width: 100%; aspect-ratio: 1; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-main); font-weight: 600; font-size: 1.1rem; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: 0.2s; }
-        
-        /* Status Colors */
+        .palette-btn { width: 100%; aspect-ratio: 1; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-main); font-weight: 600; cursor: pointer; }
         .status-not-visited { background: var(--bg-color); }
         .status-not-answered { background: var(--danger-color); color: white; border-color: var(--danger-color); }
         .status-answered { background: var(--success-color); color: white; border-color: var(--success-color); }
-        .palette-btn.active-q { border: 3px solid var(--accent-blue); transform: scale(1.1); box-shadow: 0 4px 10px rgba(0,113,227,0.3); }
+        .palette-btn.active-q { border: 3px solid var(--accent-blue); transform: scale(1.1); }
 
-        /* Legends */
-        .legends { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 20px; border-top: 1px solid var(--border-color); font-size: 0.8rem; font-weight: 500; }
-        .legend-item { display: flex; align-items: center; gap: 8px; }
-        .legend-box { width: 16px; height: 16px; border-radius: 4px; border: 1px solid var(--border-color); }
-
-        /* Bottom Action Bar */
         .bottom-bar { background: var(--surface-color); border-top: 1px solid var(--border-color); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
-        .left-actions { display: flex; gap: 15px; }
-        
-        button.btn { padding: 12px 24px; border-radius: 10px; border: none; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .btn { padding: 12px 24px; border-radius: 10px; border: none; font-size: 1rem; font-weight: 600; cursor: pointer; }
         .btn-outline { background: transparent; border: 2px solid var(--border-color); color: var(--text-main); }
-        .btn-outline:hover { background: var(--border-color); }
-        .btn-primary { background: var(--accent-blue); color: white; box-shadow: 0 4px 15px rgba(0,113,227,0.3); }
-        .btn-primary:hover { background: var(--accent-hover); }
-        .btn-submit { background: var(--success-color); color: white; box-shadow: 0 4px 15px rgba(52,199,89,0.3); }
+        .btn-primary { background: var(--accent-blue); color: white; }
+        .btn-submit { background: var(--success-color); color: white; }
 
-        /* Loader & Result Modal */
         #pageLoader, #resultModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 2000; display: flex; justify-content: center; align-items: center; }
-        .loader-text { color: white; font-size: 1.5rem; font-weight: bold; }
-        
         .result-card { background: var(--surface-color); padding: 40px; border-radius: 20px; text-align: center; max-width: 400px; width: 90%; }
-        .result-card h2 { font-size: 2rem; margin-bottom: 10px; color: var(--text-main); }
-        .score-circle { width: 120px; height: 120px; border-radius: 50%; border: 8px solid var(--success-color); display: flex; justify-content: center; align-items: center; margin: 20px auto; font-size: 2.5rem; font-weight: 700; color: var(--text-main); }
-        
-        @media (max-width: 900px) {
-            .engine-container { flex-direction: column; }
-            .sidebar { width: 100%; height: 250px; border-left: none; border-top: 1px solid var(--border-color); }
-            .bottom-bar { flex-direction: column; gap: 15px; }
-            .left-actions { width: 100%; justify-content: space-between; }
-            .btn-submit { width: 100%; }
-        }
+        .score-circle { width: 120px; height: 120px; border-radius: 50%; border: 8px solid var(--success-color); display: flex; justify-content: center; align-items: center; margin: 20px auto; font-size: 2.5rem; font-weight: 700; }
+        @media (max-width: 900px) { .engine-container { flex-direction: column; } .sidebar { width: 100%; height: 250px; } }
     </style>
 </head>
 <body>
+    <div id="pageLoader"><div style="color:white; font-size:1.5rem; font-weight:bold;">Loading Test...</div></div>
 
-    <div id="pageLoader"><div class="loader-text">Loading Test Environment...</div></div>
-
-    <!-- Header -->
     <header>
-        <div class="test-title" id="displayTestTitle">TestAdfreeHaven Engine</div>
+        <div style="font-size: 1.2rem; font-weight: 700;" id="displayTestTitle">TestAdfreeHaven Engine</div>
         <div class="timer-box" id="timerDisplay">⏱ 00:00:00</div>
     </header>
 
-    <!-- Main Container -->
     <div class="engine-container">
-        
-        <!-- Question Area -->
         <div class="question-area">
             <div class="q-header">
                 <span id="qNumberText">Question 1</span>
                 <span id="qMarksText" style="color: var(--success-color);">Marks: +2 | -0.5</span>
             </div>
-            <div class="q-text" id="questionText">Loading question...</div>
+            <div class="q-text" id="questionText">Loading...</div>
             
-            <div class="options-list" id="optionsContainer">
-                <!-- Options will be generated by JS -->
+            <!-- IMAGE TAG -->
+            <img id="questionImage" class="q-image" src="" alt="Question Image">
+            
+            <div class="options-list" id="optionsContainer"></div>
+
+            <!-- SOLUTION BOX (Hidden until Review Mode) -->
+            <div class="solution-box" id="solutionBox">
+                <strong>Explanation:</strong> <span id="explanationText"></span>
             </div>
         </div>
 
-        <!-- Sidebar Palette -->
         <div class="sidebar">
             <div class="student-info">
-                <div class="avatar" id="studentAvatar">S</div>
-                <div>
-                    <div style="font-weight: 600; font-size: 1rem;" id="studentNameDisplay">Student Name</div>
-                    <div style="font-size: 0.8rem; color: var(--text-muted);">Candidate</div>
-                </div>
+                <div style="font-weight: 600;" id="studentNameDisplay">Student</div>
             </div>
-
             <div class="palette-container">
-                <div class="palette-title">Question Palette</div>
-                <div class="grid-palette" id="paletteGrid">
-                    <!-- Buttons generated by JS -->
-                </div>
-            </div>
-
-            <div class="legends">
-                <div class="legend-item"><div class="legend-box status-answered"></div> Answered</div>
-                <div class="legend-item"><div class="legend-box status-not-answered"></div> Not Answered</div>
-                <div class="legend-item"><div class="legend-box status-not-visited"></div> Not Visited</div>
+                <div style="font-size: 0.9rem; font-weight: 600; margin-bottom: 15px; color: var(--text-muted);">QUESTION PALETTE</div>
+                <div class="grid-palette" id="paletteGrid"></div>
             </div>
         </div>
     </div>
 
-    <!-- Bottom Actions -->
-    <div class="bottom-bar">
-        <div class="left-actions">
+    <div class="bottom-bar" id="normalBottomBar">
+        <div style="display: flex; gap: 15px;">
             <button class="btn btn-outline" id="clearBtn">Clear Response</button>
             <button class="btn btn-primary" id="saveNextBtn">Save & Next</button>
         </div>
         <button class="btn btn-submit" id="submitTestBtn">Submit Test</button>
     </div>
 
-    <!-- Result Modal (Hidden initially) -->
+    <!-- Review Mode Bottom Bar -->
+    <div class="bottom-bar" id="reviewBottomBar" style="display: none; justify-content: space-between;">
+        <button class="btn btn-outline" onclick="renderQuestion(currentQIndex - 1)" id="revPrevBtn">Previous</button>
+        <span style="font-weight: 600; color: var(--accent-blue);">REVIEW MODE</span>
+        <div>
+            <button class="btn btn-outline" onclick="renderQuestion(currentQIndex + 1)" id="revNextBtn" style="margin-right:10px;">Next</button>
+            <button class="btn btn-submit" onclick="window.location.href='student.html'">Exit Review</button>
+        </div>
+    </div>
+
     <div id="resultModal" style="display: none;">
         <div class="result-card">
             <h2>Test Submitted!</h2>
-            <p style="color: var(--text-muted);">Your final score is:</p>
             <div class="score-circle" id="finalScoreDisplay">0</div>
             <p id="accuracyText" style="margin-bottom: 20px; font-weight: 600;"></p>
+            <button class="btn btn-outline" style="width: 100%; margin-bottom: 10px;" id="reviewAnswersBtn">Review Answers & Solutions</button>
             <button class="btn btn-primary" style="width: 100%;" onclick="window.location.href='student.html'">Return to Dashboard</button>
         </div>
     </div>
 
-    <!-- Firebase Scripts -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyA68qtMRSc_ypJLfp1_WrHj2WwTsn5tXwc",
-            authDomain: "free-test-portal.firebaseapp.com",
-            projectId: "free-test-portal",
-            storageBucket: "free-test-portal.firebasestorage.app",
-            messagingSenderId: "184523976049",
-            appId: "1:184523976049:web:3afcd5b9a05495fcc39ad0"
-        };
+        const firebaseConfig = { apiKey: "AIzaSyA68qtMRSc_ypJLfp1_WrHj2WwTsn5tXwc", authDomain: "free-test-portal.firebaseapp.com", projectId: "free-test-portal", storageBucket: "free-test-portal.firebasestorage.app", messagingSenderId: "184523976049", appId: "1:184523976049:web:3afcd5b9a05495fcc39ad0" };
+        const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app);
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+        let currentUser = null; let testData = null; let questions = []; let currentQIndex = 0;
+        let qStatus = []; let userAnswers = {}; let timeRemaining = 0; let timerInterval = null;
+        let isReviewMode = false; // REVIEW FLAG
 
-        // State Variables
-        let currentUser = null;
-        let testData = null;
-        let questions = [];
-        let currentQIndex = 0;
-        
-        // Status arrays: 0 = Not Visited, 1 = Not Answered, 2 = Answered
-        let qStatus = []; 
-        let userAnswers = {}; // { questionIndex: selectedOptionIndex }
-        
-        let timeRemaining = 0;
-        let timerInterval = null;
-        let warningCount = 0;
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('copy', e => { e.preventDefault(); alert("Copying is prohibited!"); });
 
-        // Anti-Cheat System
-        document.addEventListener('contextmenu', event => event.preventDefault()); // Disable Right Click
-        document.addEventListener('copy', event => {
-            event.preventDefault();
-            alert("Copying questions is strictly prohibited!");
-        });
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden && document.getElementById('resultModal').style.display === 'none') {
-                warningCount++;
-                if (warningCount >= 3) {
-                    alert("Test Auto-Submitted due to multiple tab switches/suspicious activity!");
-                    submitTest();
-                } else {
-                    alert(`Warning ${warningCount}/3: Please do not switch tabs during the test!`);
-                }
-            }
-        });
-
-        // 1. Get Test ID from URL
         const urlParams = new URLSearchParams(window.location.search);
         const testId = urlParams.get('id');
 
-        if(!testId) {
-            alert("Invalid Test URL!");
-            window.location.href = "student.html";
-        }
-
-        // 2. Auth Check & Initialization
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const docSnap = await getDoc(doc(db, "users", user.uid));
                 if (docSnap.exists()) {
                     currentUser = { uid: user.uid, name: docSnap.data().name };
                     document.getElementById("studentNameDisplay").innerText = currentUser.name;
-                    document.getElementById("studentAvatar").innerText = currentUser.name.charAt(0).toUpperCase();
                     loadTestDetails();
                 }
-            } else {
-                window.location.href = "index.html";
-            }
+            } else window.location.href = "index.html";
         });
 
-        // 3. Load Test from Firestore
         async function loadTestDetails() {
-            try {
-                const testSnap = await getDoc(doc(db, "tests", testId));
-                if(testSnap.exists()) {
-                    testData = testSnap.data();
-                    questions = testData.questions || [];
-                    
-                    if(questions.length === 0) {
-                        alert("This test has no questions yet!");
-                        window.location.href = "student.html";
-                        return;
-                    }
-
-                    document.getElementById("displayTestTitle").innerText = testData.title;
-                    
-                    // Initialize Status Arrays
-                    qStatus = new Array(questions.length).fill(0);
-                    qStatus[0] = 1; // Mark first question as 'Not Answered' (visited)
-
-                    // Start Timer
-                    timeRemaining = testData.durationMinutes * 60;
-                    startTimer();
-
-                    // Generate Palette UI & Render First Q
-                    generatePalette();
-                    renderQuestion(0);
-                    
-                    document.getElementById("pageLoader").style.display = "none";
-                } else {
-                    alert("Test not found!");
-                    window.location.href = "student.html";
-                }
-            } catch(e) {
-                alert("Error loading test data.");
-            }
+            const testSnap = await getDoc(doc(db, "tests", testId));
+            if(testSnap.exists()) {
+                testData = testSnap.data(); questions = testData.questions || [];
+                document.getElementById("displayTestTitle").innerText = testData.title;
+                qStatus = new Array(questions.length).fill(0); qStatus[0] = 1;
+                timeRemaining = testData.durationMinutes * 60;
+                startTimer(); generatePalette(); window.renderQuestion(0);
+                document.getElementById("pageLoader").style.display = "none";
+            } else window.location.href = "student.html";
         }
 
-        // 4. Timer Logic
         function startTimer() {
             timerInterval = setInterval(() => {
-                if(timeRemaining <= 0) {
-                    clearInterval(timerInterval);
-                    alert("Time's up! Submitting your test automatically.");
-                    submitTest();
-                } else {
+                if(timeRemaining <= 0) { clearInterval(timerInterval); submitTest(); }
+                else {
                     timeRemaining--;
-                    let h = Math.floor(timeRemaining / 3600);
-                    let m = Math.floor((timeRemaining % 3600) / 60);
-                    let s = timeRemaining % 60;
+                    let h = Math.floor(timeRemaining / 3600); let m = Math.floor((timeRemaining % 3600) / 60); let s = timeRemaining % 60;
                     document.getElementById("timerDisplay").innerText = `⏱ ${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
                 }
             }, 1000);
         }
 
-        // 5. Render Question
-        function renderQuestion(index) {
+        window.renderQuestion = function(index) {
+            if(index < 0 || index >= questions.length) return;
             currentQIndex = index;
             const q = questions[index];
-            
-            // Update Status to Not Answered if it was Not Visited
             if(qStatus[index] === 0) qStatus[index] = 1;
 
             document.getElementById("qNumberText").innerText = `Question ${index + 1} of ${questions.length}`;
-            document.getElementById("qMarksText").innerText = `Marks: +${q.marks} | -${q.negativeMarks}`;
             document.getElementById("questionText").innerText = q.question;
+
+            // HANDLE IMAGE
+            const imgEl = document.getElementById("questionImage");
+            if(q.imageUrl && q.imageUrl.trim() !== "") {
+                imgEl.src = q.imageUrl; imgEl.style.display = "block";
+            } else { imgEl.style.display = "none"; }
 
             const optsContainer = document.getElementById("optionsContainer");
             optsContainer.innerHTML = "";
 
             q.options.forEach((optText, optIndex) => {
-                const isSelected = userAnswers[index] === optIndex;
-                
                 const label = document.createElement("label");
-                label.className = `option-label ${isSelected ? 'selected' : ''}`;
+                label.className = "option-label";
                 
                 const radio = document.createElement("input");
-                radio.type = "radio";
-                radio.name = "qOption";
-                radio.value = optIndex;
-                if(isSelected) radio.checked = true;
+                radio.type = "radio"; radio.name = "qOption"; radio.value = optIndex;
+                if(userAnswers[index] === optIndex) radio.checked = true;
 
-                radio.addEventListener("change", () => {
-                    document.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
-                    label.classList.add('selected');
-                    userAnswers[index] = optIndex;
-                    qStatus[index] = 2; // Mark as Answered
-                    updatePaletteUI();
-                });
+                if(!isReviewMode) {
+                    if(userAnswers[index] === optIndex) label.classList.add('selected');
+                    radio.addEventListener("change", () => {
+                        document.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
+                        label.classList.add('selected');
+                        userAnswers[index] = optIndex; qStatus[index] = 2; updatePaletteUI();
+                    });
+                } else {
+                    radio.disabled = true; // Lock inputs in review mode
+                    // Show correct and wrong colors
+                    if(optIndex === q.correctAnswer) label.classList.add("correct-ans");
+                    else if(userAnswers[index] === optIndex && optIndex !== q.correctAnswer) label.classList.add("wrong-ans");
+                }
 
-                label.appendChild(radio);
-                label.appendChild(document.createTextNode(optText));
-                optsContainer.appendChild(label);
+                label.appendChild(radio); label.appendChild(document.createTextNode(optText)); optsContainer.appendChild(label);
             });
+
+            // HANDLE SOLUTION BOX IN REVIEW MODE
+            const solBox = document.getElementById("solutionBox");
+            if(isReviewMode) {
+                solBox.style.display = "block";
+                document.getElementById("explanationText").innerText = q.explanation ? q.explanation : "No specific explanation provided by admin.";
+                // Hide Previous/Next buttons appropriately
+                document.getElementById("revPrevBtn").style.visibility = index === 0 ? "hidden" : "visible";
+                document.getElementById("revNextBtn").style.visibility = index === questions.length - 1 ? "hidden" : "visible";
+            } else {
+                solBox.style.display = "none";
+            }
 
             updatePaletteUI();
         }
 
-        // 6. Sidebar Palette Logic
         function generatePalette() {
-            const grid = document.getElementById("paletteGrid");
-            grid.innerHTML = "";
+            const grid = document.getElementById("paletteGrid"); grid.innerHTML = "";
             for(let i=0; i<questions.length; i++) {
-                const btn = document.createElement("button");
-                btn.className = "palette-btn status-not-visited";
-                btn.id = `palBtn_${i}`;
-                btn.innerText = i + 1;
-                btn.onclick = () => renderQuestion(i);
+                const btn = document.createElement("button"); btn.id = `palBtn_${i}`; btn.innerText = i + 1;
+                btn.onclick = () => window.renderQuestion(i);
                 grid.appendChild(btn);
             }
         }
@@ -360,93 +244,58 @@
         function updatePaletteUI() {
             for(let i=0; i<questions.length; i++) {
                 const btn = document.getElementById(`palBtn_${i}`);
-                btn.className = "palette-btn"; // reset classes
-                
+                btn.className = "palette-btn";
                 if(i === currentQIndex) btn.classList.add("active-q");
                 
-                if(qStatus[i] === 0) btn.classList.add("status-not-visited");
-                else if(qStatus[i] === 1) btn.classList.add("status-not-answered");
-                else if(qStatus[i] === 2) btn.classList.add("status-answered");
+                if(isReviewMode) {
+                    // In review mode, show green if correct, red if wrong, grey if skipped
+                    if(userAnswers[i] === undefined) btn.style.background = "#e0e0e0";
+                    else if(userAnswers[i] === questions[i].correctAnswer) { btn.style.background = "var(--success-color)"; btn.style.color = "white"; }
+                    else { btn.style.background = "var(--danger-color)"; btn.style.color = "white"; }
+                } else {
+                    if(qStatus[i] === 0) btn.classList.add("status-not-visited");
+                    else if(qStatus[i] === 1) btn.classList.add("status-not-answered");
+                    else if(qStatus[i] === 2) btn.classList.add("status-answered");
+                }
             }
         }
 
-        // 7. Bottom Bar Actions
-        document.getElementById("clearBtn").addEventListener("click", () => {
-            delete userAnswers[currentQIndex];
-            qStatus[currentQIndex] = 1; // Back to Not Answered
-            renderQuestion(currentQIndex);
-        });
+        document.getElementById("clearBtn").addEventListener("click", () => { delete userAnswers[currentQIndex]; qStatus[currentQIndex] = 1; window.renderQuestion(currentQIndex); });
+        document.getElementById("saveNextBtn").addEventListener("click", () => { if(currentQIndex < questions.length - 1) window.renderQuestion(currentQIndex + 1); });
+        document.getElementById("submitTestBtn").addEventListener("click", () => { if(confirm("Submit test?")) submitTest(); });
 
-        document.getElementById("saveNextBtn").addEventListener("click", () => {
-            if(currentQIndex < questions.length - 1) {
-                renderQuestion(currentQIndex + 1);
-            } else {
-                alert("This is the last question. Click 'Submit Test' to finish.");
-            }
-        });
-
-        document.getElementById("submitTestBtn").addEventListener("click", () => {
-            if(confirm("Are you sure you want to submit the test? You cannot change answers after this.")) {
-                submitTest();
-            }
-        });
-
-        // 8. Submit & Calculate Score
         async function submitTest() {
             clearInterval(timerInterval);
-            document.getElementById("pageLoader").style.display = "flex";
-            document.querySelector(".loader-text").innerText = "Calculating Result...";
-
-            let score = 0;
-            let correctCount = 0;
-            let totalMaxMarks = 0;
-
+            let score = 0; let correctCount = 0; let totalMaxMarks = 0;
             questions.forEach((q, i) => {
                 totalMaxMarks += q.marks;
-                const userAns = userAnswers[i];
-                
-                if(userAns !== undefined) {
-                    if(userAns === q.correctAnswer) {
-                        score += q.marks;
-                        correctCount++;
-                    } else {
-                        score -= q.negativeMarks;
-                    }
+                if(userAnswers[i] !== undefined) {
+                    if(userAnswers[i] === q.correctAnswer) { score += q.marks; correctCount++; } 
+                    else score -= q.negativeMarks;
                 }
             });
-
-            // Prevent negative total score display optionally
             score = Math.max(0, parseFloat(score.toFixed(2))); 
-
-            const submissionId = currentUser.uid + "_" + Date.now();
             
             try {
-                // Save Result to Database (FIXED ERROR HERE)
-                // request.data.userId को Firestore Rules में पास करने के लिए यह स्ट्रक्चर ज़रूरी है
-                await setDoc(doc(db, "results", submissionId), {
-                    userId: currentUser.uid,          // Rule के लिए ज़रूरी
-                    userName: currentUser.name || "Student",
-                    testId: testId,
-                    testTitle: testData.title || "Mock Test",
-                    score: score,
-                    totalMarks: totalMaxMarks,
-                    userAnswers: userAnswers,
-                    submittedAt: new Date().toISOString()
+                await setDoc(doc(db, "results", currentUser.uid + "_" + Date.now()), {
+                    userId: currentUser.uid, userName: currentUser.name || "Student", testId: testId,
+                    score: score, totalMarks: totalMaxMarks, userAnswers: userAnswers, submittedAt: new Date().toISOString()
                 });
-
-                // Show Result Modal
-                document.getElementById("pageLoader").style.display = "none";
                 document.getElementById("resultModal").style.display = "flex";
                 document.getElementById("finalScoreDisplay").innerText = score;
-                document.getElementById("accuracyText").innerText = `Correct: ${correctCount} / ${questions.length} | Total Marks: ${totalMaxMarks}`;
-
-            } catch(e) {
-                // अब अगर कोई एरर आएगी तो वह एग्ज़ैक्ट कारण बताएगी (Permission denied etc.)
-                alert("Error saving result: " + e.message);
-                console.error("Firebase Error: ", e);
-                document.getElementById("pageLoader").style.display = "none";
-            }
+                document.getElementById("accuracyText").innerText = `Correct: ${correctCount} / ${questions.length}`;
+            } catch(e) { alert("Error saving result."); }
         }
+
+        // --- START REVIEW MODE ---
+        document.getElementById("reviewAnswersBtn").addEventListener("click", () => {
+            document.getElementById("resultModal").style.display = "none";
+            document.getElementById("timerDisplay").innerText = "Review Mode";
+            document.getElementById("normalBottomBar").style.display = "none";
+            document.getElementById("reviewBottomBar").style.display = "flex";
+            isReviewMode = true;
+            window.renderQuestion(0); // Restart from Q1 in review mode
+        });
     </script>
 </body>
 </html>
