@@ -240,10 +240,11 @@
         }
 
         // --- START TEST ACTION ---
-        window.startTest = function(testId) {
-            // Note: Next step is to build engine.html
-            alert("The Test Engine UI (engine.html) is coming next! Test ID: " + testId);
-        }
+       // --- START TEST ACTION ---
+window.startTest = function(testId) {
+    // Redirect to test engine with the specific test ID in URL
+    window.location.href = "engine.html?id=" + testId;
+}
 
         // --- TAB SWITCHER LOGIC ---
         window.switchTab = function(tabName) {
