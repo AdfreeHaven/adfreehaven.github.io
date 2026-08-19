@@ -1,36 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  
-  <!-- 1. Main Website Hub -->
-  <url>
-    <loc>https://adfreehaven.github.io/</loc>
-    <lastmod>2026-08-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
+<?xml-stylesheet type="text/css" href="https://www.xml-sitemaps.com/css/sitemap.css"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
-  <!-- 2. Windows Software: CloudServer-PC -->
   <url>
-    <loc>https://adfreehaven.github.io/CloudServer-PC/</loc>
-    <lastmod>2026-08-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+       <loc>https://adfreehaven.github.io/</loc>
+       <lastmod>2026-08-18T17:45:23+00:00</lastmod>
+       <changefreq>daily</changefreq>
+       <priority>1.0000</priority>
   </url>
-
-  <!-- 3. Browser App: Image Editor -->
   <url>
-    <loc>https://adfreehaven.github.io/ImageEditor</loc>
-    <lastmod>2026-08-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+       <loc>https://adfreehaven.github.io/ImageEditor/</loc>
+       <lastmod>2026-08-18T17:45:23+00:00</lastmod>
+       <changefreq>daily</changefreq>
+       <priority>0.8000</priority>
   </url>
-
-  <!-- 4. Browser App: JPEG/PDF Compressor -->
   <url>
-    <loc>https://adfreehaven.github.io/JpegPdfCompressor</loc>
-    <lastmod>2026-08-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+       <loc>https://adfreehaven.github.io/JpegPdfCompressor/</loc>
+       <lastmod>2026-08-18T17:45:23+00:00</lastmod>
+       <changefreq>daily</changefreq>
+       <priority>0.8000</priority>
   </url>
-
+  <url>
+       <loc>https://adfreehaven.github.io/CloudServer-PC/</loc>
+       <lastmod>2026-08-18T17:45:23+00:00</lastmod>
+       <changefreq>daily</changefreq>
+       <priority>0.8000</priority>
+  </url>
+  <url>
+       <loc>https://adfreehaven.github.io/TapCounter/</loc>
+       <lastmod>2026-08-18T17:45:23+00:00</lastmod>
+       <changefreq>daily</changefreq>
+       <priority>0.8000</priority>
+  </url>
 </urlset>
