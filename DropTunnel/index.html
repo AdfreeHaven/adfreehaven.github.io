@@ -9,7 +9,7 @@
     <meta name="google-site-verification" content="acRDymDA5v9jn3qx7g63vayLaAuDSjQyUlRWxgiayDw" />
 
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Drop tunnel to instantly transform your file into a secure, fully customizable connection. Enjoy 100% ad-free file sharing with AdFree Haven.">
+    <meta name="description" content="Drop tunnel to instantly transform your file one device to another device  into a secure, fully customizable connection. Enjoy 100% ad-free file sharing with AdFree Haven.">
     <meta name="keywords" content="Droptunnel, Adfreehaven, personal snapdrop,file drop, sharefile, quicksharefile, direct share file, Dropsnap, tunnel server, ad-free file hosting">
     <meta name="author" content="Adfreehaven Jalap Group">
     
@@ -85,7 +85,7 @@
             transition: background 0.3s ease, color 0.3s ease;
             color: var(--text-main);
             padding-top: 80px; 
-            padding-bottom: 60px; 
+            padding-bottom: 50px; /* Reduced bottom padding */
         }
 
         .dark body {
@@ -219,6 +219,19 @@
         }
         .copy-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+        /* Custom Icon Animation for File Transfer Graphic */
+        @keyframes slideFile {
+            0% { left: 0%; opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            20% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+            80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { left: 100%; opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+        }
+        .animate-slide-file {
+            animation: slideFile 2s infinite ease-in-out;
+            position: absolute;
+            top: 50%;
+        }
+
         /* Transfer Animations */
         @keyframes progress-stripes { from { background-position: 1rem 0; } to { background-position: 0 0; } }
         .progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); width: 0%; transition: width 0.2s ease-out; }
@@ -237,8 +250,9 @@
         .btn-cancel { background-color: #ef4444; color: white; border-radius: 99px; padding: 0.25rem 0.5rem; font-size: 0.7rem; font-weight: bold; cursor: pointer; transition: background 0.2s; border: none; }
         .btn-cancel:hover { background-color: #dc2626; }
 
-        .taskbar { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); border-top: 1px solid var(--border-color); padding: 15px 0; text-align: center; z-index: 1000; box-shadow: 0 -4px 15px rgba(0,0,0,0.03); transition: background 0.3s, border-color 0.3s; }
-        .taskbar p { font-size: 0.9rem; font-weight: 700; letter-spacing: 1.5px; color: var(--text-muted); margin: 0;}
+        /* Taskbar Shrink Adjustments */
+        .taskbar { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); border-top: 1px solid var(--border-color); padding: 10px 0; text-align: center; z-index: 1000; box-shadow: 0 -4px 15px rgba(0,0,0,0.03); transition: background 0.3s, border-color 0.3s; }
+        .taskbar p { font-size: 0.7rem; font-weight: 700; letter-spacing: 1.2px; color: var(--text-muted); margin: 0;}
         .taskbar .highlight-1 { color: var(--primary); }
         .taskbar .highlight-2 { color: var(--secondary); }
 
@@ -267,12 +281,12 @@
     <!-- Navbar -->
     <nav>
         <a href="https://adfreehaven.github.io/" class="logo-container">
-            <img src="LOGO.webp" alt="AdFree Haven Logo" class="logo-img">
+            <img src="../LOGO.webp" alt="AdFree Haven Logo" class="logo-img">
             <span class="brand-name">AdFree Haven <span class="brand-divider">|</span> DropTunnel</span>
         </a>
         <div class="nav-links">
             <a href="https://adfreehaven.github.io/"><i class="fa-solid fa-house"></i> Main Hub</a>
-            <a href="how-it-works.html"><i class="fa-solid fa-bolt"></i> How it Works</a>
+            <a href="https://adfreehaven.github.io/Droptunnel/app"><i class="fa-solid fa-bolt"></i> How it Works</a>
             <button id="theme-toggle" class="w-10 h-10 rounded-full flex items-center justify-center hover:scale-105 transition-transform text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800" aria-label="Toggle Theme">
                 <i id="icon-sun" class="fa-solid fa-sun"></i>
                 <i id="icon-moon" class="fa-solid fa-moon hidden"></i>
@@ -329,6 +343,18 @@
             <!-- INTRODUCTORY TEXT -->
             <div class="w-full text-center px-4 mb-2 md:mb-6" id="intro-text">
                 <h2 class="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-sky-500">P2P File Sharing Platform</h2>
+                
+                <!-- NEW GRAPHICAL FILE TRANSFER ANIMATION -->
+                <div class="flex items-center justify-center gap-5 my-4 text-gray-400 dark:text-gray-500">
+                    <i class="fa-solid fa-laptop text-2xl md:text-3xl"></i>
+                    <div class="relative w-20 md:w-32 h-[3px] bg-gray-200 dark:bg-gray-700 rounded-full">
+                        <div class="animate-slide-file bg-white dark:bg-gray-800 rounded-full shadow-sm border border-gray-100 dark:border-gray-700 p-1.5 flex items-center justify-center">
+                            <i class="fa-solid fa-file-circle-check text-emerald-500 text-[10px] md:text-xs"></i>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-mobile-screen-button text-xl md:text-2xl"></i>
+                </div>
+                
                 <p class="text-sm md:text-base mt-2 max-w-lg mx-auto" style="color: var(--text-muted);">
                     Transfer files directly over Local Wi-Fi or securely over the Internet. Zero cloud uploads required.
                 </p>
