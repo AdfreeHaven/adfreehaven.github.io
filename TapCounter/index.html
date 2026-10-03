@@ -226,7 +226,7 @@
             background: var(--card-bg); padding: 10px 10px; border-radius: 24px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid var(--border-color);
             min-width: 280px; display: flex; flex-direction: column; align-items: center;
-            margin-top: 10px; transition: background 0.3s, border-color 0.3s;
+            margin-top: 20px; transition: background 0.3s, border-color 0.3s;
         }
 
         .user-label {
@@ -378,27 +378,44 @@
         const iconSun = document.getElementById('icon-sun');
         const iconMoon = document.getElementById('icon-moon');
 
-        // Load saved theme on startup
-        if (localStorage.getItem('tapCounterTheme') === 'dark') {
-            htmlEl.classList.add('dark-theme');
-            iconSun.style.display = 'block';
-            iconMoon.style.display = 'none';
-        }
+      
+        const systemThemeMedia = window.matchMedia('(prefers-color-scheme: dark)');
 
-        themeBtn.addEventListener('click', () => {
-            htmlEl.classList.toggle('dark-theme');
-            if (htmlEl.classList.contains('dark-theme')) {
+        function applyTheme(isDark) {
+            if (isDark) {
+                htmlEl.classList.add('dark-theme');
                 iconSun.style.display = 'block';
                 iconMoon.style.display = 'none';
-                localStorage.setItem('tapCounterTheme', 'dark');
             } else {
+                htmlEl.classList.remove('dark-theme');
                 iconSun.style.display = 'none';
                 iconMoon.style.display = 'block';
-                localStorage.setItem('tapCounterTheme', 'light');
+            }
+        }
+
+        const savedTheme = localStorage.getItem('tapCounterTheme');
+        if (savedTheme === 'dark') {
+            applyTheme(true);
+        } else if (savedTheme === 'light') {
+            applyTheme(false);
+        } else {
+            applyTheme(systemThemeMedia.matches);
+        }
+
+        systemThemeMedia.addEventListener('change', (e) => {
+            if (!localStorage.getItem('tapCounterTheme')) {
+                applyTheme(e.matches);
             }
         });
-        // -------------------------- //
 
+        themeBtn.addEventListener('click', () => {
+            const isCurrentlyDark = htmlEl.classList.contains('dark-theme');
+            const newThemeIsDark = !isCurrentlyDark;
+            
+            applyTheme(newThemeIsDark);            
+            localStorage.setItem('tapCounterTheme', newThemeIsDark ? 'dark' : 'light');
+        });
+        // -------------------------- //
 
         let tapData = {};
         // Ensures last tapped/selected user is loaded immediately
