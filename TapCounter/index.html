@@ -54,6 +54,19 @@
             --text-muted: #64748b; 
             --border-color: #cbd5e1;
             --danger: #ef4444;
+            --dropdown-hover: #f8fafc;
+            --input-bg: #f8fafc;
+        }
+
+        /* --- AMOLED Pure Dark Theme Variables --- */
+        html.dark-theme {
+            --bg-color: #000000; /* Pure Black for AMOLED */
+            --card-bg: #0d0d0d; /* Very deep grey for cards */
+            --text-main: #f8fafc; 
+            --text-muted: #94a3b8; 
+            --border-color: #262626;
+            --dropdown-hover: #1a1a1a;
+            --input-bg: #111111;
         }
 
         * {
@@ -68,6 +81,7 @@
             height: 100dvh; /* Mobile friendly full height */
             display: flex; flex-direction: column;
             overflow: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         /* --- 1. NAVBAR --- */
@@ -76,6 +90,11 @@
             padding: 12px 20px; background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02); z-index: 1000; flex-shrink: 0;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        html.dark-theme .navbar {
+            background: rgba(0, 0, 0, 0.95);
         }
 
         .hamburger { font-size: 24px; cursor: pointer; user-select: none; color: var(--text-main); transition: 0.2s;}
@@ -90,16 +109,25 @@
             margin: 0; font-family: 'Poppins', sans-serif;
         }
 
-        .home-btn {
-            font-size: 20px; color: var(--text-main); text-decoration: none; transition: 0.2s;
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
-        .home-btn:hover { color: var(--primary); }
+
+        .home-btn, .theme-btn {
+            font-size: 20px; color: var(--text-main); text-decoration: none; 
+            background: transparent; border: none; cursor: pointer; transition: 0.2s;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .home-btn:hover, .theme-btn:hover { color: var(--primary); }
 
         /* --- 2. SIDEBAR MENU --- */
         .sidebar {
             position: fixed; top: 0; left: -300px; width: 280px; height: 100%;
             background: var(--card-bg); border-right: 1px solid var(--border-color);
-            transition: 0.3s ease-in-out; z-index: 2000; padding-top: 60px;
+            transition: 0.3s ease-in-out, background 0.3s, border-color 0.3s; 
+            z-index: 2000; padding-top: 60px;
             overflow-y: auto; box-shadow: 5px 0 25px rgba(0,0,0,0.05);
         }
 
@@ -108,7 +136,8 @@
         .sidebar-header {
             position: absolute; top: 0; left: 0; width: 100%; height: 60px;
             display: flex; align-items: center; justify-content: space-between;
-            padding: 0 20px; border-bottom: 1px solid var(--border-color); background: #f8fafc;
+            padding: 0 20px; border-bottom: 1px solid var(--border-color); background: var(--input-bg);
+            transition: background 0.3s, border-color 0.3s;
         }
         .sidebar-header span { font-weight: 800; color: var(--text-main); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;}
         .close-btn { font-size: 20px; cursor: pointer; color: var(--text-muted); transition: 0.2s;}
@@ -117,13 +146,15 @@
         .sidebar button {
             width: 100%; background: transparent; color: var(--text-main);
             border: none; padding: 16px 20px; text-align: left; font-weight: 600;
-            font-size: 0.9rem; border-bottom: 1px solid #f1f5f9; cursor: pointer;
+            font-size: 0.9rem; border-bottom: 1px solid var(--border-color); cursor: pointer;
             transition: 0.2s; display: flex; align-items: center; gap: 12px;
         }
         .sidebar button i { width: 20px; text-align: center; color: var(--secondary); font-size: 1.1rem;}
-        .sidebar button:hover { background: #f8fafc; color: var(--primary); padding-left: 25px;}
+        .sidebar button:hover { background: var(--dropdown-hover); color: var(--primary); padding-left: 25px;}
         .sidebar button.btn-danger { color: var(--danger); }
         .sidebar button.btn-danger i { color: var(--danger); }
+        
+        html.dark-theme .sidebar button.btn-danger:hover { background: #2a1111; color: var(--danger); }
         .sidebar button.btn-danger:hover { background: #fef2f2; color: var(--danger); }
 
         .overlay {
@@ -145,16 +176,17 @@
             display: flex; gap: 10px; width: 100%; max-width: 400px;
             background: var(--card-bg); padding: 10px; border-radius: 16px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid var(--border-color);
-            flex-shrink: 0; z-index: 100;
+            flex-shrink: 0; z-index: 100; transition: background 0.3s, border-color 0.3s;
         }
 
         .input-wrapper { position: relative; flex: 1; display: flex; }
         .input-wrapper input {
             width: 100%; padding: 10px 35px 10px 15px; border-radius: 10px;
-            border: 1px solid var(--border-color); background: #f8fafc;
+            border: 1px solid var(--border-color); background: var(--input-bg);
             color: var(--text-main); font-size: 0.9rem; font-weight: 600; outline: none; transition: 0.3s;
         }
-        .input-wrapper input:focus { border-color: var(--secondary); background: #fff; box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1); }
+        .input-wrapper input:focus { border-color: var(--secondary); box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1); }
+        html.dark-theme .input-wrapper input:focus { background: #1a1a1a; }
 
         .dropdown-btn {
             position: absolute; right: 5px; top: 50%; transform: translateY(-50%);
@@ -167,17 +199,17 @@
             display: none; position: absolute; top: 110%; left: 0; width: 100%;
             background: var(--card-bg); border: 1px solid var(--border-color);
             border-radius: 10px; max-height: 200px; overflow-y: auto; z-index: 1000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: background 0.3s, border-color 0.3s;
         }
         .dropdown-content.show { display: block; animation: fadeIn 0.2s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
         .dropdown-item {
-            padding: 12px 15px; cursor: pointer; border-bottom: 1px solid #f1f5f9;
+            padding: 12px 15px; cursor: pointer; border-bottom: 1px solid var(--border-color);
             font-size: 0.85rem; font-weight: 600; color: var(--text-main); display: flex; justify-content: space-between;
         }
         .dropdown-item:last-child { border-bottom: none; }
-        .dropdown-item:hover { background: #f8fafc; color: var(--primary); padding-left: 20px; transition: 0.2s;}
+        .dropdown-item:hover { background: var(--dropdown-hover); color: var(--primary); padding-left: 20px; transition: 0.2s;}
 
         .name-setup > button {
             padding: 0 20px; border-radius: 10px; border: none;
@@ -194,7 +226,7 @@
             background: var(--card-bg); padding: 10px 10px; border-radius: 24px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid var(--border-color);
             min-width: 280px; display: flex; flex-direction: column; align-items: center;
-            margin-top: 10px;
+            margin-top: 10px; transition: background 0.3s, border-color 0.3s;
         }
 
         .user-label {
@@ -210,12 +242,14 @@
 
         /* RESET BUTTON ON MAIN SCREEN */
         .reset-main-btn {
-            margin-top: 15px; background: #f8fafc; border: 1px solid var(--border-color);
+            margin-top: 15px; background: var(--input-bg); border: 1px solid var(--border-color);
             color: var(--text-muted); padding: 6px 16px; border-radius: 20px;
             font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: 0.2s;
             display: inline-flex; align-items: center; gap: 6px; justify-content: center;
         }
         .reset-main-btn:hover { background: #fef2f2; color: var(--danger); border-color: #fca5a5; }
+        
+        html.dark-theme .reset-main-btn:hover { background: #2a1111; border-color: var(--danger); }
 
         /* Giant Tap Button */
         .tap-area {
@@ -224,7 +258,7 @@
 
         #tapBtn {
             width: 55vmin; height: 55vmin; max-width: 250px; max-height: 250px;
-            border-radius: 50%; border: 6px solid #ffffff;
+            border-radius: 50%; border: 6px solid var(--card-bg);
             background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white;
             font-size: 2.5rem; font-weight: 800; font-family: 'Poppins', sans-serif; cursor: pointer;
             box-shadow: 0 15px 35px rgba(16, 185, 129, 0.3), inset 0 -10px 20px rgba(0,0,0,0.1);
@@ -238,6 +272,7 @@
             flex-shrink: 0; width: 100%; background: var(--card-bg); padding: 8px 0;
             text-align: center; font-size: 0.7rem; color: var(--text-muted);
             border-top: 1px solid var(--border-color); font-weight: 600; letter-spacing: 1px;
+            transition: background 0.3s, border-color 0.3s;
         }
         .taskbar span.t1 { color: var(--primary); }
         .taskbar span.t2 { color: var(--secondary); }
@@ -264,7 +299,7 @@
         <button onclick="backupData()"><i class="fa-solid fa-download" style="color:var(--primary);"></i> Backup Data (JSON)</button>
         <button onclick="document.getElementById('restoreFileInput').click()"><i class="fa-solid fa-folder-open" style="color:var(--warning);"></i> Restore Data</button>
         <input type="file" id="restoreFileInput" accept=".json" onchange="restoreData(event)">
-        <button onclick="clearAllData()" class="btn-danger" style="margin-top: 20px; border-top: 1px solid #e2e8f0;"><i class="fa-solid fa-trash-can"></i> Clear All Data</button>
+        <button onclick="clearAllData()" class="btn-danger" style="margin-top: 20px; border-top: 1px solid var(--border-color);"><i class="fa-solid fa-trash-can"></i> Clear All Data</button>
     </div>
 
     <!-- Navbar -->
@@ -274,8 +309,14 @@
             <img src="LOGO.webp" onerror="this.src='../LOGO.webp'" alt="AdFree Haven" class="logo-img">
             <h2>Tap Counter</h2>
         </div>
-        <!-- Home Button Added -->
-        <a href="https://adfreehaven.github.io/" class="home-btn" title="Go to Home Hub"><i class="fa-solid fa-house"></i></a> 
+        <div class="nav-right">
+            <!-- Theme Toggle Button -->
+            <button id="theme-toggle" class="theme-btn" aria-label="Toggle Theme">
+                <i id="icon-sun" class="fa-solid fa-sun" style="display: none;"></i>
+                <i id="icon-moon" class="fa-solid fa-moon"></i>
+            </button>
+            <a href="https://adfreehaven.github.io/" class="home-btn" title="Go to Home Hub"><i class="fa-solid fa-house"></i></a> 
+        </div>
     </div>
 
     <!-- Main Content -->
@@ -331,6 +372,34 @@
     </div>
 
     <script>
+        // --- THEME TOGGLE LOGIC --- //
+        const htmlEl = document.documentElement;
+        const themeBtn = document.getElementById('theme-toggle');
+        const iconSun = document.getElementById('icon-sun');
+        const iconMoon = document.getElementById('icon-moon');
+
+        // Load saved theme on startup
+        if (localStorage.getItem('tapCounterTheme') === 'dark') {
+            htmlEl.classList.add('dark-theme');
+            iconSun.style.display = 'block';
+            iconMoon.style.display = 'none';
+        }
+
+        themeBtn.addEventListener('click', () => {
+            htmlEl.classList.toggle('dark-theme');
+            if (htmlEl.classList.contains('dark-theme')) {
+                iconSun.style.display = 'block';
+                iconMoon.style.display = 'none';
+                localStorage.setItem('tapCounterTheme', 'dark');
+            } else {
+                iconSun.style.display = 'none';
+                iconMoon.style.display = 'block';
+                localStorage.setItem('tapCounterTheme', 'light');
+            }
+        });
+        // -------------------------- //
+
+
         let tapData = {};
         // Ensures last tapped/selected user is loaded immediately
         let currentUser = localStorage.getItem("lastActiveUser") || "guest"; 
