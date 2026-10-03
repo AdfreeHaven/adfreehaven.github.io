@@ -9,8 +9,8 @@
 
     <!-- SEO Meta Tags -->
     <title>AdFree Haven | Premium Ad-Free Tools & Web Apps</title>
-    <meta name="description" content="Welcome to AdFree Haven. Your premium centralized hub for exclusive, lightning-fast tools, scripts, browser web apps, and Windows software like CloudServer-PC, Image Editor, Tab Counter and JPEG/PDF Compressor. Enjoy a 100% ad-free experience.">
-    <meta name="keywords" content="AdFree Haven, Jalapgroup, CloudServer-PC, Image Editor, JPEG Compressor, Tab Counter, Tally Counter, ad-free tools, web applications, Windows software, premium SaaS, free online tools">
+    <meta name="description" content="Welcome to AdFree Haven. Your premium centralized hub for exclusive, lightning-fast tools, scripts, browser web apps, and Windows software like CloudServer-PC, DropTunnel, Image Editor, Tab Counter and JPEG/PDF Compressor. Enjoy a 100% ad-free experience.">
+    <meta name="keywords" content="AdFree Haven, Jalapgroup, DropTunnel, CloudServer-PC, Image Editor, JPEG Compressor, Tab Counter, Tally Counter, ad-free tools, web applications, Windows software, premium SaaS, free online tools">
     <meta name="author" content="Team AdFree Haven">
     <meta name="robots" content="index, follow">
 
@@ -19,7 +19,7 @@
     <meta property="og:description" content="Your premium centralized hub for exclusive web applications and Windows software built for peak performance. 100% Ad-Free.">
     <meta property="og:type" content="website">
     
-    <!-- Favicon (Aapka Logo) -->
+    <!-- Favicon -->
     <link rel="icon" href="LOGO.webp" type="image/webp">
     
     <!-- Google Fonts -->
@@ -28,7 +28,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- Premium Clean Theme --- */
+        /* --- Premium Clean Theme Variables --- */
         :root {
             --primary: #10b981; 
             --secondary: #0ea5e9; 
@@ -37,6 +37,15 @@
             --text-main: #1e293b; 
             --text-muted: #64748b; 
             --border-color: #e2e8f0;
+        }
+
+        /* --- Dark Mode Variables Overrides --- */
+        html.dark {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
         }
 
         * {
@@ -55,6 +64,7 @@
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         /* --- Navbar / Header --- */
@@ -70,7 +80,10 @@
             top: 0;
             z-index: 1000;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            transition: background 0.3s, border-color 0.3s;
         }
+
+        html.dark nav { background: rgba(15, 23, 42, 0.9); }
 
         .logo-container {
             display: flex;
@@ -101,7 +114,7 @@
         .nav-links {
             display: flex;
             align-items: center;
-            gap: 30px;
+            gap: 25px;
         }
 
         .nav-links a {
@@ -146,15 +159,38 @@
         }
 
         .dropdown-content a:hover {
-            background-color: #f8fafc; color: var(--primary); padding-left: 25px;
+            background-color: rgba(16, 185, 129, 0.05); color: var(--primary); padding-left: 25px;
+        }
+        
+        html.dark .dropdown-content a:hover {
+            background-color: rgba(255, 255, 255, 0.05);
         }
 
         .dropdown:hover .dropdown-content { display: block; }
 
-        /* --- Hero Section (Optimized/Smaller Text) --- */
+        /* --- Theme Toggle Button --- */
+        .theme-btn {
+            background: #e2e8f0;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: transform 0.3s, background 0.3s;
+        }
+        .theme-btn:hover { transform: scale(1.05); }
+        html.dark .theme-btn { background: #334155; color: #cbd5e1; }
+
+        /* --- Hero Section --- */
         .hero {
             text-align: center; padding: 60px 20px 30px; background: radial-gradient(circle at top, #ffffff, var(--bg-color));
+            transition: background 0.3s;
         }
+        html.dark .hero { background: radial-gradient(circle at top, #1e293b, var(--bg-color)); }
 
         .hero h1 {
             font-size: 2.8rem; font-weight: 800; margin-bottom: 12px; letter-spacing: -1px; color: var(--text-main);
@@ -204,15 +240,20 @@
         .card-icon.accent-warning { color: var(--primary); background: rgba(16, 185, 129, 0.1); }
         .tool-card:hover .card-icon.accent-warning { background: var(--secondary); color: white; }
 
+        .card-icon.accent-emerald { color: #10b981; background: rgba(16, 185, 129, 0.1); }
+        .tool-card:hover .card-icon.accent-emerald { background: #0ea5e9; color: white; }
+
         .tool-card h3 { font-size: 1.25rem; margin-bottom: 10px; font-weight: 700; }
         .tool-card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 25px; flex: 1; line-height: 1.5; }
 
         .visit-btn {
-            background: var(--text-main); color: #ffffff; padding: 10px 30px; border-radius: 50px; font-weight: 600;
+            background: var(--text-main); color: var(--bg-color); padding: 10px 30px; border-radius: 50px; font-weight: 600;
             font-size: 0.9rem; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s;
         }
+        
+        html.dark .visit-btn { color: var(--card-bg); }
 
-        .tool-card:hover .visit-btn { background: var(--primary); box-shadow: 0 8px 15px rgba(16, 185, 129, 0.25); }
+        .tool-card:hover .visit-btn { background: var(--primary); box-shadow: 0 8px 15px rgba(16, 185, 129, 0.25); color: #fff; }
 
         /* --- Vision Section --- */
         .vision-section {
@@ -221,8 +262,10 @@
 
         .vision-box {
             max-width: 800px; margin: 0 auto; background: linear-gradient(to right, rgba(16,185,129,0.05), rgba(14,165,233,0.05));
-            border: 1px solid var(--border-color); padding: 35px; border-radius: 20px;
+            border: 1px solid var(--border-color); padding: 35px; border-radius: 20px; transition: background 0.3s;
         }
+        
+        html.dark .vision-box { background: linear-gradient(to right, rgba(16,185,129,0.1), rgba(14,165,233,0.1)); }
 
         .vision-box h2 { font-size: 1.8rem; margin-bottom: 15px; color: var(--text-main); }
         .vision-box h2 i { color: var(--primary); margin-right: 8px; }
@@ -288,17 +331,24 @@
                 <button class="dropbtn"><i class="fa-solid fa-screwdriver-wrench"></i> Tools <i class="fa-solid fa-chevron-down" style="font-size: 0.7rem;"></i></button>
                 <div class="dropdown-content">
                     <div class="dropdown-category">Browser Apps</div>
+                    <!-- DropTunnel added to dropdown -->
+                    <a href="DropTunnel/"><i class="fa-solid fa-network-wired"></i> DropTunnel</a>
                     <a href="ImageEditor/"><i class="fa-solid fa-image"></i> Image Editor</a>
                     <a href="JpegPdfCompressor/"><i class="fa-solid fa-file-zipper"></i> JPEG/PDF Compressor</a>
-                    <!-- New App Added to Dropdown -->
                     <a href="TabCounter/"><i class="fa-solid fa-hand-pointer"></i> Tab & Tally Counter</a>
                     
-                    <div class="dropdown-category" style="border-top: 1px solid #e2e8f0; margin-top: 5px;">Windows Software</div>
+                    <div class="dropdown-category" style="border-top: 1px solid var(--border-color); margin-top: 5px;">Windows Software</div>
                     <a href="CloudServer-PC/"><i class="fa-brands fa-windows" style="color: #0ea5e9;"></i> CloudServer-PC</a>
                 </div>
             </div>
 
             <a href="#vision"><i class="fa-solid fa-eye"></i> Our Vision</a>
+            
+            <!-- Dark Mode Toggle Button -->
+            <button id="theme-toggle" class="theme-btn" aria-label="Toggle Theme">
+                <i id="icon-sun" class="fa-solid fa-sun"></i>
+                <i id="icon-moon" class="fa-solid fa-moon" style="display: none;"></i>
+            </button>
         </div>
     </nav>
 
@@ -316,7 +366,15 @@
     
     <main class="tools-container">
         
-        <!-- App 1: Image Editor -->
+        <!-- App 1: DropTunnel (NEW) -->
+        <a href="DropTunnel/" class="tool-card">
+            <div class="card-icon accent-emerald"><i class="fa-solid fa-network-wired"></i></div>
+            <h3>DropTunnel</h3>
+            <p>A completely secure, serverless way to transfer files between any devices instantly. Transfers files directly over Local Wi-Fi or Internet without cloud uploads.</p>
+            <div class="visit-btn">Launch App <i class="fa-solid fa-arrow-right"></i></div>
+        </a>
+
+        <!-- App 2: Image Editor -->
         <a href="ImageEditor/" class="tool-card">
             <div class="card-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
             <h3>Image Editor</h3>
@@ -324,15 +382,15 @@
             <div class="visit-btn">Launch App <i class="fa-solid fa-arrow-right"></i></div>
         </a>
 
-        <!-- App 2: Tab Counter (NEW) -->
-        <a href="TapCounter/" class="tool-card">
+        <!-- App 3: Tab Counter -->
+        <a href="TabCounter/" class="tool-card">
             <div class="card-icon accent-warning"><i class="fa-solid fa-hand-pointer"></i></div>
             <h3>Tab & Tally Counter</h3>
             <p>An advanced online tally counter. Track multiple user profiles, manage counts, and export detailed PDF reports seamlessly.</p>
             <div class="visit-btn">Launch App <i class="fa-solid fa-arrow-right"></i></div>
         </a>
 
-        <!-- App 3: JPEG/PDF Compressor -->
+        <!-- App 4: JPEG/PDF Compressor -->
         <a href="JpegPdfCompressor/" class="tool-card">
             <div class="card-icon"><i class="fa-solid fa-file-arrow-down"></i></div>
             <h3>JPEG/PDF Compressor</h3>
@@ -360,10 +418,10 @@
 
         <!-- Upcoming Software Placeholder -->
         <a href="#" class="tool-card" style="opacity: 0.6;">
-            <div class="card-icon" style="background: #e2e8f0; color: #94a3b8;"><i class="fa-solid fa-code"></i></div>
+            <div class="card-icon" style="background: var(--border-color); color: var(--text-muted);"><i class="fa-solid fa-code"></i></div>
             <h3>Coming Soon</h3>
             <p>More innovative desktop software is under development. Stay tuned for our next big release!</p>
-            <div class="visit-btn" style="background: #94a3b8; pointer-events: none;">In Progress</div>
+            <div class="visit-btn" style="background: var(--text-muted); pointer-events: none;">In Progress</div>
         </a>
 
     </main>
@@ -381,5 +439,23 @@
         <p>MADE BY TEAM <span class="highlight-1">ADFREE HAVEN</span> | POWERED BY <span class="highlight-2">JALAPGROUP</span></p>
     </div>
 
+    <!-- Theme Toggle Script -->
+    <script>
+        const htmlEl = document.documentElement;
+        const themeBtn = document.getElementById('theme-toggle');
+        const iconSun = document.getElementById('icon-sun');
+        const iconMoon = document.getElementById('icon-moon');
+
+        themeBtn.addEventListener('click', () => {
+            htmlEl.classList.toggle('dark');
+            if (htmlEl.classList.contains('dark')) {
+                iconSun.style.display = 'none';
+                iconMoon.style.display = 'block';
+            } else {
+                iconSun.style.display = 'block';
+                iconMoon.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>
