@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>How it Works | DropTunnel</title>
+    <title>How it Works | FileDropTunnel</title>
     
     <!-- Google Site Verification -->
     <meta name="google-site-verification" content="acRDymDA5v9jn3qx7g63vayLaAuDSjQyUlRWxgiayDw" />
 
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Learn how DropTunnel creates a secure, direct Peer-to-Peer connection to transfer files instantly without cloud servers.">
-    <meta name="keywords" content="DropTunnel how it works, P2P file sharing, WebRTC file transfer, Adfreehaven, direct share file">
+    <meta name="description" content="Learn how FileDropTunnel creates a secure, direct Peer-to-Peer connection to transfer files instantly without cloud servers.">
+    <meta name="keywords" content="FileDropTunnel how it works, P2P file sharing, WebRTC file transfer, Adfreehaven, direct share file">
     <meta name="author" content="Adfreehaven Jalap Group">
     
-    <!-- DropTunnel Original Favicon -->
+    <!-- FileDropTunnel Original Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='url(%23grad)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%233b82f6;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%2310b981;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'/%3E%3Cpolyline points='17 8 12 3 7 8'/%3E%3Cline x1='12' y1='3' x2='12' y2='15'/%3E%3C/svg%3E">
     
     <!-- Google Fonts -->
@@ -168,13 +168,13 @@
 
     <!-- Navbar -->
     <nav>
-        <a href="https://adfreehaven.github.io/DropTunnel" class="logo-container">
+        <a href="https://adfreehaven.github.io/FileDropTunnel" class="logo-container">
             <img src="../../LOGO.webp" alt="AdFree Haven Logo" class="logo-img" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%2310b981\'><circle cx=\'12\' cy=\'12\' r=\'12\'/></svg>'">
-            <span class="brand-name">AdFree Haven <span class="brand-divider">|</span> DropTunnel</span>
+            <span class="brand-name">AdFree Haven <span class="brand-divider">|</span> FileDropTunnel</span>
         </a>
         <div class="nav-links">
             <a href="https://adfreehaven.github.io/"><i class="fa-solid fa-house"></i> Main Hub</a>
-            <a href="https://adfreehaven.github.io/DropTunnel/app" class="active" style="color: var(--primary);"><i class="fa-solid fa-bolt"></i> How it Works</a>
+            <a href="https://adfreehaven.github.io/FileDropTunnel/app" class="active" style="color: var(--primary);"><i class="fa-solid fa-bolt"></i> How it Works</a>
             <button id="theme-toggle" class="w-10 h-10 rounded-full flex items-center justify-center hover:scale-105 transition-transform text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800" aria-label="Toggle Theme">
                 <i id="icon-sun" class="fa-solid fa-sun"></i>
                 <i id="icon-moon" class="fa-solid fa-moon hidden"></i>
@@ -188,7 +188,7 @@
         <!-- Header Text -->
         <div class="w-full text-center mt-4">
             <h1 class="text-3xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-sky-500 mb-4">
-                How DropTunnel Works
+                How FileDropTunnel Works
             </h1>
             <p class="text-base md:text-lg max-w-2xl mx-auto" style="color: var(--text-muted);">
                 A completely secure, serverless way to transfer files between any devices in seconds. 
@@ -210,7 +210,7 @@
                 <div class="flex flex-col items-center text-center p-6 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-200 dark:border-gray-700 relative hover:-translate-y-1 transition-transform">
                     <div class="w-8 h-8 rounded-full bg-emerald-500 text-white font-bold flex items-center justify-center absolute -top-4 shadow-lg border-4 border-white dark:border-gray-800">1</div>
                     <i class="fa-solid fa-laptop text-4xl mb-4 text-gray-400 dark:text-gray-500"></i>
-                    <h3 class="font-bold text-lg mb-2">Open DropTunnel</h3>
+                    <h3 class="font-bold text-lg mb-2">Open FileDropTunnel</h3>
                     <p class="text-sm" style="color: var(--text-muted);">Open the website on the device you want to share from (Host). You'll instantly get a unique 4-digit PIN.</p>
                 </div>
                 
@@ -253,7 +253,7 @@
             </div>
             
             <p class="text-sm mb-10 text-center mx-auto max-w-3xl" style="color: var(--text-muted);">
-                Unlike standard file sharing apps (like Google Drive or WhatsApp), DropTunnel <strong>does NOT upload your files to a cloud server</strong>. It uses WebRTC to create a secure, encrypted pipeline directly between your devices.
+                Unlike standard file sharing apps (like Google Drive or WhatsApp), FileDropTunnel <strong>does NOT upload your files to a cloud server</strong>. It uses WebRTC to create a secure, encrypted pipeline directly between your devices.
             </p>
 
             <!-- Interactive Diagram -->
@@ -333,8 +333,8 @@
 
             <!-- Call to action -->
             <div class="mt-10 flex justify-center">
-                <a href="https://adfreehaven.github.io/DropTunnel" class="bg-gradient-to-r from-emerald-500 to-sky-500 text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all flex items-center gap-2">
-                    <i class="fa-solid fa-rocket"></i> Try DropTunnel Now
+                <a href="https://adfreehaven.github.io/FileDropTunnel" class="bg-gradient-to-r from-emerald-500 to-sky-500 text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-rocket"></i> Try FileDropTunnel Now
                 </a>
             </div>
 
